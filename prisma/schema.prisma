@@ -16,4 +16,39 @@ model Users {
   email     String   @unique
   password  String
   createdAt DateTime @default(now())
+
+  accounts   Accounts[]
+  statements Statements[]
+}
+
+model Accounts {
+  id     String  @id @default(uuid())
+  userId String?
+
+  name        String
+  balance     Decimal  @default(0)
+  type        String
+  bank        String?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+
+  statements Statements[]
+
+  Users Users? @relation(fields: [userId], references: [id])
+}
+
+model Statements {
+  id        String  @id @default(uuid())
+  userId    String?
+  accountId String?
+
+  type        String
+  amount      Decimal
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+
+  Users   Users?    @relation(fields: [userId], references: [id])
+  Account Accounts? @relation(fields: [accountId], references: [id])
 }
