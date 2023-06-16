@@ -1,10 +1,13 @@
+/* eslint-disable no-useless-constructor */
 import { Request, Response } from 'express'
 import { hash } from 'bcryptjs'
 
 import { AppError } from '../AppError'
-import { prisma } from '../lib/prisma'
+import { UsersRepository } from '@/Repositories/UsersRepository'
 
 class CreateUserController {
+	constructor(private usersRepository: UsersRepository) {}
+
 	async handle(req: Request, res: Response): Promise<Response> {
 		const { name, email, password } = req.body
 
@@ -12,7 +15,7 @@ class CreateUserController {
 			throw new AppError('> Fields must be all filled')
 		}
 
-		const userAlreadyExists = await prisma.users.findFirst({ where: { email } })
+		const userAlreadyExists = await this.usersRepository.findByEmail(email)
 
 		if (userAlreadyExists) {
 			throw new AppError('> User already exists')
@@ -20,12 +23,10 @@ class CreateUserController {
 
 		const passwordHash = await hash(password, 8)
 
-		const user = await prisma.users.create({
-			data: {
-				name,
-				email,
-				password: passwordHash,
-			},
+		const user = await this.usersRepository.create({
+			name,
+			email,
+			password: passwordHash,
 		})
 
 		return res.status(201).json(user)

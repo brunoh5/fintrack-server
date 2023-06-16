@@ -1,30 +1,31 @@
+/* eslint-disable no-useless-constructor */
 import { Request, Response } from 'express'
 
 import { AppError } from '@/AppError'
-import { prisma } from '@/lib/prisma'
+import { AccountsRepository } from '@/Repositories/AccountsRepository'
 
 class CreateAccountController {
-  async handle(req: Request, res: Response): Promise<Response> {
-    const { name, description, balance, type, bank } = req.body
-    const userId = req.headers.authorization
+	constructor(private accountRepository: AccountsRepository) {}
 
-    if (!userId) {
-      throw new AppError('> You must be logged in', 401)
-    }
+	async handle(req: Request, res: Response): Promise<Response> {
+		const { name, description, balance, type, bank } = req.body
+		const userId = req.headers.authorization
 
-    const account = await prisma.accounts.create({
-      data: {
-        userId,
-        name,
-        description,
-        balance,
-        type,
-        bank,
-      },
-    })
+		if (!userId) {
+			throw new AppError('> You must be logged in', 401)
+		}
 
-    return res.status(201).json(account)
-  }
+		const account = await this.accountRepository.create({
+			userId,
+			name,
+			description,
+			balance,
+			type,
+			bank,
+		})
+
+		return res.status(201).json(account)
+	}
 }
 
 export { CreateAccountController }

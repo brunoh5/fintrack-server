@@ -19,6 +19,7 @@ model Users {
 
   accounts   Accounts[]
   statements Statements[]
+  Bills      Bills[]
 }
 
 model Accounts {
@@ -31,23 +32,41 @@ model Accounts {
   bank        String?
   description String?
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   statements Statements[]
 
-  Users Users? @relation(fields: [userId], references: [id])
+  Users Users?  @relation(fields: [userId], references: [id])
+  Bills Bills[]
 }
 
 model Statements {
-  id        String  @id @default(uuid())
-  userId    String?
-  accountId String?
+  id        String @id @default(uuid())
+  userId    String
+  accountId String
 
   type        String
   amount      Decimal
   description String?
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  Users   Users?    @relation(fields: [userId], references: [id])
+  Account Accounts? @relation(fields: [accountId], references: [id])
+}
+
+model Bills {
+  id        String @id @default(uuid())
+  userId    String
+  accountId String
+
+  value       Decimal
+  description String?
+  dueDate     DateTime
+  type        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  isPaid      Boolean
 
   Users   Users?    @relation(fields: [userId], references: [id])
   Account Accounts? @relation(fields: [accountId], references: [id])
