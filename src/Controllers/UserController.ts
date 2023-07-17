@@ -1,12 +1,23 @@
-/* eslint-disable no-useless-constructor */
+import { prisma } from '@/lib/prisma'
 import { Request, Response } from 'express'
 import { hash } from 'bcryptjs'
 
 import { AppError } from '../AppError'
-import { UsersRepository } from '@/Repositories/UsersRepository'
 
-class CreateUserController {
-	constructor(private usersRepository: UsersRepository) {}
+export class UserController {
+	async create(req: Request, res: Response): Promise<Response> {
+		const { name, email, password } = req.body
+
+		const user = await prisma.users.create({
+			data: {
+				name,
+				email,
+				password,
+			},
+		})
+
+		return res.status(201).json(user)
+	}
 
 	async handle(req: Request, res: Response): Promise<Response> {
 		const { name, email, password } = req.body
@@ -32,5 +43,3 @@ class CreateUserController {
 		return res.status(201).json(user)
 	}
 }
-
-export { CreateUserController }
