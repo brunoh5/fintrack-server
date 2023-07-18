@@ -3,6 +3,7 @@ import { Request, Response } from 'express'
 import { hash } from 'bcryptjs'
 
 import { AppError } from '../AppError'
+import { sign } from 'jsonwebtoken'
 
 export class UserController {
 	async create(req: Request, res: Response): Promise<Response> {
@@ -25,7 +26,22 @@ export class UserController {
 				},
 			})
 
-			return res.status(201).json(user)
+			const twentyFourHours = 60 * 60 * 24
+
+			const token = sign({}, String(process.env.SECRET_TOKEN), {
+				subject: user.id,
+				expiresIn: twentyFourHours,
+			})
+
+			const tokenReturn = {
+				token,
+				user: {
+					name: user.name,
+					email: user.email,
+				},
+			}
+
+			return res.status(201).json(tokenReturn)
 		} catch (err) {
 			throw new AppError(`> ${err}`)
 		}

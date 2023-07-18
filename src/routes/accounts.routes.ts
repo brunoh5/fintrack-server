@@ -1,14 +1,15 @@
 import { Router } from 'express'
 
-import { UserController } from '@/Controllers/UserController'
-import { AuthenticateUserController } from '@/Controllers/AuthenticateUserController'
+import { AccountsController } from '@/Controllers/AccountsController'
 
 const accountsRouter = Router()
 
-const userController = new UserController()
-const authenticateUserController = new AuthenticateUserController()
+const accountsController = new AccountsController()
 
-accountsRouter.post('/', userController.create)
-accountsRouter.post('/sessions', authenticateUserController.handle)
+accountsRouter.post('/', accountsController.create)
+accountsRouter.get('/all', accountsController.listAll)
+accountsRouter.get('/', accountsController.list)
+accountsRouter.put('/', accountsController.update)
+accountsRouter.delete('/', accountsController.delete)
 
 export { accountsRouter }

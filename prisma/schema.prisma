@@ -10,7 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model Users {
   id        String   @id @default(uuid())
   name      String
   email     String   @unique
@@ -18,12 +18,12 @@ model User {
   createdAt DateTime @default(now())
   phone     String?
 
-  accounts     Account[]
-  transactions Transaction[]
-  Bills        Bill[]
+  accounts     Accounts[]
+  transactions Transactions[]
+  Bills        Bills[]
 }
 
-model Account {
+model Accounts {
   id     String  @id @default(uuid())
   userId String?
 
@@ -34,12 +34,12 @@ model Account {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  transactions Transaction[]
+  transactions Transactions[]
 
-  User User? @relation(fields: [userId], references: [id])
+  User Users? @relation(fields: [userId], references: [id])
 }
 
-model Transaction {
+model Transactions {
   id        String @id @default(uuid())
   userId    String
   accountId String
@@ -50,14 +50,13 @@ model Transaction {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  Users   User?    @relation(fields: [userId], references: [id])
-  Account Account? @relation(fields: [accountId], references: [id])
+  Users   Users?    @relation(fields: [userId], references: [id])
+  Account Accounts? @relation(fields: [accountId], references: [id])
 }
 
-model Bill {
-  id        String @id @default(uuid())
-  userId    String
-  accountId String
+model Bills {
+  id     String @id @default(uuid())
+  userId String
 
   dueDate     DateTime
   imageUrl    String?
@@ -69,5 +68,5 @@ model Bill {
   updatedAt   DateTime @updatedAt
   isPaid      Boolean
 
-  User User? @relation(fields: [userId], references: [id])
+  User Users? @relation(fields: [userId], references: [id])
 }
