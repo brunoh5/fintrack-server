@@ -5,8 +5,6 @@ import cors from 'cors'
 import { router } from './routes'
 import { AppError } from './AppError'
 
-import './container'
-
 const app = express()
 
 app.use(express.json())

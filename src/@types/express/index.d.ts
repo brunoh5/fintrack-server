@@ -1,8 +1,8 @@
 // eslint-disable-next-line no-unused-vars
 declare namespace Express {
 	export interface Request {
-		headers: {
-			authorization: string
+		user: {
+			id: string
 		}
 	}
 }

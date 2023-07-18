@@ -1,19 +1,14 @@
 import { Router } from 'express'
 
-import { CreateAccountController } from '../Controllers/Accounts/CreateAccountController'
-import { ListAccountsController } from '@/Controllers/Accounts/ListAccountController'
-import { AccountsRepository } from '@/Repositories/AccountsRepository'
+import { UserController } from '@/Controllers/UserController'
+import { AuthenticateUserController } from '@/Controllers/AuthenticateUserController'
 
 const accountsRouter = Router()
 
-const createAccountController = new CreateAccountController(
-	new AccountsRepository(),
-)
-const listAccountController = new ListAccountsController(
-	new AccountsRepository(),
-)
+const userController = new UserController()
+const authenticateUserController = new AuthenticateUserController()
 
-accountsRouter.get('/', listAccountController.handle)
-accountsRouter.post('/', createAccountController.handle)
+accountsRouter.post('/', userController.create)
+accountsRouter.post('/sessions', authenticateUserController.handle)
 
 export { accountsRouter }
