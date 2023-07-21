@@ -23,6 +23,16 @@ export class UserController {
 					name,
 					email,
 					password: passwordHash,
+					goals: {
+						create: [
+							{ name: 'Housing' },
+							{ name: 'Food' },
+							{ name: 'Transportation' },
+							{ name: 'Entertainment' },
+							{ name: 'Shopping' },
+							{ name: 'Others' },
+						],
+					},
 				},
 			})
 

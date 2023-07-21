@@ -8,7 +8,7 @@ const usersRouter = Router()
 const userController = new UserController()
 const authenticateUserController = new AuthenticateUserController()
 
-usersRouter.post('/', userController.create)
+usersRouter.post('/create', userController.create)
 usersRouter.post('/sessions', authenticateUserController.handle)
 
 export { usersRouter }

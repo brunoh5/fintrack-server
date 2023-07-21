@@ -21,6 +21,7 @@ model Users {
   accounts     Accounts[]
   transactions Transactions[]
   Bills        Bills[]
+  goals        Goals[]
 }
 
 model Accounts {
@@ -44,11 +45,11 @@ model Transactions {
   userId    String
   accountId String
 
-  type        String
-  amount      Decimal
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  name      String
+  shopName  String
+  createdAt DateTime @default(now())
+  amount    Decimal
+  updatedAt DateTime @updatedAt
 
   Users   Users?    @relation(fields: [userId], references: [id])
   Account Accounts? @relation(fields: [accountId], references: [id])
@@ -69,4 +70,14 @@ model Bills {
   isPaid      Boolean
 
   User Users? @relation(fields: [userId], references: [id])
+}
+
+model Goals {
+  id            String   @id @default(uuid())
+  name          String
+  targetAmount  Decimal  @default(0)
+  presentAmount Decimal? @default(0)
+
+  userId String
+  User   Users? @relation(fields: [userId], references: [id])
 }
