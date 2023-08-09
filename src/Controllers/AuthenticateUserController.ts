@@ -11,7 +11,7 @@ export class AuthenticateUserController {
 		const user = await prisma.users.findFirst({ where: { email } })
 
 		if (!user) {
-			throw new AppError('> Email or password incorrect')
+			throw new AppError(`> User doesn't exists`)
 		}
 
 		const passwordMatch = await compare(password, user.password)
