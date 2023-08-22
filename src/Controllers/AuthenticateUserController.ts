@@ -8,6 +8,10 @@ export class AuthenticateUserController {
 	async handle(req: Request, res: Response): Promise<Response> {
 		const { email, password } = req.body
 
+		if (email === '' || password === '') {
+			throw new AppError(`> field must be filled`)
+		}
+
 		const user = await prisma.users.findFirst({ where: { email } })
 
 		if (!user) {

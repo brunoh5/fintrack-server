@@ -21,7 +21,8 @@ export class AccountsController {
 
 			return res.status(201).json(account)
 		} catch (err) {
-			throw new AppError('Error creating the account')
+			console.log(err)
+			throw new AppError(`Error creating the account` + err)
 		}
 	}
 
