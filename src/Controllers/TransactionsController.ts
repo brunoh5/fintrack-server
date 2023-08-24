@@ -8,7 +8,7 @@ export class TransactionsController {
 		const { accountId, name, amount, shopName, createdAt } = req.body
 		const { id } = req.user
 
-		const account = await prisma.accounts.findFirst({ where: { id } })
+		const account = await prisma.accounts.findFirst({ where: { id: accountId } })
 
 		if (!account) {
 			throw new AppError(`> This account doesn't exist`)
@@ -42,5 +42,30 @@ export class TransactionsController {
 		} catch (err) {
 			throw new AppError(`> ${err}`)
 		}
+	}
+
+	async list(req: Request, res: Response): Promise<Response> {
+		const { id, accountId } = req.body
+
+		const transaction = await prisma.transactions.findFirst({
+			where: {
+				accountId,
+				id
+			}
+		})
+
+		return res.status(201).json(transaction)
+	}
+
+	async listAll(req: Request, res: Response): Promise<Response> {
+		const { accountId } = req.body
+
+		const transaction = await prisma.transactions.findMany({
+			where: {
+				accountId,
+			}
+		})
+
+		return res.status(201).json(transaction)
 	}
 }

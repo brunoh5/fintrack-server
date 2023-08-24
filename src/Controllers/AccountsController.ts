@@ -27,7 +27,7 @@ export class AccountsController {
 	}
 
 	async list(req: Request, res: Response): Promise<Response> {
-		const { id } = req.body
+		const { id } = req.params
 
 		const account = await prisma.accounts.findFirst({
 			where: {
