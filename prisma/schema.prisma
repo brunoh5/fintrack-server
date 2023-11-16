@@ -8,17 +8,18 @@ datasource db {
 }
 
 model User {
-  id            String        @id @default(uuid())
+  id            String   @id @default(uuid())
   name          String
-  email         String        @unique
+  email         String   @unique
   password_hash String
-  created_at    DateTime      @default(now())
+  created_at    DateTime @default(now())
   phone         String?
   avatar_url    String?
-  accounts      Account[]
-  bills         Bill[]
-  goals         Goal[]
-  transactions  Transaction[]
+
+  accounts     Account[]
+  bills        Bill[]
+  goals        Goal[]
+  transactions Transaction[]
 
   @@map("users")
 }

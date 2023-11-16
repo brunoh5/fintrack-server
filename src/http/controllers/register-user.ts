@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { z } from 'zod'
 
-import { RegisterUserUseCase } from '@/use-cases/register-user'
+import { RegisterUserUseCase } from '@/use-cases/register'
 
 export class RegisterUser {
 	async handle(req: Request, res: Response): Promise<Response> {
