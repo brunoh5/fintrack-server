@@ -2,13 +2,36 @@
   "name": "fintrack-server",
   "version": "1.0.0",
   "description": "",
-  "main": "src/server.ts",
+  "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/server.ts"
+    "dev": "tsx watch src/server.ts",
+    "start": "node build/server.js",
+    "build": "tsup src --out-dir build",
+    "db:rollback": "prisma migrate reset --force",
+    "db:save": "prisma db pull",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seeds.ts"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
+  "dependencies": {
+    "@prisma/client": "^5.2.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "csv-parse": "^5.4.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-async-errors": "^3.1.1",
+    "jsonwebtoken": "^9.0.1",
+    "multer": "1.4.5-lts.1",
+    "reflect-metadata": "^0.1.13",
+    "zod": "^3.22.4"
+  },
   "devDependencies": {
     "@rocketseat/eslint-config": "^2.1.0",
     "@types/bcryptjs": "^2.4.2",
@@ -17,20 +40,13 @@
     "@types/jsonwebtoken": "^9.0.2",
     "@types/multer": "^1.4.7",
     "@types/node": "^20.5.4",
+    "@vitest/coverage-v8": "0.34.6",
     "eslint": "^8.47.0",
     "prisma": "^5.2.0",
+    "tsup": "^7.2.0",
     "tsx": "^3.12.7",
-    "typescript": "^5.1.6"
-  },
-  "dependencies": {
-    "@prisma/client": "^5.2.0",
-    "bcryptjs": "^2.4.3",
-    "cors": "^2.8.5",
-    "csv-parse": "^5.4.0",
-    "express": "^4.18.2",
-    "express-async-errors": "^3.1.1",
-    "jsonwebtoken": "^9.0.1",
-    "multer": "1.4.5-lts.1",
-    "reflect-metadata": "^0.1.13"
+    "typescript": "^5.1.6",
+    "vite-tsconfig-paths": "^4.2.1",
+    "vitest": "^0.34.6"
   }
 }

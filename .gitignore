@@ -1,4 +1,14 @@
-node_modules
-# Keep environment variables out of version control
+# dependencies
+node_modules/
+
+# environment
 .env
-dev.db
+
+# database
+prisma/*.db
+
+# build
+build
+
+# tests
+coverage

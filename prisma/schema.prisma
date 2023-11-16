@@ -1,83 +1,100 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model Users {
-  id        String   @id @default(uuid())
-  name      String
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  phone     String?
+model User {
+  id            String        @id @default(uuid())
+  name          String
+  email         String        @unique
+  password_hash String
+  created_at    DateTime      @default(now())
+  phone         String?
+  avatar_url    String?
+  accounts      Account[]
+  bills         Bill[]
+  goals         Goal[]
+  transactions  Transaction[]
 
-  accounts     Accounts[]
-  transactions Transactions[]
-  Bills        Bills[]
-  goals        Goals[]
+  @@map("users")
 }
 
-model Accounts {
-  id     String  @id @default(uuid())
-  userId String?
+model Account {
+  id      String  @id @default(uuid())
+  balance Decimal @default(0)
+  type    String
+  number  String?
+  bank    String
 
-  balance       Decimal  @default(0)
-  accountType   String
-  accountNumber String?
-  bank          String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  transactions Transactions[]
-
-  User Users? @relation(fields: [userId], references: [id])
-}
-
-model Transactions {
-  id        String @id @default(uuid())
-  userId    String
-  accountId String
-
-  name      String
-  shopName  String
-  createdAt DateTime @default(now())
-  amount    Decimal
-  updatedAt DateTime @updatedAt
-
-  Users   Users?    @relation(fields: [userId], references: [id])
-  Account Accounts? @relation(fields: [accountId], references: [id])
-}
-
-model Bills {
-  id     String @id @default(uuid())
   userId String
+  user   User   @relation(fields: [userId], references: [id])
 
+  transactions Transaction[]
+
+  @@map("accounts")
+}
+
+model Transaction {
+  id             String    @id @default(uuid())
+  name           String
+  shopName       String?
+  created_at     DateTime  @default(now())
+  paid_at        DateTime?
+  amount         Decimal
+  type           String
+  payment_method String?
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  accountId String
+  account   Account @relation(fields: [accountId], references: [id])
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@map("transactions")
+}
+
+model Bill {
+  id          String    @id @default(uuid())
   dueDate     DateTime
   imageUrl    String?
   title       String
   description String?
-  lastCharge  DateTime
+  lastCharge  DateTime?
   amount      Decimal
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  isPaid      Boolean
+  created_at  DateTime  @default(now())
+  paid_at     DateTime?
 
-  User Users? @relation(fields: [userId], references: [id])
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@map("bills")
 }
 
-model Goals {
+model Goal {
   id            String   @id @default(uuid())
   name          String
   targetAmount  Decimal  @default(0)
   presentAmount Decimal? @default(0)
+  created_at    DateTime @default(now())
 
   userId String
-  User   Users? @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@map("goals")
+}
+
+model Category {
+  id   String @id @default(uuid())
+  name String
+
+  transaction Transaction[]
+
+  @@map("categories")
 }

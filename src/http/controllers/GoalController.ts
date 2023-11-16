@@ -6,7 +6,7 @@ export class GoalsController {
 	async list(req: Request, res: Response): Promise<Response> {
 		const { id } = req.user
 
-		const goals = await prisma.goals.findMany({
+		const goals = await prisma.goal.findMany({
 			where: {
 				userId: id,
 			},
@@ -19,7 +19,7 @@ export class GoalsController {
 		const { id } = req.params
 		const { targetAmount, presentAmount } = req.body
 
-		const goal = await prisma.goals.update({
+		const goal = await prisma.goal.update({
 			where: { id },
 			data: {
 				targetAmount,
