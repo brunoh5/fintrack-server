@@ -1,4 +1,5 @@
-import { prisma } from '@/lib/prisma'
+import { AccountsRepository } from '@/repositories/accounts-repository'
+import { Account } from '@prisma/client'
 
 interface CreateAccountUseCaseRequest {
 	type: string
@@ -8,13 +9,19 @@ interface CreateAccountUseCaseRequest {
 	userId: string
 }
 
+interface CreateAccountUseCaseResponse {
+	account: Account
+}
+
 export class CreateAccountUseCase {
-	async execute(data: CreateAccountUseCaseRequest) {
-		const account = await prisma.account.create({
-			data: {
-				...data,
-				balance: data.initialAmount,
-			},
+	constructor(private accountsRepository: AccountsRepository) {}
+
+	async execute(
+		data: CreateAccountUseCaseRequest,
+	): Promise<CreateAccountUseCaseResponse> {
+		const account = await this.accountsRepository.create({
+			...data,
+			balance: data.initialAmount,
 		})
 
 		return {

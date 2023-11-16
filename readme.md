@@ -8,7 +8,7 @@ Financial Management app
 - [x] Deve ser possível se autenticar;
 - [x] Deve ser possível obter o perfil de um usuário logado;
 - Deve ser possível (Conta Bancária)
-  - [ ] criar;
+  - [x] criar;
   - [ ] listar;
   - [ ] atualizar;
   - [ ] deletar;
