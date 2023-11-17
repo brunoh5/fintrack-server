@@ -5,6 +5,10 @@ import { AccountsRepository } from '../accounts-repository'
 export class InMemoryAccountsRepository implements AccountsRepository {
 	public items: Account[] = []
 
+	async findManyByUserId(id: string) {
+		return this.items.filter((item) => item.userId === id)
+	}
+
 	async findById(id: string) {
 		const account = this.items.find((item) => item.id === id)
 
