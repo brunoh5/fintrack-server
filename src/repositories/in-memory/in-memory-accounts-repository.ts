@@ -5,6 +5,13 @@ import { AccountsRepository } from '../accounts-repository'
 export class InMemoryAccountsRepository implements AccountsRepository {
 	public items: Account[] = []
 
+	async getBalanceByAccountId(id: string): Promise<number> {
+		const rowIndex = this.items.findIndex((row) => row.id === id)
+		const row = this.items[rowIndex]
+
+		return Number(row.balance)
+	}
+
 	async delete(id: string) {
 		const rowIndex = this.items.findIndex((row) => row.id === id)
 
