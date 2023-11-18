@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
-import { AppError } from './AppError'
 import { verify } from 'jsonwebtoken'
+import { AppError } from './AppError'
+import { env } from './env'
 
 interface PayloadProps {
 	sub: string
@@ -8,7 +9,7 @@ interface PayloadProps {
 
 export async function ensureAuthenticated(
 	req: Request,
-	res: Response,
+	_: Response,
 	next: NextFunction,
 ) {
 	const authHeader = req.headers.authorization
@@ -22,7 +23,7 @@ export async function ensureAuthenticated(
 	try {
 		const { sub: userId } = verify(
 			token,
-			String(process.env.SECRET_TOKEN),
+			String(env.SECRET_TOKEN),
 		) as PayloadProps
 
 		req.user = {
