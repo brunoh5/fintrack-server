@@ -9,17 +9,18 @@ Financial Management app
 - [x] Deve ser possível obter o perfil de um usuário logado;
 - Deve ser possível (Conta Bancária)
   - [x] criar;
-  - [x] listar;
+  - [x] listar por id;
 	- [x] listar vários;
   - [x] atualizar;
   - [x] deletar;
-- [ ] Deve ser possível obter o balanço de uma conta
+- [x] Deve ser possível obter o balanço de uma conta
 - Deve ser possível (Transação)
-  - [ ] criar;
-  - [ ] listar;
+  - [x] criar;
+  - [ ] listar por id;
+	- [ ] listar vários;
   - [ ] atualizar;
   - [ ] deletar;
-- [ ] Deve ser possível importar uma lista de transações
+- [x] Deve ser possível importar uma lista de transações
 - [ ] Deve ser possível criar um objetivo
 - [ ] Deve ser possível obter as métricas de gastos do usuário
 
@@ -28,6 +29,8 @@ Financial Management app
 - [ ] O usuário não deve poder se cadastrar com um e-mail duplicado;
 - [ ] Ao criar uma transação o balanço de uma conta deve mudar;
 - [ ] Ao apagar uma conta deverá apagar todas as transações da mesma;
+- [ ] Transações com o tipo sent devem diminuir o valor do balanço da conta
+- [ ] Transações com o tipo received devem aumentar o valor do balanço da conta
 
 ## RNFs
 

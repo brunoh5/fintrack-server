@@ -1,4 +1,6 @@
-import { prisma } from '@/lib/prisma'
+import { AccountsRepository } from '@/repositories/accounts-repository'
+import { TransactionsRepository } from '@/repositories/transactions-repository'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 interface CreateTransactionUseCaseRequest {
 	accountId: string
@@ -13,6 +15,11 @@ interface CreateTransactionUseCaseRequest {
 }
 
 export class CreateTransactionUseCase {
+	constructor(
+		private transactionsRepository: TransactionsRepository,
+		private accountsRepository: AccountsRepository,
+	) {}
+
 	async execute({
 		accountId,
 		categoryId,
@@ -24,35 +31,25 @@ export class CreateTransactionUseCase {
 		type,
 		payment_method,
 	}: CreateTransactionUseCaseRequest) {
-		const account = await prisma.account.findFirstOrThrow({
-			where: { id: accountId },
+		const account = await this.accountsRepository.findById(accountId)
+
+		if (!account) {
+			throw new ResourceNotFoundError()
+		}
+
+		const transaction = await this.transactionsRepository.create({
+			accountId,
+			categoryId,
+			name,
+			shopName,
+			amount,
+			paid_at,
+			type,
+			payment_method,
+			userId,
 		})
 
-		const createTransaction = prisma.transaction.create({
-			data: {
-				accountId,
-				categoryId,
-				name,
-				shopName,
-				amount,
-				paid_at,
-				type,
-				method: payment_method,
-				userId,
-			},
-		})
-
-		const updateBalance = prisma.account.update({
-			where: { id: accountId },
-			data: {
-				balance: Number(account.balance) + amount,
-			},
-		})
-
-		const [transaction] = await prisma.$transaction([
-			createTransaction,
-			updateBalance,
-		])
+		await this.accountsRepository.updateBalanceAccount(accountId, amount)
 
 		return {
 			transaction,

@@ -5,6 +5,15 @@ import { AccountsRepository } from '../accounts-repository'
 export class InMemoryAccountsRepository implements AccountsRepository {
 	public items: Account[] = []
 
+	async updateBalanceAccount(id: string, amount: number) {
+		const rowIndex = this.items.findIndex((row) => row.id === id)
+		const row = this.items[rowIndex]
+
+		this.items[rowIndex].balance = new Prisma.Decimal(
+			row.balance.toNumber() + amount,
+		)
+	}
+
 	async getBalanceByAccountId(id: string): Promise<number> {
 		const rowIndex = this.items.findIndex((row) => row.id === id)
 		const row = this.items[rowIndex]
@@ -34,6 +43,15 @@ export class InMemoryAccountsRepository implements AccountsRepository {
 		}
 
 		return account
+	}
+
+	async update(id: string, data: Prisma.AccountUpdateInput): Promise<Account> {
+		const rowIndex = this.items.findIndex((row) => row.id === id)
+		const row = this.items[rowIndex]
+
+		this.items[rowIndex] = Object.assign(row, data)
+
+		return row
 	}
 
 	async create(data: Prisma.AccountUncheckedCreateInput) {
