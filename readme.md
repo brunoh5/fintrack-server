@@ -16,7 +16,7 @@ Financial Management app
 - [x] Deve ser possível obter o balanço de uma conta
 - Deve ser possível (Transação)
   - [x] criar;
-  - [ ] listar por id;
+  - [x] listar por id;
 	- [ ] listar vários;
   - [ ] atualizar;
   - [ ] deletar;

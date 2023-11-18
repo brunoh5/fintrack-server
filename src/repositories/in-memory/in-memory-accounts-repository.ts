@@ -56,7 +56,7 @@ export class InMemoryAccountsRepository implements AccountsRepository {
 
 	async create(data: Prisma.AccountUncheckedCreateInput) {
 		const account = {
-			id: randomUUID(),
+			id: data.id ?? randomUUID(),
 			balance: new Prisma.Decimal(Number(data.balance)),
 			bank: data.bank,
 			type: data.type,

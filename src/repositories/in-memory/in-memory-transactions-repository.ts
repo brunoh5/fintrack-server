@@ -59,7 +59,7 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
 
 	async create(data: Prisma.TransactionUncheckedCreateInput) {
 		const transaction = {
-			id: randomUUID(),
+			id: data.id ?? randomUUID(),
 			name: data.name,
 			shopName: data.shopName ?? null,
 			created_at: new Date(),
