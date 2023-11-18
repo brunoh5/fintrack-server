@@ -5,6 +5,16 @@ import { AccountsRepository } from '../accounts-repository'
 export class InMemoryAccountsRepository implements AccountsRepository {
 	public items: Account[] = []
 
+	async delete(id: string) {
+		const rowIndex = this.items.findIndex((row) => row.id === id)
+
+		if (rowIndex <= -1) {
+			throw new Error()
+		}
+
+		this.items.splice(rowIndex, 1)
+	}
+
 	async findManyByUserId(id: string) {
 		return this.items.filter((item) => item.userId === id)
 	}

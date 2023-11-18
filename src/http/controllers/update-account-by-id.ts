@@ -1,4 +1,4 @@
-import { UpdateAccountByIdUseCase } from '@/use-cases/update-account-by-id'
+import { UpdateAccountByIdUseCase } from '@/use-cases/update-account'
 import { Request, Response } from 'express'
 import { z } from 'zod'
 

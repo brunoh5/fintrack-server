@@ -1,15 +1,20 @@
-import { prisma } from '@/lib/prisma'
+import { AccountsRepository } from '@/repositories/accounts-repository'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 interface DeleteAccountUseCaseRequest {
 	accountId: string
 }
 
 export class DeleteAccountUseCase {
-	async execute(data: DeleteAccountUseCaseRequest): Promise<void> {
-		await prisma.account.delete({
-			where: {
-				id: data.accountId,
-			},
-		})
+	constructor(private accountsRepository: AccountsRepository) {}
+
+	async execute({ accountId }: DeleteAccountUseCaseRequest): Promise<void> {
+		const doesAccountExist = this.accountsRepository.findById(accountId)
+
+		if (!doesAccountExist) {
+			throw new ResourceNotFoundError()
+		}
+
+		await this.accountsRepository.delete(accountId)
 	}
 }

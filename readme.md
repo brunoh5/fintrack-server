@@ -11,8 +11,8 @@ Financial Management app
   - [x] criar;
   - [x] listar;
 	- [x] listar vários;
-  - [ ] atualizar;
-  - [ ] deletar;
+  - [x] atualizar;
+  - [x] deletar;
 - [ ] Deve ser possível obter o balanço de uma conta
 - Deve ser possível (Transação)
   - [ ] criar;
@@ -27,6 +27,7 @@ Financial Management app
 
 - [ ] O usuário não deve poder se cadastrar com um e-mail duplicado;
 - [ ] Ao criar uma transação o balanço de uma conta deve mudar;
+- [ ] Ao apagar uma conta deverá apagar todas as transações da mesma;
 
 ## RNFs
 
