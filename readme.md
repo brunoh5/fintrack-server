@@ -18,8 +18,8 @@ Financial Management app
   - [x] criar;
   - [x] listar por id;
 	- [x] listar vários;
-  - [ ] atualizar;
-  - [ ] deletar;
+  - [x] atualizar;
+  - [x] deletar;
 - [x] Deve ser possível importar uma lista de transações
 - [ ] Deve ser possível criar um objetivo
 - [ ] Deve ser possível obter as métricas de gastos do usuário

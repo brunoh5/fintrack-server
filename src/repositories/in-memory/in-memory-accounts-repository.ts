@@ -5,20 +5,32 @@ import { AccountsRepository } from '../accounts-repository'
 export class InMemoryAccountsRepository implements AccountsRepository {
 	public items: Account[] = []
 
-	async updateBalanceAccount(id: string, amount: number) {
+	async updateBalanceAccount(
+		id: string,
+		amount: number,
+		type: 'sent' | 'received',
+	) {
 		const rowIndex = this.items.findIndex((row) => row.id === id)
 		const row = this.items[rowIndex]
 
-		this.items[rowIndex].balance = new Prisma.Decimal(
-			row.balance.toNumber() + amount,
-		)
+		if (type === 'sent') {
+			this.items[rowIndex].balance = new Prisma.Decimal(
+				row.balance.toNumber() - amount,
+			)
+		} else if (type === 'received') {
+			this.items[rowIndex].balance = new Prisma.Decimal(
+				row.balance.toNumber() + amount,
+			)
+		}
 	}
 
 	async getBalanceByAccountId(id: string): Promise<number> {
 		const rowIndex = this.items.findIndex((row) => row.id === id)
 		const row = this.items[rowIndex]
 
-		return Number(row.balance)
+		// console.log(row)
+
+		return row.balance.toNumber()
 	}
 
 	async delete(id: string) {

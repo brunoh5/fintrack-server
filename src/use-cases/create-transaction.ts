@@ -9,7 +9,7 @@ interface CreateTransactionUseCaseRequest {
 	shopName: string
 	amount: number
 	paid_at: string | null
-	type: string
+	type: 'sent' | 'received'
 	payment_method: string
 	userId: string
 }
@@ -49,7 +49,7 @@ export class CreateTransactionUseCase {
 			userId,
 		})
 
-		await this.accountsRepository.updateBalanceAccount(accountId, amount)
+		await this.accountsRepository.updateBalanceAccount(accountId, amount, type)
 
 		return {
 			transaction,

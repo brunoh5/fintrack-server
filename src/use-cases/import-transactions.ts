@@ -31,9 +31,17 @@ export class ImportTransactionsUseCase {
 		})
 
 		const totalAmount = transactions.reduce((acc, transaction) => {
-			return acc + transaction.amount
+			if (transaction.type === 'sent') {
+				return acc - transaction.amount
+			} else {
+				return acc + transaction.amount
+			}
 		}, 0)
 
-		await this.accountsRepository.updateBalanceAccount(accountId, totalAmount)
+		await this.accountsRepository.updateBalanceAccount(
+			accountId,
+			totalAmount,
+			'received',
+		)
 	}
 }
