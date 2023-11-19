@@ -1,4 +1,3 @@
-import { randomUUID } from 'crypto'
 import { beforeEach, describe, expect, it } from 'vitest'
 
 import { AccountsRepository } from '@/repositories/accounts-repository'
@@ -17,10 +16,10 @@ describe('Get Balance Use Case', () => {
 	it('should be able to get a account balance', async () => {
 		const createdAccount = await accountsRepository.create({
 			balance: 3500,
-			bank: 'Nubank',
+			bank: 'bank',
 			type: 'Conta Corrente',
 			number: '1111 2222 3333 4444',
-			userId: randomUUID(),
+			userId: 'user-01',
 		})
 
 		const { balance } = await sut.execute({ accountId: createdAccount.id })

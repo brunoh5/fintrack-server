@@ -24,10 +24,10 @@ describe('Import Transactions UseCase', () => {
 	it('should be able to create many transactions', async () => {
 		const createdAccount = await accountsRepository.create({
 			balance: 0,
-			bank: 'Nubank',
+			bank: 'bank',
 			type: 'Conta Corrente',
 			number: '1111 2222 3333 4444',
-			userId: randomUUID(),
+			userId: 'user-01',
 		})
 
 		const dataTransactions = [
@@ -56,8 +56,8 @@ describe('Import Transactions UseCase', () => {
 		]
 
 		await sut.execute({
-			userId: randomUUID(),
-			categoryId: randomUUID(),
+			userId: 'user-01',
+			categoryId: 'category-01',
 			accountId: createdAccount.id,
 			transactions: dataTransactions,
 		})
@@ -75,10 +75,10 @@ describe('Import Transactions UseCase', () => {
 	it('should be able to update a account balance', async () => {
 		const createdAccount = await accountsRepository.create({
 			balance: 0,
-			bank: 'Nubank',
+			bank: 'bank',
 			type: 'Conta Corrente',
 			number: '1111 2222 3333 4444',
-			userId: randomUUID(),
+			userId: 'user-01',
 		})
 
 		const dataTransactions = [
@@ -107,8 +107,8 @@ describe('Import Transactions UseCase', () => {
 		]
 
 		await sut.execute({
-			userId: randomUUID(),
-			categoryId: randomUUID(),
+			userId: 'user-01',
+			categoryId: 'category-01',
 			accountId: createdAccount.id,
 			transactions: dataTransactions,
 		})

@@ -21,7 +21,7 @@ describe('Fetch Transactions Use Case', () => {
 	it('should be able to fetch transactions', async () => {
 		const createdAccount = await accountsRepository.create({
 			balance: 0,
-			bank: 'Nubank',
+			bank: 'bank',
 			type: 'Conta Corrente',
 			number: '1111 2222 3333 4444',
 			userId: randomUUID(),

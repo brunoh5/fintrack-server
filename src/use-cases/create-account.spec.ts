@@ -16,7 +16,7 @@ describe('Create Account UseCase', () => {
 	it('should be able to create a account', async () => {
 		const { account } = await sut.execute({
 			initialAmount: 3500,
-			bank: 'Nubank',
+			bank: 'bank',
 			type: 'Conta Corrente',
 			number: '1111 2222 3333 4444',
 			userId: randomUUID(),

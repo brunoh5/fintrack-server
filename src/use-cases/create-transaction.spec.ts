@@ -1,10 +1,11 @@
+import { Account } from '@prisma/client'
+import { randomUUID } from 'node:crypto'
+import { beforeEach, describe, expect, it } from 'vitest'
+
 import { AccountsRepository } from '@/repositories/accounts-repository'
 import { InMemoryAccountsRepository } from '@/repositories/in-memory/in-memory-accounts-repository'
 import { InMemoryTransactionsRepository } from '@/repositories/in-memory/in-memory-transactions-repository'
 import { TransactionsRepository } from '@/repositories/transactions-repository'
-import { Account } from '@prisma/client'
-import { randomUUID } from 'node:crypto'
-import { beforeEach, describe, expect, it } from 'vitest'
 import { CreateTransactionUseCase } from './create-transaction'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
@@ -13,28 +14,29 @@ let accountsRepository: AccountsRepository
 let sut: CreateTransactionUseCase
 
 describe('Create Transactions UseCase', () => {
-	beforeEach(() => {
+	beforeEach(async () => {
 		transactionsRepository = new InMemoryTransactionsRepository()
 		accountsRepository = new InMemoryAccountsRepository()
 		sut = new CreateTransactionUseCase(
 			transactionsRepository,
 			accountsRepository,
 		)
-	})
 
-	it('should be able to create a transaction', async () => {
-		const createdAccount = await accountsRepository.create({
+		await accountsRepository.create({
+			id: 'account-01',
 			balance: 0,
-			bank: 'Nubank',
+			bank: 'bank',
 			type: 'Conta Corrente',
 			number: '1111 2222 3333 4444',
 			userId: randomUUID(),
 		})
+	})
 
+	it('should be able to create a transaction', async () => {
 		const { transaction } = await sut.execute({
 			userId: randomUUID(),
 			categoryId: randomUUID(),
-			accountId: createdAccount.id,
+			accountId: 'account-01',
 			amount: 3500,
 			shopName: 'KaBuM',
 			type: 'sent',
@@ -47,18 +49,10 @@ describe('Create Transactions UseCase', () => {
 	})
 
 	it('should be able to update a account balance', async () => {
-		const createdAccount = await accountsRepository.create({
-			balance: 0,
-			bank: 'Nubank',
-			type: 'Conta Corrente',
-			number: '1111 2222 3333 4444',
-			userId: randomUUID(),
-		})
-
 		await sut.execute({
 			userId: randomUUID(),
 			categoryId: randomUUID(),
-			accountId: createdAccount.id,
+			accountId: 'account-01',
 			amount: 3500,
 			shopName: 'KaBuM',
 			type: 'sent',
@@ -67,9 +61,7 @@ describe('Create Transactions UseCase', () => {
 			name: 'RTX 3060',
 		})
 
-		const account = (await accountsRepository.findById(
-			createdAccount.id,
-		)) as Account
+		const account = (await accountsRepository.findById('account-01')) as Account
 
 		expect(account.balance.d[0]).toEqual(3500)
 	})

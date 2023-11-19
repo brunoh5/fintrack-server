@@ -1,4 +1,3 @@
-import { randomUUID } from 'crypto'
 import { beforeEach, describe, expect, it } from 'vitest'
 
 import { AccountsRepository } from '@/repositories/accounts-repository'
@@ -20,18 +19,18 @@ describe('Get Account Use Case', () => {
 
 	it('should be able to get a transaction', async () => {
 		await accountsRepository.create({
-			id: 'account-1',
+			id: 'account-01',
 			balance: 0,
-			bank: 'Nubank',
+			bank: 'bank',
 			type: 'Conta Corrente',
 			number: '1111 2222 3333 4444',
-			userId: randomUUID(),
+			userId: 'user-01',
 		})
 
 		const createTransaction = await transactionsRepository.create({
-			userId: randomUUID(),
-			categoryId: randomUUID(),
-			accountId: 'account-1',
+			userId: 'user-01',
+			categoryId: 'category-01',
+			accountId: 'account-01',
 			amount: 3500,
 			shopName: 'KaBuM',
 			type: 'sent',

@@ -1,9 +1,10 @@
+import { randomUUID } from 'node:crypto'
+import { beforeEach, describe, expect, it } from 'vitest'
+
 import { AccountsRepository } from '@/repositories/accounts-repository'
 import { InMemoryAccountsRepository } from '@/repositories/in-memory/in-memory-accounts-repository'
 import { InMemoryTransactionsRepository } from '@/repositories/in-memory/in-memory-transactions-repository'
 import { TransactionsRepository } from '@/repositories/transactions-repository'
-import { randomUUID } from 'crypto'
-import { beforeEach, describe, expect, it } from 'vitest'
 import { DeleteTransactionUseCase } from './delete-transaction'
 
 let transactionsRepository: TransactionsRepository
@@ -22,7 +23,7 @@ describe('Delete Transaction UseCase', () => {
 		await accountsRepository.create({
 			id: 'account-01',
 			balance: 3500,
-			bank: 'Nubank',
+			bank: 'bank',
 			type: 'Conta Corrente',
 			number: '1111 2222 3333 4444',
 			userId: randomUUID(),

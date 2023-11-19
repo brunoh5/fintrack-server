@@ -1,4 +1,3 @@
-import { randomUUID } from 'crypto'
 import { beforeEach, describe, expect, it } from 'vitest'
 
 import { AccountsRepository } from '@/repositories/accounts-repository'
@@ -18,10 +17,10 @@ describe('Get Account Use Case', () => {
   it('should be able to get a account', async () => {
     const createdAccount = await accountsRepository.create({
       balance: 3500,
-      bank: 'Nubank',
+      bank: 'bank',
       type: 'Conta Corrente',
       number: '1111 2222 3333 4444',
-      userId: randomUUID(),
+      userId: 'user-01',
     })
 
     const { account } = await sut.execute({ accountId: createdAccount.id })
@@ -31,17 +30,17 @@ describe('Get Account Use Case', () => {
 
   it('should not be able to get a account with wrong id', async () => {
     await expect(() =>
-      sut.execute({ accountId: randomUUID() }),
+      sut.execute({ accountId: 'not-existent-account' }),
     ).rejects.toBeInstanceOf(ResourceNotFoundError)
   })
 
   it('should hide the account number', async () => {
     const createdAccount = await accountsRepository.create({
       balance: 3500,
-      bank: 'Nubank',
+      bank: 'bank',
       type: 'Conta Corrente',
       number: '1111 2222 3333 4444',
-      userId: randomUUID(),
+      userId: 'user-01',
     })
 
     const { account } = await sut.execute({ accountId: createdAccount.id })

@@ -1,6 +1,5 @@
 import { InMemoryTransactionsRepository } from '@/repositories/in-memory/in-memory-transactions-repository'
 import { TransactionsRepository } from '@/repositories/transactions-repository'
-import { randomUUID } from 'node:crypto'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { UpdateTransactionUseCase } from './update-transaction'
 
@@ -15,9 +14,9 @@ describe('Update Transaction UseCase', () => {
 
 	it('should be able to update a transaction', async () => {
 		const createdTransaction = await transactionsRepository.create({
-			userId: randomUUID(),
-			categoryId: randomUUID(),
-			accountId: randomUUID(),
+			userId: 'user-01',
+			categoryId: 'category-01',
+			accountId: 'account-01',
 			amount: 3500,
 			shopName: 'KaBuM-01',
 			type: 'sent',

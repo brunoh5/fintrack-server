@@ -1,4 +1,3 @@
-import { randomUUID } from 'crypto'
 import { beforeEach, describe, expect, it } from 'vitest'
 
 import { AccountsRepository } from '@/repositories/accounts-repository'
@@ -9,53 +8,42 @@ let accountsRepository: AccountsRepository
 let sut: FetchAccountsUseCase
 
 describe('Fetch Accounts Use Case', () => {
-	beforeEach(() => {
+	beforeEach(async () => {
 		accountsRepository = new InMemoryAccountsRepository()
 		sut = new FetchAccountsUseCase(accountsRepository)
+
+		await accountsRepository.create({
+			balance: 3500,
+			bank: 'bank-01',
+			type: 'Conta Corrente',
+			number: '1111 2222 3333 4444',
+			userId: 'user-01',
+		})
+
+		await accountsRepository.create({
+			balance: 3500,
+			bank: 'bank-02',
+			type: 'Conta Corrente',
+			number: '1111 2222 3333 4444',
+			userId: 'user-01',
+		})
 	})
 
 	it('should be able to fetch accounts', async () => {
-		const userId = randomUUID()
-
-		await accountsRepository.create({
-			balance: 3500,
-			bank: 'Nubank-01',
-			type: 'Conta Corrente',
-			number: '1111 2222 3333 4444',
-			userId,
-		})
-
-		await accountsRepository.create({
-			balance: 3500,
-			bank: 'Nubank-02',
-			type: 'Conta Corrente',
-			number: '1111 2222 3333 4444',
-			userId,
-		})
-
-		const { accounts } = await sut.execute({ userId })
+		const { accounts } = await sut.execute({ userId: 'user-01' })
 
 		expect(accounts).toHaveLength(2)
 		expect(accounts).toEqual([
-			expect.objectContaining({ bank: 'Nubank-01' }),
-			expect.objectContaining({ bank: 'Nubank-02' }),
+			expect.objectContaining({ bank: 'bank-01' }),
+			expect.objectContaining({ bank: 'bank-02' }),
 		])
 	})
 
 	it('should hide the account number', async () => {
-		const userId = randomUUID()
-
-		await accountsRepository.create({
-			balance: 3500,
-			bank: 'Nubank-02',
-			type: 'Conta Corrente',
-			number: '1111 2222 3333 4444',
-			userId,
-		})
-
-		const { accounts } = await sut.execute({ userId })
+		const { accounts } = await sut.execute({ userId: 'user-01' })
 
 		expect(accounts).toEqual([
+			expect.objectContaining({ number: '**** **** **** 4444' }),
 			expect.objectContaining({ number: '**** **** **** 4444' }),
 		])
 	})

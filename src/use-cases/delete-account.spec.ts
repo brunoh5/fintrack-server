@@ -1,7 +1,8 @@
-import { AccountsRepository } from '@/repositories/accounts-repository'
-import { InMemoryAccountsRepository } from '@/repositories/in-memory/in-memory-accounts-repository'
 import { randomUUID } from 'crypto'
 import { beforeEach, describe, expect, it } from 'vitest'
+
+import { AccountsRepository } from '@/repositories/accounts-repository'
+import { InMemoryAccountsRepository } from '@/repositories/in-memory/in-memory-accounts-repository'
 import { DeleteAccountUseCase } from './delete-account'
 
 let accountsRepository: AccountsRepository
@@ -16,7 +17,7 @@ describe('Delete Account UseCase', () => {
 	it('should be able to delete a account', async () => {
 		const createdAccount = await accountsRepository.create({
 			balance: 3500,
-			bank: 'Nubank-01',
+			bank: 'bank-01',
 			type: 'Conta Corrente',
 			number: '1111 2222 3333 4444',
 			userId: randomUUID(),
