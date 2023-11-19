@@ -17,7 +17,7 @@ Financial Management app
 - Deve ser possível (Transação)
   - [x] criar;
   - [x] listar por id;
-	- [ ] listar vários;
+	- [x] listar vários;
   - [ ] atualizar;
   - [ ] deletar;
 - [x] Deve ser possível importar uma lista de transações

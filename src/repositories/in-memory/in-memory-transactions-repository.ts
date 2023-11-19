@@ -8,6 +8,15 @@ import {
 export class InMemoryTransactionsRepository implements TransactionsRepository {
 	public items: Transaction[] = []
 
+	async update(id: string, data: Prisma.TransactionUpdateInput) {
+		const rowIndex = this.items.findIndex((row) => row.id === id)
+		const row = this.items[rowIndex]
+
+		this.items[rowIndex] = Object.assign(row, data)
+
+		return row
+	}
+
 	async createMany({
 		accountId,
 		categoryId,

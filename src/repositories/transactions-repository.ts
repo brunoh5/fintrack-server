@@ -18,6 +18,7 @@ export interface CreateManyRequest {
 }
 
 export interface TransactionsRepository {
+	update(id: string, data: Prisma.TransactionUpdateInput): Promise<Transaction>
 	createMany(data: CreateManyRequest): Promise<void>
 	delete(id: string): Promise<void>
 	findManyByAccountId(id: string): Promise<Transaction[]>
