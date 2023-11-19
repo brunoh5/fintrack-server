@@ -1,4 +1,5 @@
 import { AccountsRepository } from '@/repositories/accounts-repository'
+import { TransactionsRepository } from '@/repositories/transactions-repository'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 interface DeleteAccountUseCaseRequest {
@@ -6,14 +7,24 @@ interface DeleteAccountUseCaseRequest {
 }
 
 export class DeleteAccountUseCase {
-	constructor(private accountsRepository: AccountsRepository) {}
+	constructor(
+		private accountsRepository: AccountsRepository,
+		private transactionsRepository: TransactionsRepository,
+	) {}
 
 	async execute({ accountId }: DeleteAccountUseCaseRequest): Promise<void> {
-		const doesAccountExist = this.accountsRepository.findById(accountId)
+		const account = await this.accountsRepository.findById(accountId)
 
-		if (!doesAccountExist) {
+		if (!account) {
 			throw new ResourceNotFoundError()
 		}
+
+		const transactions =
+			await this.transactionsRepository.findManyByAccountId(accountId)
+
+		transactions.map(
+			async ({ id }) => await this.transactionsRepository.delete(id),
+		)
 
 		await this.accountsRepository.delete(accountId)
 	}
