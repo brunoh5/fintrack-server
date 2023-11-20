@@ -31,6 +31,7 @@ Financial Management app
 - [x] Ao apagar uma conta deverá apagar todas as transações da mesma;
 - [x] Transações com o tipo sent devem diminuir o valor do balanço da conta
 - [x] Transações com o tipo received devem aumentar o valor do balanço da conta
+- [ ] Transações do tipo **sent** não deve ser criadas caso balanço da conta não for o suficiente
 
 ## RNFs
 
