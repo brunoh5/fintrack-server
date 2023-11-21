@@ -2,7 +2,7 @@ import { prisma } from '@/lib/prisma'
 import { Account, Prisma } from '@prisma/client'
 import { AccountsRepository } from '../accounts-repository'
 
-export class PrismaUsersRepository implements AccountsRepository {
+export class PrismaAccountsRepository implements AccountsRepository {
 	async updateBalanceAccount(
 		id: string,
 		amount: number,
