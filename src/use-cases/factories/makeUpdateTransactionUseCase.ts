@@ -1,5 +1,5 @@
-import { PrismaTransactionsRepository } from "@/repositories/prisma/prisma-transactions-repository";
-import { UpdateTransactionUseCase } from "../update-transaction";
+import { PrismaTransactionsRepository } from '@/repositories/prisma/prisma-transactions-repository'
+import { UpdateTransactionUseCase } from '../update-transaction'
 
 export function makeUpdateTransactionUseCase() {
 	const transactionsRepository = new PrismaTransactionsRepository()

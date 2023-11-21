@@ -10,7 +10,7 @@ interface TransactionProps {
 	description: string
 }
 
-export class ImportExtractController {
+export class Import {
 	loadTransactions(file: Express.Multer.File): Promise<TransactionProps[]> {
 		return new Promise((resolve, reject) => {
 			// const stream = fs.createReadStream(file.path)
@@ -57,7 +57,6 @@ export class ImportExtractController {
 
 	async handle(req: Request, res: Response): Promise<Response> {
 		const { file } = req
-		const { id } = req.user
 		const { accountId } = req.params
 
 		if (!file) {
@@ -79,7 +78,7 @@ export class ImportExtractController {
 			const createTransaction = prisma.transaction.create({
 				data: {
 					...transaction,
-					userId: id,
+					userId: req.user.sub,
 					accountId: account.id,
 					shopName: 'a',
 					name: 'b',

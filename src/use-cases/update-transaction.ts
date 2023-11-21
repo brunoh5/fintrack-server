@@ -3,6 +3,7 @@ import { Transaction } from '@prisma/client'
 
 interface UpdateTransactionUseCaseRequest {
 	transactionId: string
+	categoryId: string
 	name: string
 	shopName: string
 	amount: number
@@ -20,6 +21,7 @@ export class UpdateTransactionUseCase {
 
 	async execute({
 		transactionId,
+		categoryId,
 		name,
 		shopName,
 		amount,
@@ -36,6 +38,7 @@ export class UpdateTransactionUseCase {
 				paid_at,
 				payment_method,
 				type,
+				categoryId,
 			},
 		)
 

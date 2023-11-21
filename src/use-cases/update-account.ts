@@ -6,7 +6,7 @@ interface UpdateAccountUseCaseRequest {
 	accountId: string
 	type: string | undefined
 	bank: string | undefined
-	number: string | undefined
+	number: string | null
 }
 
 interface UpdateAccountUseCaseResponse {

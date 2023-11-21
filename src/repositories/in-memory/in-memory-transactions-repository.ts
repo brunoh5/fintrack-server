@@ -1,9 +1,6 @@
 import { Prisma, Transaction } from '@prisma/client'
 import { randomUUID } from 'node:crypto'
-import {
-	CreateManyRequest,
-	TransactionsRepository,
-} from '../transactions-repository'
+import { CreateMany, TransactionsRepository } from '../transactions-repository'
 
 export class InMemoryTransactionsRepository implements TransactionsRepository {
 	public items: Transaction[] = []
@@ -17,12 +14,7 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
 		return row
 	}
 
-	async createMany({
-		accountId,
-		categoryId,
-		userId,
-		transactions,
-	}: CreateManyRequest): Promise<void> {
+	async createMany({ transactions }: CreateMany): Promise<void> {
 		transactions.map((transaction) => {
 			const data = {
 				id: randomUUID(),
@@ -33,9 +25,9 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
 				type: transaction.type,
 				amount: new Prisma.Decimal(Number(transaction.amount)),
 				payment_method: transaction.payment_method ?? null,
-				categoryId,
-				accountId,
-				userId,
+				categoryId: transaction.categoryId,
+				accountId: transaction.accountId,
+				userId: transaction.userId,
 			}
 
 			return this.items.push(data)

@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
-import { TransactionsRepository } from '../transactions-repository'
+import { CreateMany, TransactionsRepository } from '../transactions-repository'
 
 export class PrismaTransactionsRepository implements TransactionsRepository {
 	async update(id: string, data: Prisma.TransactionUpdateInput) {
@@ -12,9 +12,9 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 		})
 	}
 
-	async createMany(data: Prisma.TransactionCreateManyInput) {
+	async createMany(data: CreateMany) {
 		await prisma.transaction.createMany({
-			data,
+			data: data.transactions,
 		})
 	}
 

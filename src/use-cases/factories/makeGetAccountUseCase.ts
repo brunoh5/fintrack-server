@@ -1,5 +1,5 @@
-import { PrismaAccountsRepository } from "@/repositories/prisma/prisma-accounts-repository";
-import { GetAccountUseCase } from "../get-account";
+import { PrismaAccountsRepository } from '@/repositories/prisma/prisma-accounts-repository'
+import { GetAccountUseCase } from '../get-account'
 
 export function makeGetAccountUseCase() {
 	const accountsRepository = new PrismaAccountsRepository()
