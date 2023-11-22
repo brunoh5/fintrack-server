@@ -19,12 +19,12 @@ export async function update(req: Request, res: Response): Promise<Response> {
 
 	const updateAccountByIdUseCase = makeUpdateAccountUseCase()
 
-	const account = await updateAccountByIdUseCase.execute({
+	const { account } = await updateAccountByIdUseCase.execute({
 		accountId: id,
 		type,
 		bank,
 		number,
 	})
 
-	return res.status(201).json({ account })
+	return res.status(200).json({ account })
 }

@@ -5,7 +5,7 @@ interface CreateAccountUseCaseRequest {
 	type: string
 	bank: string
 	number: string | null
-	initialAmount: number
+	balance: number
 	userId: string
 }
 
@@ -21,7 +21,6 @@ export class CreateAccountUseCase {
 	): Promise<CreateAccountUseCaseResponse> {
 		const account = await this.accountsRepository.create({
 			...data,
-			balance: data.initialAmount,
 		})
 
 		return {

@@ -11,7 +11,7 @@ export async function get(req: Request, res: Response) {
 
 	const getCategoryUseCase = makeGetCategoryUseCase()
 
-	const category = await getCategoryUseCase.execute({
+	const { category } = await getCategoryUseCase.execute({
 		categoryId: id,
 	})
 

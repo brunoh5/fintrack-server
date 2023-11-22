@@ -11,7 +11,7 @@ export async function get(req: Request, res: Response): Promise<Response> {
 
 	const getTransactionUseCase = makeGetTransactionUseCase()
 
-	const transaction = await getTransactionUseCase.execute({
+	const { transaction } = await getTransactionUseCase.execute({
 		transactionId: id,
 	})
 

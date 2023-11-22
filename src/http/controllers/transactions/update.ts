@@ -23,7 +23,7 @@ export async function update(req: Request, res: Response) {
 
 	const updateTransactionUseCase = makeUpdateTransactionUseCase()
 
-	const transaction = await updateTransactionUseCase.execute({
+	const { transaction } = await updateTransactionUseCase.execute({
 		transactionId: id,
 		categoryId,
 		name,

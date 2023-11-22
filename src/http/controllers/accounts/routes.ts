@@ -5,7 +5,7 @@ import { create } from './create'
 import { deleteAccount } from './delete'
 import { fetch } from './fetch'
 import { get } from './get'
-import { getBalance } from './getBalance'
+import { getBalance } from './get-balance'
 import { update } from './update'
 
 const accountsRouter = Router()

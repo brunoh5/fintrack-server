@@ -22,12 +22,12 @@ describe('Register UseCase', () => {
 			password_hash: await hash('123456', 6),
 		})
 
-		const { token } = await sut.execute({
+		const { user } = await sut.execute({
 			email: 'johndoe@example.com',
 			password: '123456',
 		})
 
-		expect(token).toEqual(expect.any(String))
+		expect(user.id).toEqual(expect.any(String))
 	})
 
 	it('should not be able to register with wrong email', async () => {

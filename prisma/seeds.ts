@@ -15,7 +15,7 @@ async function main() {
 		],
 	})
 
-	const password = await hash('12345', 6)
+	const password = await hash('123456', 6)
 
 	await prisma.user.create({
 		data: {

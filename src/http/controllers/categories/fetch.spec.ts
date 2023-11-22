@@ -1,15 +1,17 @@
 import { app } from '@/app'
 import request from 'supertest'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 
-describe('Profile (e2e)', () => {
-	it('should be able to get user profile', async () => {
+describe('Fetch Categories (e2e)', () => {
+	beforeEach(async () => {
 		await request(app).post('/users').send({
 			name: 'John Doe',
 			email: 'johndoe@example.com',
 			password: '123456',
 		})
+	})
 
+	it('should be able to fetch a categories', async () => {
 		const authResponse = await request(app).post('/sessions').send({
 			email: 'johndoe@example.com',
 			password: '123456',
@@ -17,16 +19,12 @@ describe('Profile (e2e)', () => {
 
 		const { token } = authResponse.body
 
-		const profileResponse = await request(app)
-			.get('/me')
+		const response = await request(app)
+			.get(`/categories`)
 			.set('Authorization', `Bearer ${token}`)
 			.send()
 
-		expect(profileResponse.statusCode).toEqual(200)
-		expect(profileResponse.body.user).toEqual(
-			expect.objectContaining({
-				email: 'johndoe@example.com',
-			}),
-		)
+		expect(response.status).toEqual(200)
+		expect(response.body.categories.length).toEqual(6)
 	})
 })

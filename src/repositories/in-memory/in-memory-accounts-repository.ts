@@ -28,8 +28,6 @@ export class InMemoryAccountsRepository implements AccountsRepository {
 		const rowIndex = this.items.findIndex((row) => row.id === id)
 		const row = this.items[rowIndex]
 
-		// console.log(row)
-
 		return row.balance.toNumber()
 	}
 

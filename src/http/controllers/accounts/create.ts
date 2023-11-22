@@ -17,11 +17,11 @@ export async function create(req: Request, res: Response) {
 
 	const createAccountUseCase = makeCreateAccountUseCase()
 
-	const account = await createAccountUseCase.execute({
+	const { account } = await createAccountUseCase.execute({
 		type,
 		bank,
 		number,
-		initialAmount,
+		balance: initialAmount,
 		userId: req.user.sub,
 	})
 

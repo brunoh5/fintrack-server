@@ -8,7 +8,7 @@ const categoriesRouter = Router()
 
 categoriesRouter.use(verifyJWT)
 
-categoriesRouter.get('/', fetch)
-categoriesRouter.get('/:id', get)
+categoriesRouter.get('/categories', fetch)
+categoriesRouter.get('/categories/:id', get)
 
 export { categoriesRouter }

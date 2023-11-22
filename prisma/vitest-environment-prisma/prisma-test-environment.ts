@@ -30,6 +30,7 @@ export default <Environment>{
 		process.env.DATABASE_URL = databaseURL
 
 		execSync('pnpm prisma migrate deploy')
+		execSync('pnpm seed')
 
 		return {
 			async teardown() {

@@ -19,12 +19,6 @@ export class DeleteTransactionUseCase {
 			transactionId,
 		)) as Transaction
 
-		// console.log(
-		// 	await this.accountsRepository.getBalanceByAccountId(
-		// 		transaction.accountId,
-		// 	),
-		// )
-
 		await this.accountsRepository.updateBalanceAccount(
 			transaction?.accountId,
 			Number(transaction?.amount),

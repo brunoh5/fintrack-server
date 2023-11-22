@@ -1,17 +1,8 @@
 import { app } from '@/app'
-import { prisma } from '@/lib/prisma'
 import request from 'supertest'
-import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
 describe('Authenticate (e2e)', () => {
-	beforeAll(async () => {
-		await prisma.$connect()
-	})
-
-	afterAll(async () => {
-		await prisma.$disconnect()
-	})
-
 	it('should be able to authenticate', async () => {
 		await request(app).post('/users').send({
 			name: 'John Doe',

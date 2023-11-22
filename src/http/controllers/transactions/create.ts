@@ -27,7 +27,7 @@ export async function create(req: Request, res: Response): Promise<Response> {
 
 	const createTransactionUseCase = makeCreateTransactionUseCase()
 
-	const transaction = await createTransactionUseCase.execute({
+	const { transaction } = await createTransactionUseCase.execute({
 		accountId,
 		categoryId,
 		name,

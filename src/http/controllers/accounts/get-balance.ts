@@ -14,7 +14,7 @@ export async function getBalance(
 
 	const getBalanceUseCase = makeGetBalanceUseCase()
 
-	const balance = await getBalanceUseCase.execute({
+	const { balance } = await getBalanceUseCase.execute({
 		accountId: id,
 	})
 

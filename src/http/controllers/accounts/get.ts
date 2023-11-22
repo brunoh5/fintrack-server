@@ -11,7 +11,7 @@ export async function get(req: Request, res: Response): Promise<Response> {
 
 	const listAccountUseCase = makeGetAccountUseCase()
 
-	const account = listAccountUseCase.execute({
+	const { account } = await listAccountUseCase.execute({
 		accountId: id,
 	})
 
