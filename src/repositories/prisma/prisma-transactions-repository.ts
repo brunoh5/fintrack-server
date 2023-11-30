@@ -3,6 +3,17 @@ import { Prisma } from '@prisma/client'
 import { CreateMany, TransactionsRepository } from '../transactions-repository'
 
 export class PrismaTransactionsRepository implements TransactionsRepository {
+	async findManyByUserId(id: string) {
+		return await prisma.transaction.findMany({
+			where: {
+				userId: id,
+			},
+			include: {
+				category: true,
+			},
+		})
+	}
+
 	async update(id: string, data: Prisma.TransactionUpdateInput) {
 		return prisma.transaction.update({
 			where: {
