@@ -1,8 +1,26 @@
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
-import { CreateMany, TransactionsRepository } from '../transactions-repository'
+import {
+	CreateMany,
+	MonthlyExpense,
+	TransactionsRepository,
+} from '../transactions-repository'
 
 export class PrismaTransactionsRepository implements TransactionsRepository {
+	async monthlyExpensesMetricsByYear(year: number, userId: string) {
+		const expenses = await prisma.$queryRaw<MonthlyExpense[]>`
+			SELECT date_trunc('month', created_at) AS month, SUM(amount) AS total
+			FROM transactions
+			WHERE EXTRACT(year FROM created_at) = ${year}
+			AND type='sent'
+			AND "userId" = ${userId}
+			GROUP BY month
+			ORDER BY month
+		`
+
+		return expenses
+	}
+
 	async findManyByUserId(id: string) {
 		return await prisma.transaction.findMany({
 			where: {
