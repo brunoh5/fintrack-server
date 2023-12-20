@@ -21,10 +21,11 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 		return expenses
 	}
 
-	async findManyByUserId(id: string) {
+	async findManyByUserId({ id, type }: { id: string; type: string | null }) {
 		return await prisma.transaction.findMany({
 			where: {
 				userId: id,
+				type: type || undefined,
 			},
 			include: {
 				category: true,

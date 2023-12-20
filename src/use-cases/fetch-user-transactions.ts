@@ -3,6 +3,7 @@ import { Transaction } from '@prisma/client'
 
 interface FetchUserTransactionsUseCaseRequest {
 	userId: string
+	type: string | null
 }
 
 interface FetchUserTransactionsUseCaseResponse {
@@ -14,9 +15,12 @@ export class FetchUserTransactionsUseCase {
 
 	async execute({
 		userId,
+		type,
 	}: FetchUserTransactionsUseCaseRequest): Promise<FetchUserTransactionsUseCaseResponse> {
-		const transactions =
-			await this.transactionsRepository.findManyByUserId(userId)
+		const transactions = await this.transactionsRepository.findManyByUserId({
+			id: userId,
+			type,
+		})
 
 		return {
 			transactions,
