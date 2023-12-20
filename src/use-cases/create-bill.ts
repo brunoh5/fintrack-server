@@ -2,14 +2,12 @@ import { BillsRepository } from '@/repositories/bills-repository'
 import { Bill } from '@prisma/client'
 
 interface CreateBillUseCaseRequest {
-	id: string
 	dueDate: string
-	imageUrl: string
+	imageUrl?: string
 	title: string
-	description: string
-	lastCharge: string
+	description?: string
+	lastCharge?: string
 	amount: number
-	created_at: string
 	paid_at?: string
 	userId: string
 }
