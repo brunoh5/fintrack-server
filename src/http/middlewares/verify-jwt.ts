@@ -20,7 +20,7 @@ export async function verifyJWT(
 	const [, token] = authHeader.split(' ')
 
 	try {
-		const { sub: userId } = verify(token, env.SECRET_TOKEN) as PayloadProps
+		const { sub: userId } = verify(token, env.JWT_SECRET) as PayloadProps
 
 		req.user = {
 			sub: userId,

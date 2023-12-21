@@ -19,7 +19,7 @@ export async function authenticate(req: Request, res: Response) {
 		password,
 	})
 
-	const token = sign({}, env.SECRET_TOKEN, { subject: user.id })
+	const token = sign({}, env.JWT_SECRET, { subject: user.id })
 
 	return res.json({ token })
 }

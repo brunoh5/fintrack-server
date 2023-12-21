@@ -12,6 +12,7 @@ import { usersRouter } from '@/http/controllers/users/routes'
 import { billsRouter } from './http/controllers/bills/routes'
 
 import { AppError } from './AppError'
+import { env } from './env'
 
 export const app = express()
 
@@ -19,7 +20,11 @@ app.use(morgan('dev'))
 
 app.use(express.json())
 
-app.use(cors())
+app.use(
+	cors({
+		origin: env.CLIENT_URL,
+	}),
+)
 
 app.use(usersRouter)
 app.use(transactionsRouter)
