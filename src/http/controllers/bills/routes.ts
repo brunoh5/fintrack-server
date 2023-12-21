@@ -8,7 +8,7 @@ const billsRouter = Router()
 
 billsRouter.use(verifyJWT)
 
-billsRouter.get('/accounts', fetchByUser)
+billsRouter.get('/bills', fetchByUser)
 billsRouter.post('/bills', create)
 
 export { billsRouter }

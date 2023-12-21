@@ -5,7 +5,7 @@ import { z } from 'zod'
 
 export async function fetchByUser(req: Request, res: Response) {
 	const fetchByUserQuerySchema = z.object({
-		type: z.string().nullable(),
+		type: z.string().nullable().default(null),
 	})
 
 	const { type } = fetchByUserQuerySchema.parse(req.query)
