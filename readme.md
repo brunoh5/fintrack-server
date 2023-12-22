@@ -26,13 +26,13 @@
 ## Install
 
 ```sh
-pnpm install
+pnpm install && pnpm build
 ```
 
 ## Usage
 
 ```sh
-pnpm generate && pnpm prisma db push && pnpm seed
+pnpm generate && pnpm prisma db push && pnpm seed && pnpm start
 ```
 
 ## Run tests
