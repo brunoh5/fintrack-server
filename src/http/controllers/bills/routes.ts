@@ -2,7 +2,7 @@ import { Router } from 'express'
 
 import { verifyJWT } from '@/http/middlewares/verify-jwt'
 import { create } from './create'
-import { fetchByUser } from './fetchByUser'
+import { fetchByUser } from './fetch-by-user'
 
 const billsRouter = Router()
 
