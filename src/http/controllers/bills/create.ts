@@ -11,8 +11,8 @@ export async function create(req: Request, res: Response) {
 		imageUrl: z.string().nullable(),
 		amount: z.number().default(0),
 		dueDate: z.string(),
-		lastCharge: z.string(),
-		paid_at: z.string(),
+		lastCharge: z.string().nullable(),
+		paid_at: z.string().nullable(),
 	})
 
 	const { amount, description, dueDate, imageUrl, lastCharge, paid_at, title } =

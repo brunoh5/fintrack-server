@@ -1,23 +1,11 @@
 import { app } from '@/app'
+import { createAndAuthenticateUser } from '@/utils/tests/create-user-and-authenticate'
 import request from 'supertest'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
 describe('Get Account (e2e)', () => {
-	beforeEach(async () => {
-		await request(app).post('/users').send({
-			name: 'John Doe',
-			email: 'johndoe@example.com',
-			password: '123456',
-		})
-	})
-
 	it('should be able to get a account', async () => {
-		const authResponse = await request(app).post('/sessions').send({
-			email: 'johndoe@example.com',
-			password: '123456',
-		})
-
-		const { token } = authResponse.body
+		const { token } = await createAndAuthenticateUser(app)
 
 		const accountResponse = await request(app)
 			.post('/accounts')
