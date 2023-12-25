@@ -4,26 +4,40 @@ import { hash } from 'bcryptjs'
 const prisma = new PrismaClient()
 
 async function main() {
-	await prisma.category.createMany({
-		data: [
-			{ name: 'Casa' },
-			{ name: 'Alimentação' },
-			{ name: 'Transporte' },
-			{ name: 'Entretenimento' },
-			{ name: 'Shopping' },
-			{ name: 'Outros' },
-		],
+	const isCategoriesAlreadyExists = await prisma.category.findFirst({
+		where: { name: 'Casa' },
 	})
 
-	const password = await hash('123456', 6)
+	if (!isCategoriesAlreadyExists) {
+		await prisma.category.createMany({
+			data: [
+				{ name: 'Casa' },
+				{ name: 'Alimentação' },
+				{ name: 'Transporte' },
+				{ name: 'Entretenimento' },
+				{ name: 'Shopping' },
+				{ name: 'Outros' },
+			],
+		})
 
-	await prisma.user.create({
-		data: {
-			name: 'Admin',
-			email: 'admin@fintrack.com',
-			password_hash: password,
-		},
+		console.log('> Categories created')
+	}
+
+	const isAdminUserAlreadyExists = await prisma.user.findFirst({
+		where: { email: 'admin@fintrack.com' },
 	})
+
+	if (!isAdminUserAlreadyExists) {
+		await prisma.user.create({
+			data: {
+				name: 'Admin',
+				email: 'admin@fintrack.com',
+				password_hash: await hash('123456', 6),
+			},
+		})
+
+		console.log('> Admin user Created')
+	}
 }
 
 main()
