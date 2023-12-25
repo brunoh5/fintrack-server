@@ -23,6 +23,8 @@ app.use(express.json())
 app.use(
 	cors({
 		origin: env.CLIENT_URL,
+  alowedHeaders: ['content-type'], 
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS']
 	}),
 )
 
