@@ -1,6 +1,7 @@
 import { env } from '@/env'
+import { InvalidCredentialsError } from '@/use-cases/errors/invalid-credentials-error'
 import { makeAuthenticateUseCase } from '@/use-cases/factories/makeAuthenticateUseCase'
-import { Request, Response } from 'express'
+import { Request, Response, response } from 'express'
 import { sign } from 'jsonwebtoken'
 import { z } from 'zod'
 
@@ -12,14 +13,20 @@ export async function authenticate(req: Request, res: Response) {
 
 	const { email, password } = registerUserBodySchema.parse(req.body)
 
-	const authenticateUseCase = makeAuthenticateUseCase()
+	try {
+		const authenticateUseCase = makeAuthenticateUseCase()
 
-	const { user } = await authenticateUseCase.execute({
-		email,
-		password,
-	})
+		const { user } = await authenticateUseCase.execute({
+			email,
+			password,
+		})
 
-	const token = sign({}, env.JWT_SECRET, { subject: user.id })
+		const token = sign({}, env.JWT_SECRET, { subject: user.id })
 
-	return res.json({ token })
+		return res.status(200).json({ token })
+	} catch (err) {
+		if (err instanceof InvalidCredentialsError) {
+			return response.status(400).json({ message: err.message })
+		}
+	}
 }
