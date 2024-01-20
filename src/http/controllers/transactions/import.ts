@@ -1,4 +1,3 @@
-import { AppError } from '@/AppError'
 import { prisma } from '@/lib/prisma'
 import { parse } from 'csv-parse'
 import { Request, Response } from 'express'
@@ -60,7 +59,8 @@ export class Import {
 		const { accountId } = req.params
 
 		if (!file) {
-			throw new AppError(`> File doesn't exists`)
+			// throw new AppError(`> File doesn't exists`)
+			throw new Error()
 		}
 
 		const account = await prisma.account.findFirst({
@@ -69,7 +69,8 @@ export class Import {
 		})
 
 		if (!account) {
-			throw new AppError(`> This account doesn't exist`)
+			// throw new AppError(`> This account doesn't exist`)
+			throw new Error()
 		}
 
 		const transactions = await this.loadTransactions(file)

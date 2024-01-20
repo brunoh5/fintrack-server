@@ -1,9 +1,10 @@
+import { Request, Response } from 'express'
+import { sign } from 'jsonwebtoken'
+import { z } from 'zod'
+
 import { env } from '@/env'
 import { InvalidCredentialsError } from '@/use-cases/errors/invalid-credentials-error'
 import { makeAuthenticateUseCase } from '@/use-cases/factories/makeAuthenticateUseCase'
-import { Request, Response, response } from 'express'
-import { sign } from 'jsonwebtoken'
-import { z } from 'zod'
 
 export async function authenticate(req: Request, res: Response) {
 	const registerUserBodySchema = z.object({
@@ -26,7 +27,9 @@ export async function authenticate(req: Request, res: Response) {
 		return res.status(200).json({ token })
 	} catch (err) {
 		if (err instanceof InvalidCredentialsError) {
-			return response.status(400).json({ message: err.message })
+			return res.status(400).json({ message: err.message })
 		}
+
+		throw err
 	}
 }

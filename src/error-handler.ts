@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextFunction, Request, Response } from 'express'
-import { AppError } from './AppError'
 import { ZodError } from 'zod'
+import { env } from './env'
 
 export function errorHandler(
 	error: Error,
@@ -15,11 +15,9 @@ export function errorHandler(
 			.send({ message: 'Validation error.', issues: error.format() })
 	}
 
-	if (error instanceof AppError) {
-		return res.status(error.statusCode).json({
-			message: error.message,
-		})
+	if (env.NODE_ENV !== 'production') {
+		console.error(error)
 	}
 
-	return res.status(500).json({ message: error.message })
+	return res.status(500).json({ message: 'Internal server Error' })
 }

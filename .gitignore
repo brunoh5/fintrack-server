@@ -12,3 +12,6 @@ build
 
 # tests
 coverage
+
+# Bruno HTTP Client
+Fintracer
