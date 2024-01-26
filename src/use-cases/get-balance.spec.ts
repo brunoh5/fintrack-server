@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 import { AccountsRepository } from '@/repositories/accounts-repository'
 import { InMemoryAccountsRepository } from '@/repositories/in-memory/in-memory-accounts-repository'
+
 import { GetBalanceUseCase } from './get-balance'
 
 let accountsRepository: AccountsRepository

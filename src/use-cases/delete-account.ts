@@ -1,5 +1,6 @@
 import { AccountsRepository } from '@/repositories/accounts-repository'
 import { TransactionsRepository } from '@/repositories/transactions-repository'
+
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 interface DeleteAccountUseCaseRequest {

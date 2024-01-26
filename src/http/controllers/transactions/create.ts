@@ -1,6 +1,7 @@
-import { makeCreateTransactionUseCase } from '@/use-cases/factories/makeCreateTransactionUseCase'
 import { Request, Response } from 'express'
 import { z } from 'zod'
+
+import { makeCreateTransactionUseCase } from '@/use-cases/factories/makeCreateTransactionUseCase'
 
 export async function create(req: Request, res: Response): Promise<Response> {
 	const createTransactionBodySchema = z.object({

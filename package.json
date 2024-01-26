@@ -30,7 +30,8 @@
     "pretest:coverage": "npm-run-all test:create-prisma-environment test:install-prisma-environment",
     "test:e2e": "vitest run --dir src/http",
     "test:e2e:watch": "vitest --dir src/http",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+		"lint": "eslint --fix ./src --ext .ts"
   },
   "dependencies": {
     "@prisma/client": "^5.7.1",
@@ -38,6 +39,7 @@
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "csv-parse": "^5.5.3",
+    "dayjs": "1.11.10",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-async-errors": "^3.1.1",

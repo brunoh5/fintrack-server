@@ -1,6 +1,7 @@
-import { makeGetCategoryUseCase } from '@/use-cases/factories/makeGetCategoryUseCase'
 import { Request, Response } from 'express'
 import { z } from 'zod'
+
+import { makeGetCategoryUseCase } from '@/use-cases/factories/makeGetCategoryUseCase'
 
 export async function get(req: Request, res: Response) {
 	const getCategoryParamsSchema = z.object({

@@ -1,6 +1,7 @@
+import { Transaction } from '@prisma/client'
+
 import { AccountsRepository } from '@/repositories/accounts-repository'
 import { TransactionsRepository } from '@/repositories/transactions-repository'
-import { Transaction } from '@prisma/client'
 
 interface DeleteTransactionUseCaseRequest {
 	transactionId: string

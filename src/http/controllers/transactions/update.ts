@@ -1,6 +1,7 @@
-import { makeUpdateTransactionUseCase } from '@/use-cases/factories/makeUpdateTransactionUseCase'
 import { Request, Response } from 'express'
 import { z } from 'zod'
+
+import { makeUpdateTransactionUseCase } from '@/use-cases/factories/makeUpdateTransactionUseCase'
 
 export async function update(req: Request, res: Response) {
 	const updateTransactionParamsSchema = z.object({

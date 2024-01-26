@@ -1,4 +1,5 @@
 import { PrismaBillsRepository } from '@/repositories/prisma/prisma-bills-repository'
+
 import { FetchBillsUseCase } from '../fetch-bills'
 
 export function makeFetchBillUseCase() {

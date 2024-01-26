@@ -1,5 +1,7 @@
-import { TransactionsRepository } from '@/repositories/transactions-repository'
 import { Transaction } from '@prisma/client'
+
+import { TransactionsRepository } from '@/repositories/transactions-repository'
+
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 interface GetTransactionUseCaseRequest {

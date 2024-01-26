@@ -1,6 +1,8 @@
+import { Account } from '@prisma/client'
+
 import { AccountsRepository } from '@/repositories/accounts-repository'
 import { hideAccountNumber } from '@/utils/hide-account-number'
-import { Account } from '@prisma/client'
+
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 interface GetAccountUseCaseRequest {

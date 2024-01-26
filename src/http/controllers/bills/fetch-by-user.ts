@@ -1,5 +1,6 @@
-import { makeFetchBillUseCase } from '@/use-cases/factories/makeFetchBillsUseCase'
 import { Request, Response } from 'express'
+
+import { makeFetchBillUseCase } from '@/use-cases/factories/makeFetchBillsUseCase'
 
 export async function fetchByUser(req: Request, res: Response) {
 	const { sub: userId } = req.user

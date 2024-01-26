@@ -1,6 +1,7 @@
-import { makeUpdateAccountUseCase } from '@/use-cases/factories/makeUpdateAccountUseCase'
 import { Request, Response } from 'express'
 import { z } from 'zod'
+
+import { makeUpdateAccountUseCase } from '@/use-cases/factories/makeUpdateAccountUseCase'
 
 export async function update(req: Request, res: Response): Promise<Response> {
 	const updateAccountParamsSchema = z.object({

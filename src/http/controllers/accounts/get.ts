@@ -1,6 +1,7 @@
-import { makeGetAccountUseCase } from '@/use-cases/factories/makeGetAccountUseCase'
 import { Request, Response } from 'express'
 import { z } from 'zod'
+
+import { makeGetAccountUseCase } from '@/use-cases/factories/makeGetAccountUseCase'
 
 export async function get(req: Request, res: Response): Promise<Response> {
 	const listAccountParamsSchema = z.object({

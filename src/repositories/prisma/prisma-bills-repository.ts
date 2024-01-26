@@ -1,7 +1,8 @@
 import { Prisma } from '@prisma/client'
 
-import { BillsRepository } from '../bills-repository'
 import { prisma } from '@/lib/prisma'
+
+import { BillsRepository } from '../bills-repository'
 
 export class PrismaBillsRepository implements BillsRepository {
 	async create(data: Prisma.BillUncheckedCreateInput) {

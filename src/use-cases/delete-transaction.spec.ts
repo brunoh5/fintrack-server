@@ -1,10 +1,12 @@
 import { randomUUID } from 'node:crypto'
+
 import { beforeEach, describe, expect, it } from 'vitest'
 
 import { AccountsRepository } from '@/repositories/accounts-repository'
 import { InMemoryAccountsRepository } from '@/repositories/in-memory/in-memory-accounts-repository'
 import { InMemoryTransactionsRepository } from '@/repositories/in-memory/in-memory-transactions-repository'
 import { TransactionsRepository } from '@/repositories/transactions-repository'
+
 import { DeleteTransactionUseCase } from './delete-transaction'
 
 let transactionsRepository: TransactionsRepository

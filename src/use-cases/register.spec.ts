@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
 import { UsersRepository } from '@/repositories/users-repository'
+
 import { UserAlreadyExistsError } from './errors/user-already-exists-error'
 import { RegisterUseCase } from './register'
 

@@ -1,6 +1,7 @@
-import { app } from '@/app'
 import request from 'supertest'
 import { describe, expect, it } from 'vitest'
+
+import { app } from '@/app'
 
 describe('Authenticate (e2e)', () => {
 	it('should be able to authenticate', async () => {

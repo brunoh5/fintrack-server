@@ -1,4 +1,5 @@
 import { PrismaAccountsRepository } from '@/repositories/prisma/prisma-accounts-repository'
+
 import { GetBalanceUseCase } from '../get-balance'
 
 export function makeGetBalanceUseCase() {

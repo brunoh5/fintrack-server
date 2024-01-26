@@ -1,4 +1,5 @@
 import { PrismaCategoriesRepository } from '@/repositories/prisma/prisma-categories-repository'
+
 import { GetCategoryUseCase } from '../get-category'
 
 export function makeGetCategoryUseCase() {

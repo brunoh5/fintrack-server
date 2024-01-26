@@ -1,7 +1,8 @@
-import { app } from '@/app'
-import { createAndAuthenticateUser } from '@/utils/tests/create-user-and-authenticate'
 import request from 'supertest'
 import { describe, expect, it } from 'vitest'
+
+import { app } from '@/app'
+import { createAndAuthenticateUser } from '@/utils/tests/create-user-and-authenticate'
 
 describe('Get Balance (e2e)', () => {
 	it('should be able to get a account balance', async () => {

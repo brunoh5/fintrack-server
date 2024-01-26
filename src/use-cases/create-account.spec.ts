@@ -1,7 +1,10 @@
+import { randomUUID } from 'node:crypto'
+
+import { beforeEach, describe, expect, it } from 'vitest'
+
 import { AccountsRepository } from '@/repositories/accounts-repository'
 import { InMemoryAccountsRepository } from '@/repositories/in-memory/in-memory-accounts-repository'
-import { randomUUID } from 'node:crypto'
-import { beforeEach, describe, expect, it } from 'vitest'
+
 import { CreateAccountUseCase } from './create-account'
 
 let accountsRepository: AccountsRepository

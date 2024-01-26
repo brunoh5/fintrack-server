@@ -1,5 +1,6 @@
-import { BillsRepository } from '@/repositories/bills-repository'
 import { Bill } from '@prisma/client'
+
+import { BillsRepository } from '@/repositories/bills-repository'
 
 interface FetchBillsUseCaseResponse {
 	bills: Bill[]

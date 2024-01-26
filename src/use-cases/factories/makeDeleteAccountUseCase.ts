@@ -1,5 +1,6 @@
 import { PrismaAccountsRepository } from '@/repositories/prisma/prisma-accounts-repository'
 import { PrismaTransactionsRepository } from '@/repositories/prisma/prisma-transactions-repository'
+
 import { DeleteAccountUseCase } from '../delete-account'
 
 export function makeDeleteAccountUseCase() {

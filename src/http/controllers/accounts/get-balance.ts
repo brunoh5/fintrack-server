@@ -1,6 +1,7 @@
-import { makeGetBalanceUseCase } from '@/use-cases/factories/makeGetBalanceUseCase'
 import { Request, Response } from 'express'
 import { z } from 'zod'
+
+import { makeGetBalanceUseCase } from '@/use-cases/factories/makeGetBalanceUseCase'
 
 export async function getBalance(
 	req: Request,

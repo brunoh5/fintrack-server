@@ -1,6 +1,8 @@
+import { beforeEach, describe, expect, it } from 'vitest'
+
 import { InMemoryTransactionsRepository } from '@/repositories/in-memory/in-memory-transactions-repository'
 import { TransactionsRepository } from '@/repositories/transactions-repository'
-import { beforeEach, describe, expect, it } from 'vitest'
+
 import { UpdateTransactionUseCase } from './update-transaction'
 
 let transactionsRepository: TransactionsRepository

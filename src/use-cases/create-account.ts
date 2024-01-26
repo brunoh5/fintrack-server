@@ -1,5 +1,6 @@
-import { AccountsRepository } from '@/repositories/accounts-repository'
 import { Account } from '@prisma/client'
+
+import { AccountsRepository } from '@/repositories/accounts-repository'
 
 interface CreateAccountUseCaseRequest {
 	type: string

@@ -1,6 +1,7 @@
-import { prisma } from '@/lib/prisma'
 import { Request, Response } from 'express'
 import { z } from 'zod'
+
+import { prisma } from '@/lib/prisma'
 
 export async function create(req: Request, res: Response) {
 	const { sub: userId } = req.user

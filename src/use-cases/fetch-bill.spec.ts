@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
-import { InMemoryBillsRepository } from '@/repositories/in-memory/in-memory-bills-repository'
 import { BillsRepository } from '@/repositories/bills-repository'
+import { InMemoryBillsRepository } from '@/repositories/in-memory/in-memory-bills-repository'
+
 import { FetchBillsUseCase } from './fetch-bills'
 
 let billsRepository: BillsRepository

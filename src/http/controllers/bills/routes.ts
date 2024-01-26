@@ -1,6 +1,7 @@
 import { Router } from 'express'
 
 import { verifyJWT } from '@/http/middlewares/verify-jwt'
+
 import { create } from './create'
 import { fetchByUser } from './fetch-by-user'
 

@@ -1,6 +1,7 @@
-import { makeDeleteAccountUseCase } from '@/use-cases/factories/makeDeleteAccountUseCase'
 import { Request, Response } from 'express'
 import { z } from 'zod'
+
+import { makeDeleteAccountUseCase } from '@/use-cases/factories/makeDeleteAccountUseCase'
 
 export async function deleteAccount(req: Request, res: Response) {
 	const deleteAccountParamsSchema = z.object({

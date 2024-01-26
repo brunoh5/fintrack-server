@@ -1,6 +1,7 @@
+import { Account } from '@prisma/client'
+
 import { AccountsRepository } from '@/repositories/accounts-repository'
 import { hideAccountNumber } from '@/utils/hide-account-number'
-import { Account } from '@prisma/client'
 
 interface FetchAccountsUseCaseRequest {
 	userId: string

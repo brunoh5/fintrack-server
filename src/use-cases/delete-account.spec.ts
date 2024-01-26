@@ -5,6 +5,7 @@ import { AccountsRepository } from '@/repositories/accounts-repository'
 import { InMemoryAccountsRepository } from '@/repositories/in-memory/in-memory-accounts-repository'
 import { InMemoryTransactionsRepository } from '@/repositories/in-memory/in-memory-transactions-repository'
 import { TransactionsRepository } from '@/repositories/transactions-repository'
+
 import { DeleteAccountUseCase } from './delete-account'
 
 let accountsRepository: AccountsRepository

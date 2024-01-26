@@ -1,4 +1,5 @@
 import { PrismaTransactionsRepository } from '@/repositories/prisma/prisma-transactions-repository'
+
 import { FetchUserTransactionsUseCase } from '../fetch-user-transactions'
 
 export function makeFetchUserTransactionUseCase() {

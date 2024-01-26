@@ -1,6 +1,7 @@
-import { makeFetchMonthlyMetricsByYearUseCase } from '@/use-cases/factories/makeMonthlyExpenseUseCase'
 import { Request, Response } from 'express'
 import { z } from 'zod'
+
+import { makeFetchMonthlyMetricsByYearUseCase } from '@/use-cases/factories/makeMonthlyExpenseUseCase'
 
 export async function fetchExpenses(req: Request, res: Response) {
 	const { sub: userId } = req.user

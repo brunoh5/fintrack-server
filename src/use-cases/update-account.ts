@@ -1,5 +1,7 @@
-import { AccountsRepository } from '@/repositories/accounts-repository'
 import { Account } from '@prisma/client'
+
+import { AccountsRepository } from '@/repositories/accounts-repository'
+
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 interface UpdateAccountUseCaseRequest {

@@ -1,6 +1,7 @@
 import { Router } from 'express'
 
 import { verifyJWT } from '@/http/middlewares/verify-jwt'
+
 import { authenticate } from './authenticate'
 import { profile } from './profile'
 import { register } from './register'

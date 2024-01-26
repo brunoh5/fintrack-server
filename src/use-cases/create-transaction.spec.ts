@@ -1,11 +1,13 @@
-import { Account } from '@prisma/client'
 import { randomUUID } from 'node:crypto'
+
+import { Account } from '@prisma/client'
 import { beforeEach, describe, expect, it } from 'vitest'
 
 import { AccountsRepository } from '@/repositories/accounts-repository'
 import { InMemoryAccountsRepository } from '@/repositories/in-memory/in-memory-accounts-repository'
 import { InMemoryTransactionsRepository } from '@/repositories/in-memory/in-memory-transactions-repository'
 import { TransactionsRepository } from '@/repositories/transactions-repository'
+
 import { CreateTransactionUseCase } from './create-transaction'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 

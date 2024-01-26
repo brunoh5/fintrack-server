@@ -1,5 +1,7 @@
-import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
+
+import { prisma } from '@/lib/prisma'
+
 import { CategoriesRepository } from '../categories-repository'
 
 export class PrismaCategoriesRepository implements CategoriesRepository {

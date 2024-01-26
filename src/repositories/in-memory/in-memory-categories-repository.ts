@@ -1,5 +1,6 @@
 import { Category, Prisma } from '@prisma/client'
 import { randomUUID } from 'crypto'
+
 import { CategoriesRepository } from '../categories-repository'
 
 export class InMemoryCategoriesRepository implements CategoriesRepository {

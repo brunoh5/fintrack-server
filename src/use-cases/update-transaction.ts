@@ -1,5 +1,6 @@
-import { TransactionsRepository } from '@/repositories/transactions-repository'
 import { Transaction } from '@prisma/client'
+
+import { TransactionsRepository } from '@/repositories/transactions-repository'
 
 interface UpdateTransactionUseCaseRequest {
 	transactionId: string

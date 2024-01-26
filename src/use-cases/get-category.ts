@@ -1,6 +1,7 @@
 import { Category } from '@prisma/client'
 
 import { CategoriesRepository } from '@/repositories/categories-repository'
+
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 interface GetCategoryUseCaseRequest {

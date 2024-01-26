@@ -1,5 +1,6 @@
-import { makeGetUserProfileUseCase } from '@/use-cases/factories/makeGetUserProfileUseCase'
 import { Request, Response } from 'express'
+
+import { makeGetUserProfileUseCase } from '@/use-cases/factories/makeGetUserProfileUseCase'
 
 export async function profile(req: Request, res: Response) {
 	const getUserProfile = makeGetUserProfileUseCase()

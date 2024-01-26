@@ -10,7 +10,6 @@ import { categoriesRouter } from '@/http/controllers/categories/routes'
 import { transactionsRouter } from '@/http/controllers/transactions/routes'
 import { usersRouter } from '@/http/controllers/users/routes'
 
-import { env } from './env'
 import { errorHandler } from './error-handler'
 import { billsRouter } from './http/controllers/bills/routes'
 
@@ -19,19 +18,6 @@ export const app = express()
 app.use(morgan('dev'))
 
 app.use(express.json())
-
-// if (env.NODE_ENV === 'dev') {
-// 	app.use(cors())
-// } else {
-// 	app.use(
-// 		cors({
-// 			origin: 'fintracer.com.br',
-// 			credentials: true,
-// 			allowedHeaders: ['content-type', 'authorization'],
-// 			methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
-// 		}),
-// 	)
-// }
 
 app.use(cors())
 

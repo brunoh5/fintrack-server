@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 import { CategoriesRepository } from '@/repositories/categories-repository'
 import { InMemoryCategoriesRepository } from '@/repositories/in-memory/in-memory-categories-repository'
+
 import { GetCategoryUseCase } from './get-category'
 
 let categoriesRepository: CategoriesRepository
