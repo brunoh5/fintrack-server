@@ -5,7 +5,7 @@ import { makeFetchCategoriesUseCase } from '@/use-cases/factories/makeFetchCateg
 export async function fetch(req: Request, res: Response): Promise<Response> {
 	const fetchCategoriesUseCase = makeFetchCategoriesUseCase()
 
-	const categories = fetchCategoriesUseCase.execute()
+	const categories = await fetchCategoriesUseCase.execute()
 
 	return res.json(categories)
 }
