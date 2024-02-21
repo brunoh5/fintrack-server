@@ -18,24 +18,32 @@ export type FindManyMetrics = {
 
 export class PrismaCategoriesRepository implements CategoriesRepository {
 	async findManyWithTransactions(userId: string) {
-		return await prisma.$queryRaw<FindManyMetrics[]>`
-		WITH transactions AS (
-			SELECT EXTRACT(MONTH FROM created_at) as month,
-			"categoryId",
-			COUNT(id) AS quant,
-			SUM(amount) AS total
-			FROM transactions AS t
-			WHERE t."userId" = ${userId},
-			AND EXTRACT(year FROM created_at) = ${dayjs().year()}
-			GROUP BY  "categoryId", t."created_at"
-			ORDER BY month
-		)
-		SELECT c.id, c.name, JSON_AGG (transactions.*) AS transactions
-		FROM categories AS c
-		LEFT JOIN transactions ON c.id = transactions."categoryId"
-		GROUP BY c.id
-		ORDER BY c.name
-	`
+		const today = dayjs()
+		const lastMonth = today.subtract(1, 'month')
+
+		const lastMonthWithYear = lastMonth.format('YYYY-MM')
+		const currentMonthWithYear = today.format('YYYY-MM')
+
+		const metrics = await prisma.$queryRaw<FindManyMetrics[]>`
+			WITH transactions AS (
+				SELECT EXTRACT(MONTH FROM created_at) as month,
+				SUM(amount) AS total,
+				"categoryId"
+				FROM transactions AS t
+				WHERE TO_CHAR(created_at, 'YYYY-MM') BETWEEN ${lastMonthWithYear} AND ${currentMonthWithYear}
+				AND t."userId" = ${userId}
+				AND t.type = 'sent'
+				GROUP BY  month, "categoryId"
+				ORDER BY month DESC
+			)
+			SELECT c.id, c.name, JSON_AGG (transactions.*) AS transactions
+			FROM categories AS c
+			LEFT JOIN transactions ON c.id = transactions."categoryId"
+			GROUP BY c.id
+			ORDER BY c.name
+		`
+
+		return metrics
 	}
 
 	async findById(id: string) {

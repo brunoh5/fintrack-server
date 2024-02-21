@@ -11,7 +11,7 @@ const categoriesRouter = Router()
 categoriesRouter.use(verifyJWT)
 
 categoriesRouter.get('/categories', fetch)
-categoriesRouter.get('/categories/:id', get)
 categoriesRouter.get('/categories/metrics', fetchMetrics)
+categoriesRouter.get('/categories/:id', get)
 
 export { categoriesRouter }

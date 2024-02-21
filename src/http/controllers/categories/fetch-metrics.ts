@@ -10,7 +10,7 @@ export async function fetchMetrics(
 
 	const fetchCategoriesMetricsUseCase = makeFetchCategoriesMetrics()
 
-	const categories = fetchCategoriesMetricsUseCase.execute({ userId })
+	const categories = await fetchCategoriesMetricsUseCase.execute({ userId })
 
-	return res.json(categories)
+	return res.json({ categories })
 }

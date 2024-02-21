@@ -12,8 +12,6 @@ export class FetchCategoriesUseCase {
 	async execute(): Promise<FetchCategoryUseCaseResponse> {
 		const categories = await this.categoriesRepository.findMany()
 
-		// console.log(categories)
-
 		return { categories }
 	}
 }

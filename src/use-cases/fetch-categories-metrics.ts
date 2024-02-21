@@ -5,10 +5,6 @@ interface FetchCategoriesMetricsUseCaseRequest {
 	userId: string
 }
 
-// interface FetchCategoriesMetricsUseCaseResponse {
-// 	categories: FindManyMetrics
-// }
-
 export class FetchCategoriesMetrics {
 	constructor(private categoriesRepository: CategoriesRepository) {}
 

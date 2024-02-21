@@ -20,7 +20,7 @@ async function main() {
 			],
 		})
 
-		console.log('> Categories created')
+		console.info('> Categories created')
 	}
 
 	const isAdminUserAlreadyExists = await prisma.user.findFirst({
@@ -36,7 +36,7 @@ async function main() {
 			},
 		})
 
-		console.log('> Admin user Created')
+		console.info('> Admin user Created')
 	}
 }
 
