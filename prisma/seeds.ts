@@ -24,14 +24,14 @@ async function main() {
 	}
 
 	const isAdminUserAlreadyExists = await prisma.user.findFirst({
-		where: { email: 'admin@fintrack.com' },
+		where: { email: 'admin@fintracer.com.br' },
 	})
 
 	if (!isAdminUserAlreadyExists) {
 		await prisma.user.create({
 			data: {
 				name: 'Admin',
-				email: 'admin@fintrack.com',
+				email: 'admin@fintracer.com.br',
 				password_hash: await hash('123456', 6),
 			},
 		})
