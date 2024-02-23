@@ -34,7 +34,7 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
 				AND t."userId" = ${userId}
 				AND t.type = 'sent'
 				GROUP BY  month, "categoryId"
-				ORDER BY month DESC
+				ORDER BY month ASC
 			)
 			SELECT c.id, c.name, JSON_AGG (transactions.*) AS transactions
 			FROM categories AS c
