@@ -10,3 +10,4 @@
 !/package.json
 !/tsconfig*.json
 !/pnpm-lock.yaml
+!/.nixpacks/**
