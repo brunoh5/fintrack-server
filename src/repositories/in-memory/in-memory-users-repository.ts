@@ -42,4 +42,11 @@ export class InMemoryUsersRepository implements UsersRepository {
 
 		return user
 	}
+
+	async update(data: Prisma.UserUpdateInput, id: string) {
+		const rowIndex = this.items.findIndex((row) => row.id === id)
+		const row = this.items[rowIndex]
+
+		this.items[rowIndex] = Object.assign(row, data)
+	}
 }

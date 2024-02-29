@@ -15,9 +15,10 @@ export class InMemoryBillsRepository implements BillsRepository {
 			description: data.description ?? null,
 			lastCharge: data.lastCharge ? new Date(data.lastCharge) : null,
 			created_at: new Date(),
-			amount: new Prisma.Decimal(Number(data.amount)),
+			amount: data.amount,
 			paid_at: data.paid_at ? new Date(data.paid_at) : null,
 			userId: data.userId,
+			period: data.period ?? 'ONLY',
 		}
 
 		this.items.push(bill)

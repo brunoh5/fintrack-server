@@ -26,7 +26,7 @@ describe('Delete Transaction UseCase', () => {
 			id: 'account-01',
 			balance: 3500,
 			bank: 'bank',
-			type: 'Conta Corrente',
+			type: 'CURRENT_ACCOUNT',
 			number: '1111 2222 3333 4444',
 			userId: randomUUID(),
 		})
@@ -37,11 +37,10 @@ describe('Delete Transaction UseCase', () => {
 			userId: 'user-id',
 			categoryId: 'category-id',
 			accountId: 'account-01',
-			amount: 3500,
+			amount: '3500',
 			shopName: 'KaBuM',
-			type: 'sent',
-			payment_method: 'credit-card',
-			paid_at: null,
+			transaction_type: 'DEBIT',
+			payment_method: 'CREDIT_CARD',
 			name: 'RTX 3060',
 		})
 
@@ -61,11 +60,11 @@ describe('Delete Transaction UseCase', () => {
 			userId: 'user-id',
 			categoryId: 'category-id',
 			accountId: 'account-01',
-			amount: 3500,
+			amount: '3500',
 			shopName: 'KaBuM',
-			type: 'sent',
-			payment_method: 'credit-card',
-			paid_at: null,
+			transaction_type: 'DEBIT',
+			payment_method: 'CREDIT_CARD',
+
 			name: 'RTX 3060',
 		})
 
@@ -81,6 +80,6 @@ describe('Delete Transaction UseCase', () => {
 			await accountsRepository.getBalanceByAccountId('account-01')
 
 		expect(deleteTransaction).toEqual(null)
-		expect(accountBalance).toEqual(0)
+		expect(accountBalance).toEqual(3500)
 	})
 })

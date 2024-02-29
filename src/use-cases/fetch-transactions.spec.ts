@@ -23,32 +23,30 @@ describe('Fetch Transactions Use Case', () => {
 		const createdAccount = await accountsRepository.create({
 			balance: 0,
 			bank: 'bank',
-			type: 'Conta Corrente',
+			type: 'CURRENT_ACCOUNT',
 			number: '1111 2222 3333 4444',
-			userId: randomUUID(),
+			userId: 'user-01',
 		})
 
 		await transactionsRepository.create({
 			userId: randomUUID(),
 			categoryId: randomUUID(),
 			accountId: createdAccount.id,
-			amount: 3500,
+			amount: '3500',
 			shopName: 'KaBuM-01',
-			type: 'sent',
-			payment_method: 'credit-card',
-			paid_at: null,
+			transaction_type: 'DEBIT',
+			payment_method: 'CREDIT_CARD',
 			name: 'RTX 3060',
 		})
 
 		await transactionsRepository.create({
-			userId: randomUUID(),
-			categoryId: randomUUID(),
+			userId: 'user-01',
+			categoryId: 'category-01',
 			accountId: createdAccount.id,
-			amount: 3500,
+			amount: '3500',
 			shopName: 'KaBuM-02',
-			type: 'sent',
-			payment_method: 'credit-card',
-			paid_at: null,
+			transaction_type: 'DEBIT',
+			payment_method: 'CREDIT_CARD',
 			name: 'RTX 3060',
 		})
 

@@ -1,9 +1,11 @@
 import { Prisma } from '@prisma/client'
 
 import { prisma } from '@/lib/prisma'
+import { divideAmount } from '@/utils/divide-amount'
 
 import {
 	CreateMany,
+	FindManyByUserIdProps,
 	MonthlyExpense,
 	TransactionsRepository,
 } from '../transactions-repository'
@@ -14,7 +16,7 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 			SELECT date_trunc('month', created_at) AS month, SUM(amount) AS total
 			FROM transactions
 			WHERE EXTRACT(year FROM created_at) = ${year}
-			AND type='sent'
+			AND transaction_type='DEBIT'
 			AND "userId" = ${userId}
 			GROUP BY month
 			ORDER BY month
@@ -23,15 +25,22 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 		return expenses
 	}
 
-	async findManyByUserId({ id, type }: { id: string; type: string | null }) {
+	async findManyByUserId({
+		id,
+		transaction_type,
+		page,
+		limit = 10,
+	}: FindManyByUserIdProps) {
 		return await prisma.transaction.findMany({
 			where: {
 				userId: id,
-				type: type || undefined,
+				transaction_type,
 			},
 			include: {
 				category: true,
 			},
+			take: limit,
+			skip: (page - 1) * limit,
 		})
 	}
 
@@ -58,15 +67,25 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 		})
 	}
 
-	async findManyByAccountId(id: string) {
-		return prisma.transaction.findMany({
+	async findManyByAccountId(id: string, page = 1, limit = 10) {
+		const transactions = await prisma.transaction.findMany({
 			where: {
 				accountId: id,
 			},
 			include: {
 				category: true,
 			},
+			take: limit,
+			skip: (page - 1) * limit,
 		})
+
+		const transactionsAmountFormatted = transactions.map((transaction) => {
+			return Object.assign(transaction, {
+				amount: divideAmount(transaction.amount),
+			})
+		})
+
+		return transactionsAmountFormatted
 	}
 
 	async findById(id: string) {
@@ -80,7 +99,11 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 			return null
 		}
 
-		return transaction
+		const transactionAmountFormatted = Object.assign(transaction, {
+			amount: divideAmount(transaction.amount),
+		})
+
+		return transactionAmountFormatted
 	}
 
 	async create(data: Prisma.TransactionUncheckedCreateInput) {

@@ -14,7 +14,7 @@ describe('Get Account (e2e)', () => {
 			.send({
 				initialAmount: 3500,
 				bank: 'bank-02',
-				type: 'Conta Corrente',
+				type: 'CURRENT_ACCOUNT',
 				number: '1111 2222 3333 4444',
 			})
 

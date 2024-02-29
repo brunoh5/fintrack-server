@@ -10,19 +10,15 @@ export class InMemoryAccountsRepository implements AccountsRepository {
 	async updateBalanceAccount(
 		id: string,
 		amount: number,
-		type: 'sent' | 'received',
+		type: 'CREDIT' | 'DEBIT',
 	) {
 		const rowIndex = this.items.findIndex((row) => row.id === id)
 		const row = this.items[rowIndex]
 
-		if (type === 'sent') {
-			this.items[rowIndex].balance = new Prisma.Decimal(
-				row.balance.toNumber() - amount,
-			)
-		} else if (type === 'received') {
-			this.items[rowIndex].balance = new Prisma.Decimal(
-				row.balance.toNumber() + amount,
-			)
+		if (type === 'DEBIT') {
+			this.items[rowIndex].balance = row.balance - amount
+		} else if (type === 'CREDIT') {
+			this.items[rowIndex].balance = row.balance + amount
 		}
 	}
 
@@ -30,7 +26,7 @@ export class InMemoryAccountsRepository implements AccountsRepository {
 		const rowIndex = this.items.findIndex((row) => row.id === id)
 		const row = this.items[rowIndex]
 
-		return row.balance.toNumber()
+		return row.balance
 	}
 
 	async delete(id: string) {
@@ -69,9 +65,9 @@ export class InMemoryAccountsRepository implements AccountsRepository {
 	async create(data: Prisma.AccountUncheckedCreateInput) {
 		const account = {
 			id: data.id ?? randomUUID(),
-			balance: new Prisma.Decimal(Number(data.balance)),
+			balance: data.balance ?? 0,
 			bank: data.bank,
-			type: data.type,
+			type: data.type ?? 'CURRENT_ACCOUNT',
 			number: data.number ?? null,
 			created_at: new Date(),
 			userId: data.userId,

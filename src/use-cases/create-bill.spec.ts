@@ -16,7 +16,7 @@ describe('Create Bill UseCase', () => {
 
 	it('should be able to create a account', async () => {
 		const { bill } = await sut.execute({
-			amount: 3500,
+			amount: '3500',
 			title: 'bank',
 			description: 'Conta Corrente',
 			userId: 'user-1',

@@ -8,9 +8,13 @@ interface UpdateTransactionUseCaseRequest {
 	name: string
 	shopName: string
 	amount: number
-	paid_at: Date | null
-	payment_method: string
-	type: string
+	transaction_type: 'CREDIT' | 'DEBIT'
+	payment_method:
+		| 'MONEY'
+		| 'PIX'
+		| 'CREDIT_CARD'
+		| 'DEBIT_CARD'
+		| 'BANK_TRANSFER'
 }
 
 interface UpdateTransactionUseCaseResponse {
@@ -26,9 +30,8 @@ export class UpdateTransactionUseCase {
 		name,
 		shopName,
 		amount,
-		paid_at,
 		payment_method,
-		type,
+		transaction_type,
 	}: UpdateTransactionUseCaseRequest): Promise<UpdateTransactionUseCaseResponse> {
 		const transaction = await this.transactionsRepository.update(
 			transactionId,
@@ -36,10 +39,9 @@ export class UpdateTransactionUseCase {
 				name,
 				shopName,
 				amount,
-				paid_at,
 				payment_method,
-				type,
 				categoryId,
+				transaction_type,
 			},
 		)
 

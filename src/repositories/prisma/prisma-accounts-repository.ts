@@ -8,16 +8,16 @@ export class PrismaAccountsRepository implements AccountsRepository {
 	async updateBalanceAccount(
 		id: string,
 		amount: number,
-		type: 'received' | 'sent',
+		type: 'DEBIT' | 'CREDIT',
 	) {
 		const account = (await this.findById(id)) as Account
 
-		if (type === 'received') {
-			account.balance = new Prisma.Decimal(Number(account.balance) + amount)
+		if (type === 'CREDIT') {
+			account.balance = Number(account.balance) + amount
 		}
 
-		if (type === 'sent') {
-			account.balance = new Prisma.Decimal(Number(account.balance) - amount)
+		if (type === 'DEBIT') {
+			account.balance = Number(account.balance) - amount
 		}
 
 		await this.update(id, account)

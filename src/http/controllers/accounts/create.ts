@@ -5,7 +5,12 @@ import { makeCreateAccountUseCase } from '@/use-cases/factories/makeCreateAccoun
 
 export async function create(req: Request, res: Response) {
 	const createAccountBodySchema = z.object({
-		type: z.string(),
+		type: z.enum([
+			'CURRENT_ACCOUNT',
+			'INVESTMENT_ACCOUNT',
+			'SAVINGS_ACCOUNT',
+			'MACHINE_ACCOUNT',
+		]),
 		bank: z.string(),
 		number: z.string().nullable(),
 		initialAmount: z.number().default(0),

@@ -23,7 +23,7 @@ describe('Delete Account UseCase', () => {
 		const createdAccount = await accountsRepository.create({
 			balance: 3500,
 			bank: 'bank-01',
-			type: 'Conta Corrente',
+			type: 'CURRENT_ACCOUNT',
 			number: '1111 2222 3333 4444',
 			userId: randomUUID(),
 		})
@@ -42,20 +42,19 @@ describe('Delete Account UseCase', () => {
 			id: 'account-01',
 			balance: 3500,
 			bank: 'bank-01',
-			type: 'Conta Corrente',
+			type: 'CURRENT_ACCOUNT',
 			number: '1111 2222 3333 4444',
-			userId: randomUUID(),
+			userId: 'user-01',
 		})
 
 		await transactionsRepository.create({
-			userId: 'user-id',
+			userId: 'user-01',
 			categoryId: 'category-id',
 			accountId: 'account-01',
-			amount: 3500,
+			amount: '3500',
 			shopName: 'KaBuM',
-			type: 'sent',
-			payment_method: 'credit-card',
-			paid_at: null,
+			transaction_type: 'CREDIT',
+			payment_method: 'CREDIT_CARD',
 			name: 'RTX 3060',
 		})
 

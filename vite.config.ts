@@ -6,5 +6,12 @@ export default defineConfig({
 	test: {
 		environmentMatchGlobs: [['src/http/controllers/**', 'prisma']],
 		dir: 'src',
+		exclude: [
+			'**/node_modules/**',
+			'**/build/**',
+			'**/.{idea,git,cache,output,temp}/**',
+			'./src/error-handler.ts',
+			'./prisma/seeds.ts',
+		],
 	},
 })

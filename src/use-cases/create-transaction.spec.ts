@@ -28,7 +28,7 @@ describe('Create Transactions UseCase', () => {
 			id: 'account-01',
 			balance: 0,
 			bank: 'bank',
-			type: 'Conta Corrente',
+			type: 'CURRENT_ACCOUNT',
 			number: '1111 2222 3333 4444',
 			userId: randomUUID(),
 		})
@@ -39,11 +39,10 @@ describe('Create Transactions UseCase', () => {
 			userId: randomUUID(),
 			categoryId: randomUUID(),
 			accountId: 'account-01',
-			amount: 3500,
+			amount: '3500',
 			shopName: 'KaBuM',
-			type: 'sent',
-			payment_method: 'credit-card',
-			paid_at: null,
+			transaction_type: 'DEBIT',
+			payment_method: 'CREDIT_CARD',
 			name: 'RTX 3060',
 		})
 
@@ -55,17 +54,16 @@ describe('Create Transactions UseCase', () => {
 			userId: randomUUID(),
 			categoryId: randomUUID(),
 			accountId: 'account-01',
-			amount: 3500,
+			amount: '3500',
 			shopName: 'KaBuM',
-			type: 'sent',
-			payment_method: 'credit-card',
-			paid_at: null,
+			transaction_type: 'DEBIT',
+			payment_method: 'CREDIT_CARD',
 			name: 'RTX 3060',
 		})
 
 		const account = (await accountsRepository.findById('account-01')) as Account
 
-		expect(account.balance.d[0]).toEqual(3500)
+		expect(account.balance).toEqual(-3500)
 	})
 
 	it('should not be able to create a transaction with non-existent account', async () => {
@@ -74,11 +72,10 @@ describe('Create Transactions UseCase', () => {
 				userId: randomUUID(),
 				categoryId: randomUUID(),
 				accountId: 'non-existent-account',
-				amount: 3500,
+				amount: '3500',
 				shopName: 'KaBuM',
-				type: 'sent',
-				payment_method: 'credit-card',
-				paid_at: null,
+				transaction_type: 'DEBIT',
+				payment_method: 'CREDIT_CARD',
 				name: 'RTX 3060',
 			}),
 		).rejects.toBeInstanceOf(ResourceNotFoundError)

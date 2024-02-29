@@ -2,7 +2,11 @@ import { randomUUID } from 'node:crypto'
 
 import { Prisma, Transaction } from '@prisma/client'
 
-import { CreateMany, TransactionsRepository } from '../transactions-repository'
+import {
+	CreateMany,
+	FindManyByUserIdProps,
+	TransactionsRepository,
+} from '../transactions-repository'
 
 export class InMemoryTransactionsRepository implements TransactionsRepository {
 	public items: Transaction[] = []
@@ -23,9 +27,8 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
 				name: transaction.name,
 				shopName: transaction.shopName ?? null,
 				created_at: new Date(),
-				paid_at: (transaction.paid_at as Date) ?? null,
-				type: transaction.type,
-				amount: new Prisma.Decimal(Number(transaction.amount)),
+				transaction_type: transaction.transaction_type,
+				amount: transaction.amount ?? 0,
 				payment_method: transaction.payment_method ?? null,
 				categoryId: transaction.categoryId,
 				accountId: transaction.accountId,
@@ -66,10 +69,9 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
 			name: data.name,
 			shopName: data.shopName ?? null,
 			created_at: new Date(),
-			paid_at: (data.paid_at as Date) ?? null,
-			type: data.type,
-			amount: new Prisma.Decimal(Number(data.amount)),
-			payment_method: data.payment_method ?? null,
+			transaction_type: data.transaction_type,
+			amount: data.amount ?? 0,
+			payment_method: data.payment_method,
 			categoryId: data.categoryId,
 			accountId: data.accountId,
 			userId: data.userId,
@@ -78,5 +80,13 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
 		this.items.push(transaction)
 
 		return transaction
+	}
+
+	async monthlyExpensesMetricsByYear(year: number, userId: string) {
+		throw new Error('Method not implemented.')
+	}
+
+	async findManyByUserId({ id, transaction_type }: FindManyByUserIdProps) {
+		throw new Error('Method not implemented.')
 	}
 }

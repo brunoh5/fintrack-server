@@ -32,7 +32,7 @@ export class PrismaUsersRepository implements UsersRepository {
 				accounts: {
 					create: {
 						bank: 'Conta Inicial',
-						type: 'Outros',
+						type: 'CURRENT_ACCOUNT',
 					},
 				},
 			},
@@ -47,6 +47,14 @@ export class PrismaUsersRepository implements UsersRepository {
 				id,
 			},
 			data,
+		})
+	}
+
+	async delete(id: string) {
+		await prisma.user.delete({
+			where: {
+				id,
+			},
 		})
 	}
 }

@@ -1,10 +1,12 @@
-import { Transaction } from '@prisma/client'
+import { Transaction, TransactionType } from '@prisma/client'
 
 import { TransactionsRepository } from '@/repositories/transactions-repository'
 
 interface FetchUserTransactionsUseCaseRequest {
 	userId: string
-	type: string | null
+	transaction_type?: TransactionType
+	page: number
+	limit?: number
 }
 
 interface FetchUserTransactionsUseCaseResponse {
@@ -16,11 +18,15 @@ export class FetchUserTransactionsUseCase {
 
 	async execute({
 		userId,
-		type,
+		transaction_type,
+		page,
+		limit,
 	}: FetchUserTransactionsUseCaseRequest): Promise<FetchUserTransactionsUseCaseResponse> {
 		const transactions = await this.transactionsRepository.findManyByUserId({
 			id: userId,
-			type,
+			transaction_type,
+			page,
+			limit,
 		})
 
 		return {

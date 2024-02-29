@@ -5,16 +5,22 @@ import { makeFetchUserTransactionUseCase } from '@/use-cases/factories/makeFetch
 
 export async function fetchByUser(req: Request, res: Response) {
 	const fetchByUserQuerySchema = z.object({
-		type: z.string().nullable().default(null),
+		transaction_type: z.enum(['DEBIT', 'CREDIT']),
+		page: z.coerce.number().default(1),
+		limit: z.optional(z.coerce.number()),
 	})
 
-	const { type } = fetchByUserQuerySchema.parse(req.query)
+	const { transaction_type, page, limit } = fetchByUserQuerySchema.parse(
+		req.query,
+	)
 
 	const fetchUserTransactionUseCase = makeFetchUserTransactionUseCase()
 
 	const { transactions } = await fetchUserTransactionUseCase.execute({
 		userId: req.user.sub,
-		type,
+		transaction_type,
+		page,
+		limit,
 	})
 
 	return res.status(200).json({ transactions })

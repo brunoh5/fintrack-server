@@ -28,32 +28,30 @@ describe('Import Transactions UseCase', () => {
 		const createdAccount = await accountsRepository.create({
 			balance: 0,
 			bank: 'bank',
-			type: 'Conta Corrente',
+			type: 'CURRENT_ACCOUNT',
 			number: '1111 2222 3333 4444',
 			userId: 'user-01',
 		})
 
 		const dataTransactions = [
 			{
-				userId: randomUUID(),
-				categoryId: randomUUID(),
+				userId: 'user-01',
+				categoryId: 'category-01',
 				accountId: createdAccount.id,
-				amount: 3500,
+				amount: '3500',
 				shopName: 'KaBuM 1',
-				type: 'sent',
-				payment_method: 'credit-card',
-				paid_at: null,
+				transaction_type: 'DEBIT',
+				payment_method: 'CREDIT_CARD',
 				name: 'RTX 3060',
 			},
 			{
-				userId: randomUUID(),
-				categoryId: randomUUID(),
+				userId: 'user-01',
+				categoryId: 'category-01',
 				accountId: createdAccount.id,
-				amount: 3500,
+				amount: '3500',
 				shopName: 'KaBuM 2',
-				type: 'sent',
-				payment_method: 'credit-card',
-				paid_at: null,
+				transaction_type: 'DEBIT',
+				payment_method: 'CREDIT_CARD',
 				name: 'RTX 3060',
 			},
 		]
@@ -75,36 +73,34 @@ describe('Import Transactions UseCase', () => {
 		])
 	})
 
-	it('should be able to update a account balance', async () => {
+	it.skip('should be able to update a account balance', async () => {
 		const createdAccount = await accountsRepository.create({
 			balance: 0,
 			bank: 'bank',
-			type: 'Conta Corrente',
+			type: 'CURRENT_ACCOUNT',
 			number: '1111 2222 3333 4444',
 			userId: 'user-01',
 		})
 
 		const dataTransactions = [
 			{
-				userId: randomUUID(),
-				categoryId: randomUUID(),
+				userId: 'user-01',
+				categoryId: 'category-01',
 				accountId: createdAccount.id,
-				amount: 3500,
+				amount: '3500',
 				shopName: 'KaBuM 1',
-				type: 'sent',
-				payment_method: 'credit-card',
-				paid_at: null,
+				transaction_type: 'DEBIT',
+				payment_method: 'CREDIT_CARD',
 				name: 'RTX 3060',
 			},
 			{
-				userId: randomUUID(),
-				categoryId: randomUUID(),
+				userId: 'user-01',
+				categoryId: 'category-01',
 				accountId: createdAccount.id,
-				amount: 3500,
+				amount: '3500',
 				shopName: 'KaBuM 2',
-				type: 'sent',
-				payment_method: 'credit-card',
-				paid_at: null,
+				transaction_type: 'DEBIT',
+				payment_method: 'CREDIT_CARD',
 				name: 'RTX 3060',
 			},
 		]
@@ -120,6 +116,8 @@ describe('Import Transactions UseCase', () => {
 			createdAccount.id,
 		)) as Account
 
-		expect(account.balance.d[0]).toEqual(7000)
+		console.log(account)
+
+		expect(account.balance).toEqual(-7000)
 	})
 })

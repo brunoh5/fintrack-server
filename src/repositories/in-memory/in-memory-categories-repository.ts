@@ -2,6 +2,7 @@ import { Category, Prisma } from '@prisma/client'
 import { randomUUID } from 'crypto'
 
 import { CategoriesRepository } from '../categories-repository'
+import { FindManyMetrics } from '../prisma/prisma-categories-repository'
 
 export class InMemoryCategoriesRepository implements CategoriesRepository {
 	public items: Category[] = []
@@ -29,5 +30,9 @@ export class InMemoryCategoriesRepository implements CategoriesRepository {
 		this.items.push(category)
 
 		return category
+	}
+
+	findManyWithTransactions(userId: string): Promise<FindManyMetrics[]> {
+		throw new Error('Method not implemented.')
 	}
 }

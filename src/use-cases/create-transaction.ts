@@ -9,10 +9,14 @@ interface CreateTransactionUseCaseRequest {
 	name: string
 	shopName: string
 	amount: number
-	paid_at: string | null
-	type: 'sent' | 'received'
-	payment_method: string
 	userId: string
+	transaction_type: 'CREDIT' | 'DEBIT'
+	payment_method:
+		| 'MONEY'
+		| 'PIX'
+		| 'CREDIT_CARD'
+		| 'DEBIT_CARD'
+		| 'BANK_TRANSFER'
 }
 
 export class CreateTransactionUseCase {
@@ -28,8 +32,7 @@ export class CreateTransactionUseCase {
 		name,
 		shopName,
 		amount,
-		paid_at,
-		type,
+		transaction_type,
 		payment_method,
 	}: CreateTransactionUseCaseRequest) {
 		const account = await this.accountsRepository.findById(accountId)
@@ -44,13 +47,16 @@ export class CreateTransactionUseCase {
 			name,
 			shopName,
 			amount,
-			paid_at,
-			type,
+			transaction_type,
 			payment_method,
 			userId,
 		})
 
-		await this.accountsRepository.updateBalanceAccount(accountId, amount, type)
+		await this.accountsRepository.updateBalanceAccount(
+			accountId,
+			amount,
+			transaction_type,
+		)
 
 		return {
 			transaction,

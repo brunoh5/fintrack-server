@@ -2,23 +2,14 @@ import request from 'supertest'
 import { describe, expect, it } from 'vitest'
 
 import { app } from '@/app'
+import { createAccount } from '@/utils/tests/create-account'
 import { createAndAuthenticateUser } from '@/utils/tests/create-user-and-authenticate'
 
 describe('Fetch Transactions (e2e)', () => {
 	it('should be able to fetch transactions', async () => {
 		const { token } = await createAndAuthenticateUser(app)
 
-		const accountResponse = await request(app)
-			.post('/accounts')
-			.set('Authorization', `Bearer ${token}`)
-			.send({
-				initialAmount: 3500,
-				bank: 'bank-01',
-				type: 'Conta Corrente',
-				number: '1111 2222 3333 4444',
-			})
-
-		const { id: accountId } = accountResponse.body.account
+		const { account } = await createAccount(token)
 
 		const categoryResponse = await request(app)
 			.get(`/categories`)
@@ -32,12 +23,11 @@ describe('Fetch Transactions (e2e)', () => {
 			.set('Authorization', `Bearer ${token}`)
 			.send({
 				categoryId,
-				accountId,
-				amount: 3500,
+				accountId: account.id,
+				amount: '3500',
 				shopName: 'KaBuM-01',
-				type: 'sent',
-				payment_method: 'credit-card',
-				paid_at: null,
+				transaction_type: 'DEBIT',
+				payment_method: 'CREDIT_CARD',
 				name: 'RTX 3060',
 			})
 
@@ -46,27 +36,29 @@ describe('Fetch Transactions (e2e)', () => {
 			.set('Authorization', `Bearer ${token}`)
 			.send({
 				categoryId,
-				accountId,
-				amount: 3500,
+				accountId: account.id,
+				amount: '3500',
 				shopName: 'KaBuM-02',
-				type: 'sent',
-				payment_method: 'credit-card',
-				paid_at: null,
+				transaction_type: 'DEBIT',
+				payment_method: 'CREDIT_CARD',
 				name: 'RTX 3060',
 			})
 
 		const response = await request(app)
-			.get(`/transactions/${accountId}/all`)
+			.get(`/transactions/${account.id}/all`)
+			.query({ page: 1 })
 			.set('Authorization', `Bearer ${token}`)
 			.send()
+
+		console.log(response.body)
 
 		expect(response.statusCode).toEqual(200)
 		expect(response.body.transactions).toEqual([
 			expect.objectContaining({
-				shopName: 'KaBuM-01',
+				shopName: 'KaBuM-02',
 			}),
 			expect.objectContaining({
-				shopName: 'KaBuM-02',
+				shopName: 'KaBuM-01',
 			}),
 		])
 	})

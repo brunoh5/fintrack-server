@@ -1,10 +1,16 @@
+import { Transaction } from '@prisma/client'
+
 import { AccountsRepository } from '@/repositories/accounts-repository'
-import {
-	CreateManyRequest,
-	TransactionsRepository,
-} from '@/repositories/transactions-repository'
+import { TransactionsRepository } from '@/repositories/transactions-repository'
 
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
+
+interface CreateManyRequest {
+	accountId: string
+	transactions: Transaction[]
+	userId: string
+	categoryId: string
+}
 
 export class ImportTransactionsUseCase {
 	constructor(

@@ -32,7 +32,7 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
 				FROM transactions AS t
 				WHERE TO_CHAR(created_at, 'YYYY-MM') BETWEEN ${lastMonthWithYear} AND ${currentMonthWithYear}
 				AND t."userId" = ${userId}
-				AND t.type = 'sent'
+				AND t.transaction_type = 'DEBIT'
 				GROUP BY  month, "categoryId"
 				ORDER BY month ASC
 			)

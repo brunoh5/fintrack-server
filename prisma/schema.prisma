@@ -7,6 +7,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum PaymentMethod {
+  MONEY
+  PIX
+  CREDIT_CARD
+  DEBIT_CARD
+  BANK_TRANSFER
+}
+
 model User {
   id            String   @id @default(uuid())
   name          String
@@ -24,41 +32,58 @@ model User {
   @@map("users")
 }
 
+enum AccountType {
+  CURRENT_ACCOUNT
+  INVESTMENT_ACCOUNT
+  SAVINGS_ACCOUNT
+  MACHINE_ACCOUNT
+}
+
 model Account {
-  id      String  @id @default(uuid())
-  balance Decimal @default(0)
-  type    String
+  id      String      @id @default(uuid())
+  balance Int         @default(0)
+  type    AccountType @default(CURRENT_ACCOUNT)
   number  String?
   bank    String
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   transactions Transaction[]
 
   @@map("accounts")
 }
 
+enum TransactionType {
+  CREDIT
+  DEBIT
+}
+
 model Transaction {
-  id             String    @id @default(uuid())
-  name           String
-  shopName       String?
-  created_at     DateTime  @default(now())
-  paid_at        DateTime?
-  amount         Decimal
-  type           String
-  payment_method String?
+  id               String          @id @default(uuid())
+  name             String
+  shopName         String?
+  created_at       DateTime        @default(now())
+  amount           Int             @default(0)
+  transaction_type TransactionType
+  payment_method   PaymentMethod
 
   categoryId String
   category   Category @relation(fields: [categoryId], references: [id])
 
   accountId String
-  account   Account @relation(fields: [accountId], references: [id])
+  account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("transactions")
+}
+
+enum Period {
+  ONLY
+  MONTHLY
+  ANUAL
 }
 
 model Bill {
@@ -68,12 +93,14 @@ model Bill {
   title       String
   description String?
   lastCharge  DateTime?
-  amount      Decimal
+  amount      Int
   created_at  DateTime  @default(now())
   paid_at     DateTime?
 
+  period Period @default(ONLY)
+
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("bills")
 }
@@ -81,12 +108,12 @@ model Bill {
 model Goal {
   id            String   @id @default(uuid())
   name          String
-  targetAmount  Decimal  @default(0)
-  presentAmount Decimal? @default(0)
+  targetAmount  Int      @default(0)
+  presentAmount Int?     @default(0)
   created_at    DateTime @default(now())
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("goals")
 }

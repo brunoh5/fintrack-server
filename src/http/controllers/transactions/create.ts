@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { z } from 'zod'
 
 import { makeCreateTransactionUseCase } from '@/use-cases/factories/makeCreateTransactionUseCase'
+import { formatAndMultiplyAmount } from '@/utils/format-and-multiply-amount'
 
 export async function create(req: Request, res: Response): Promise<Response> {
 	const createTransactionBodySchema = z.object({
@@ -9,10 +10,15 @@ export async function create(req: Request, res: Response): Promise<Response> {
 		categoryId: z.string().uuid(),
 		name: z.string(),
 		shopName: z.string(),
-		amount: z.coerce.number(),
-		paid_at: z.string().nullable(),
-		type: z.enum(['received', 'sent']),
-		payment_method: z.string(),
+		amount: z.string(),
+		transaction_type: z.enum(['CREDIT', 'DEBIT']),
+		payment_method: z.enum([
+			'MONEY',
+			'PIX',
+			'CREDIT_CARD',
+			'DEBIT_CARD',
+			'BANK_TRANSFER',
+		]),
 	})
 
 	const {
@@ -21,8 +27,7 @@ export async function create(req: Request, res: Response): Promise<Response> {
 		name,
 		shopName,
 		amount,
-		paid_at,
-		type,
+		transaction_type,
 		payment_method,
 	} = createTransactionBodySchema.parse(req.body)
 
@@ -33,9 +38,8 @@ export async function create(req: Request, res: Response): Promise<Response> {
 		categoryId,
 		name,
 		shopName,
-		amount,
-		paid_at,
-		type,
+		amount: formatAndMultiplyAmount(amount),
+		transaction_type,
 		payment_method,
 		userId: req.user.sub,
 	})

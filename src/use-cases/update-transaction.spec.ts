@@ -19,21 +19,20 @@ describe('Update Transaction UseCase', () => {
 			userId: 'user-01',
 			categoryId: 'category-01',
 			accountId: 'account-01',
-			amount: 3500,
+			amount: '3500',
 			shopName: 'KaBuM-01',
-			type: 'sent',
-			payment_method: 'credit-card',
-			paid_at: null,
+			transaction_type: 'DEBIT',
+			payment_method: 'CREDIT_CARD',
 			name: 'RTX 3060',
 		})
 
 		const { transaction } = await sut.execute({
 			transactionId: createdTransaction.id,
-			amount: 3500,
+			categoryId: 'category-01',
+			amount: '3500',
 			shopName: 'KaBuM-02',
-			type: 'sent',
-			payment_method: 'credit-card',
-			paid_at: null,
+			transaction_type: 'DEBIT',
+			payment_method: 'CREDIT_CARD',
 			name: 'RTX 3060',
 		})
 

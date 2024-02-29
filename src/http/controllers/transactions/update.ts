@@ -13,13 +13,24 @@ export async function update(req: Request, res: Response) {
 		name: z.string(),
 		shopName: z.string(),
 		amount: z.coerce.number(),
-		paid_at: z.date().nullable(),
-		type: z.enum(['received', 'sent']),
-		payment_method: z.string(),
+		transaction_type: z.enum(['CREDIT', 'DEBIT']),
+		payment_method: z.enum([
+			'MONEY',
+			'PIX',
+			'CREDIT_CARD',
+			'DEBIT_CARD',
+			'BANK_TRANSFER',
+		]),
 	})
 
-	const { categoryId, name, shopName, amount, paid_at, type, payment_method } =
-		createTransactionBodySchema.parse(req.body)
+	const {
+		categoryId,
+		name,
+		shopName,
+		amount,
+		transaction_type,
+		payment_method,
+	} = createTransactionBodySchema.parse(req.body)
 	const { id } = updateTransactionParamsSchema.parse(req.params)
 
 	const updateTransactionUseCase = makeUpdateTransactionUseCase()
@@ -30,8 +41,7 @@ export async function update(req: Request, res: Response) {
 		name,
 		shopName,
 		amount,
-		paid_at: paid_at ?? null,
-		type,
+		transaction_type,
 		payment_method,
 	})
 

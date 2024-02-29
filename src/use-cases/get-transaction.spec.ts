@@ -23,7 +23,7 @@ describe('Get Account Use Case', () => {
 			id: 'account-01',
 			balance: 0,
 			bank: 'bank',
-			type: 'Conta Corrente',
+			type: 'CURRENT_ACCOUNT',
 			number: '1111 2222 3333 4444',
 			userId: 'user-01',
 		})
@@ -32,11 +32,10 @@ describe('Get Account Use Case', () => {
 			userId: 'user-01',
 			categoryId: 'category-01',
 			accountId: 'account-01',
-			amount: 3500,
+			amount: '3500',
 			shopName: 'KaBuM',
-			type: 'sent',
-			payment_method: 'credit-card',
-			paid_at: null,
+			transaction_type: 'DEBIT',
+			payment_method: 'CREDIT_CARD',
 			name: 'RTX 3060',
 		})
 

@@ -4,7 +4,7 @@ export interface AccountsRepository {
 	updateBalanceAccount(
 		id: string,
 		amount: number,
-		type: 'sent' | 'received',
+		type: 'DEBIT' | 'CREDIT',
 	): Promise<void>
 	getBalanceByAccountId(id: string): Promise<number>
 	delete(id: string): Promise<void>
