@@ -63,6 +63,6 @@ _This README was generated with ❤️ by [readme-md-generator](https://github.c
 ### To-do
 
 - [ ] Adicionar importação de arquivos OFX
-- [ ] Adicionar LIMIT e OFFSET nas buscas de transações para as paginações
+- [x] Adicionar LIMIT e OFFSET nas buscas de transações para as paginações
 - [ ] Adicionar Magic Link
-- [ ] Mudar de decimal para Int o amount no banco de dados
+- [x] Mudar de decimal para Int o amount no banco de dados

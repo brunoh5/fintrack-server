@@ -20,8 +20,10 @@ export class DeleteAccountUseCase {
 			throw new ResourceNotFoundError()
 		}
 
-		const transactions =
-			await this.transactionsRepository.findManyByAccountId(accountId)
+		const transactions = await this.transactionsRepository.findManyByAccountId(
+			accountId,
+			1,
+		)
 
 		transactions.map(
 			async ({ id }) => await this.transactionsRepository.delete(id),

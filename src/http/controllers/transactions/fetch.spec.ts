@@ -11,33 +11,28 @@ describe('Fetch Transactions (e2e)', () => {
 
 		const { account } = await createAccount(token)
 
-		const categoryResponse = await request(app)
-			.get(`/categories`)
-			.set('Authorization', `Bearer ${token}`)
-			.send()
-
-		const { id: categoryId } = categoryResponse.body.categories[0]
-
-		await request(app)
+		const t = await request(app)
 			.post('/transactions')
 			.set('Authorization', `Bearer ${token}`)
 			.send({
-				categoryId,
+				category: 'OTHERS',
 				accountId: account.id,
-				amount: '3500',
+				amount: 3500,
 				shopName: 'KaBuM-01',
 				transaction_type: 'DEBIT',
 				payment_method: 'CREDIT_CARD',
 				name: 'RTX 3060',
 			})
 
+		console.log(t.body)
+
 		await request(app)
 			.post('/transactions')
 			.set('Authorization', `Bearer ${token}`)
 			.send({
-				categoryId,
+				category: 'OTHERS',
 				accountId: account.id,
-				amount: '3500',
+				amount: 3500,
 				shopName: 'KaBuM-02',
 				transaction_type: 'DEBIT',
 				payment_method: 'CREDIT_CARD',
@@ -49,8 +44,6 @@ describe('Fetch Transactions (e2e)', () => {
 			.query({ page: 1 })
 			.set('Authorization', `Bearer ${token}`)
 			.send()
-
-		console.log(response.body)
 
 		expect(response.statusCode).toEqual(200)
 		expect(response.body.transactions).toEqual([
