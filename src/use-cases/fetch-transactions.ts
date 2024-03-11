@@ -16,8 +16,10 @@ export class FetchTransactionsUseCase {
 	async execute({
 		accountId,
 	}: FetchTransactionsUseCaseRequest): Promise<FetchTransactionsUseCaseResponse> {
-		const transactions =
-			await this.transactionsRepository.findManyByAccountId(accountId)
+		const transactions = await this.transactionsRepository.findManyByAccountId(
+			accountId,
+			1,
+		)
 
 		return {
 			transactions,

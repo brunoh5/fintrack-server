@@ -16,6 +16,15 @@ export interface FindManyByUserIdProps {
 	limit?: number
 }
 
+export interface TransactionMetrics {
+	category: string
+	transactions: {
+		month: number
+		total: number
+		category: string
+	}[]
+}
+
 export interface TransactionsRepository {
 	monthlyExpensesMetricsByYear(
 		year: number,
@@ -38,4 +47,7 @@ export interface TransactionsRepository {
 	): Promise<Transaction[]>
 	findById(id: string): Promise<Transaction | null>
 	create(data: Prisma.TransactionUncheckedCreateInput): Promise<Transaction>
+	expensesCompareWithLastMonth(
+		userId: string,
+	): Promise<TransactionMetrics[] | null>
 }

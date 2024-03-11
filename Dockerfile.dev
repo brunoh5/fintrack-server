@@ -10,7 +10,5 @@ COPY package.json pnpm-lock.yaml /usr/app
 
 COPY . .
 RUN pnpm install --frozen-lockfile
-# RUN pnpm prisma generate
-# RUN pnpm prisma migrate deploy
 
 EXPOSE 3333

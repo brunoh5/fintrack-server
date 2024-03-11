@@ -5,12 +5,18 @@ import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 interface CreateTransactionUseCaseRequest {
 	accountId: string
-	categoryId: string
 	name: string
 	shopName: string
 	amount: number
 	userId: string
 	transaction_type: 'CREDIT' | 'DEBIT'
+	category:
+		| 'HOME'
+		| 'FOOD'
+		| 'TRANSPORTATION'
+		| 'OTHERS'
+		| 'ENTERTAINMENT'
+		| 'SHOPPING'
 	payment_method:
 		| 'MONEY'
 		| 'PIX'
@@ -27,7 +33,7 @@ export class CreateTransactionUseCase {
 
 	async execute({
 		accountId,
-		categoryId,
+		category,
 		userId,
 		name,
 		shopName,
@@ -43,7 +49,7 @@ export class CreateTransactionUseCase {
 
 		const transaction = await this.transactionsRepository.create({
 			accountId,
-			categoryId,
+			category,
 			name,
 			shopName,
 			amount,

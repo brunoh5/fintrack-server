@@ -1,9 +1,11 @@
 import { Prisma } from '@prisma/client'
+import dayjs from 'dayjs'
 
 import { prisma } from '@/lib/prisma'
 import { divideAmount } from '@/utils/divide-amount'
 
 import {
+	CompareWithMonthResponse,
 	CreateMany,
 	FindManyByUserIdProps,
 	MonthlyExpense,
@@ -35,9 +37,6 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 			where: {
 				userId: id,
 				transaction_type,
-			},
-			include: {
-				category: true,
 			},
 			take: limit,
 			skip: (page - 1) * limit,
@@ -72,9 +71,6 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 			where: {
 				accountId: id,
 			},
-			include: {
-				category: true,
-			},
 			take: limit,
 			skip: (page - 1) * limit,
 		})
@@ -104,6 +100,35 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 		})
 
 		return transactionAmountFormatted
+	}
+
+	async expensesCompareWithLastMonth(userId: string) {
+		const today = dayjs()
+		const lastMonth = today.subtract(1, 'month')
+
+		const lastMonthWithYear = lastMonth.format('YYYY-MM')
+		const currentMonthWithYear = today.format('YYYY-MM')
+
+		const metrics = await prisma.$queryRaw<CompareWithMonthResponse>`
+			WITH transactions AS (
+				SELECT EXTRACT(MONTH FROM created_at) as month,
+					SUM(CAST(amount AS BIGINT)) AS total,
+					category
+					FROM transactions
+					WHERE TO_CHAR(created_at, 'YYYY-MM')
+					BETWEEN ${lastMonthWithYear} AND ${currentMonthWithYear}
+					AND "userId" = ${userId}
+					AND transaction_type = 'DEBIT'
+					GROUP BY month, category
+					ORDER BY month DESC
+			)
+			SELECT category, JSON_AGG(transactions.*) as transactions
+			FROM transactions
+			GROUP BY transactions.category
+			ORDER BY category ASC
+		`
+
+		return metrics
 	}
 
 	async create(data: Prisma.TransactionUncheckedCreateInput) {

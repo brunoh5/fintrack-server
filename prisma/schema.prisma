@@ -59,17 +59,25 @@ enum TransactionType {
   DEBIT
 }
 
-model Transaction {
-  id               String          @id @default(uuid())
-  name             String
-  shopName         String?
-  created_at       DateTime        @default(now())
-  amount           Int             @default(0)
-  transaction_type TransactionType
-  payment_method   PaymentMethod
+enum Category {
+  HOME
+  FOOD
+  TRANSPORTATION
+  ENTERTAINMENT
+  SHOPPING
+  OTHERS
+}
 
-  categoryId String
-  category   Category @relation(fields: [categoryId], references: [id])
+model Transaction {
+  id         String   @id @default(uuid())
+  name       String
+  shopName   String?
+  created_at DateTime @default(now())
+  amount     Int      @default(0)
+
+  category         Category        @default(OTHERS)
+  transaction_type TransactionType @default(DEBIT)
+  payment_method   PaymentMethod   @default(MONEY)
 
   accountId String
   account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
@@ -116,13 +124,4 @@ model Goal {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("goals")
-}
-
-model Category {
-  id   String @id @default(uuid())
-  name String
-
-  transaction Transaction[]
-
-  @@map("categories")
 }

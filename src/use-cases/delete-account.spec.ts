@@ -49,9 +49,9 @@ describe('Delete Account UseCase', () => {
 
 		await transactionsRepository.create({
 			userId: 'user-01',
-			categoryId: 'category-id',
+			category: 'OTHERS',
 			accountId: 'account-01',
-			amount: '3500',
+			amount: 3500,
 			shopName: 'KaBuM',
 			transaction_type: 'CREDIT',
 			payment_method: 'CREDIT_CARD',
@@ -64,8 +64,10 @@ describe('Delete Account UseCase', () => {
 
 		const deleteAccount = await accountsRepository.findById('account-01')
 
-		const deleteTransactions =
-			await transactionsRepository.findManyByAccountId('account-01')
+		const deleteTransactions = await transactionsRepository.findManyByAccountId(
+			'account-01',
+			1,
+		)
 
 		expect(deleteAccount).toEqual(null)
 		expect(deleteTransactions).toEqual([])

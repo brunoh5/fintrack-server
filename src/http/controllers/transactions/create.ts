@@ -7,7 +7,14 @@ import { formatAndMultiplyAmount } from '@/utils/format-and-multiply-amount'
 export async function create(req: Request, res: Response): Promise<Response> {
 	const createTransactionBodySchema = z.object({
 		accountId: z.string().uuid(),
-		categoryId: z.string().uuid(),
+		category: z.enum([
+			'HOME',
+			'FOOD',
+			'TRANSPORTATION',
+			'OTHERS',
+			'ENTERTAINMENT',
+			'SHOPPING',
+		]),
 		name: z.string(),
 		shopName: z.string(),
 		amount: z.string(),
@@ -23,7 +30,7 @@ export async function create(req: Request, res: Response): Promise<Response> {
 
 	const {
 		accountId,
-		categoryId,
+		category,
 		name,
 		shopName,
 		amount,
@@ -35,7 +42,7 @@ export async function create(req: Request, res: Response): Promise<Response> {
 
 	const { transaction } = await createTransactionUseCase.execute({
 		accountId,
-		categoryId,
+		category,
 		name,
 		shopName,
 		amount: formatAndMultiplyAmount(amount),

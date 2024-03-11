@@ -11,20 +11,13 @@ describe('Get Transaction (e2e)', () => {
 
 		const { account } = await createAccount(token)
 
-		const categoryResponse = await request(app)
-			.get(`/categories`)
-			.set('Authorization', `Bearer ${token}`)
-			.send()
-
-		const { id: categoryId } = categoryResponse.body.categories[0]
-
 		const transactionResponse = await request(app)
 			.post('/transactions')
 			.set('Authorization', `Bearer ${token}`)
 			.send({
-				categoryId,
+				category: 'OTHERS',
 				accountId: account.id,
-				amount: '3500',
+				amount: 3500,
 				shopName: 'KaBuM-01',
 				transaction_type: 'DEBIT',
 				payment_method: 'CREDIT_CARD',
