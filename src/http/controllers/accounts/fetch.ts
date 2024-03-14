@@ -5,9 +5,9 @@ import { makeFetchAccountsUseCase } from '@/use-cases/factories/makeFetchAccount
 export async function fetch(req: Request, res: Response) {
 	const fetchAccountsUseCase = makeFetchAccountsUseCase()
 
-	const { accounts } = await fetchAccountsUseCase.execute({
+	const resume = await fetchAccountsUseCase.execute({
 		userId: req.user.sub,
 	})
 
-	return res.json({ accounts })
+	return res.json(resume)
 }

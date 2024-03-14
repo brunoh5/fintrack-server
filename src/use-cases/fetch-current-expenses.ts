@@ -49,11 +49,13 @@ export class FetchCurrentExpenses {
 			acc[item.category].transactions.push(
 				Object.assign(currentMonth, {
 					category: undefined,
+					total: currentMonth.total / 100,
 				}),
 			)
 			acc[item.category].transactions.push(
 				Object.assign(lastMonth, {
 					category: undefined,
+					total: lastMonth.total / 100,
 				}),
 			)
 

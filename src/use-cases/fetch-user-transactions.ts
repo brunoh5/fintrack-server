@@ -29,8 +29,15 @@ export class FetchUserTransactionsUseCase {
 			limit,
 		})
 
+		const formattedTransactions = transactions.map((transaction) => {
+			return {
+				...transaction,
+				amount: transaction.amount / 100,
+			}
+		})
+
 		return {
-			transactions,
+			transactions: formattedTransactions,
 		}
 	}
 }

@@ -4,6 +4,11 @@ import { prisma } from '@/lib/prisma'
 
 import { AccountsRepository } from '../accounts-repository'
 
+interface PrismaFindManyByUserIdResponse {
+	accounts: Account[]
+	total: number
+}
+
 export class PrismaAccountsRepository implements AccountsRepository {
 	async updateBalanceAccount(
 		id: string,
@@ -50,11 +55,16 @@ export class PrismaAccountsRepository implements AccountsRepository {
 	}
 
 	async findManyByUserId(id: string) {
-		return prisma.account.findMany({
-			where: {
-				userId: id,
-			},
-		})
+		const accounts = await prisma.$queryRaw<PrismaFindManyByUserIdResponse[]>`
+			SELECT JSON_AGG(accounts.*) as accounts,
+			SUM(CAST(balance / 100 AS BIGINT)) AS total
+			FROM accounts
+			WHERE "userId" = ${id}
+		`
+
+		const account = accounts[0]
+
+		return account
 	}
 
 	async findById(id: string) {

@@ -14,8 +14,6 @@ export async function fetchByUser(req: Request, res: Response) {
 		req.query,
 	)
 
-	console.log(req.query)
-
 	const fetchUserTransactionUseCase = makeFetchUserTransactionUseCase()
 
 	const { transactions } = await fetchUserTransactionUseCase.execute({

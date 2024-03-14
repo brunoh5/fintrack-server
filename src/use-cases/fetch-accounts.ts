@@ -1,7 +1,6 @@
 import { Account } from '@prisma/client'
 
 import { AccountsRepository } from '@/repositories/accounts-repository'
-import { hideAccountNumber } from '@/utils/hide-account-number'
 
 interface FetchAccountsUseCaseRequest {
 	userId: string
@@ -17,17 +16,9 @@ export class FetchAccountsUseCase {
 	async execute({
 		userId,
 	}: FetchAccountsUseCaseRequest): Promise<FetchAccountsUseCaseResponse> {
-		const accountsResponse =
+		const resumeResponse =
 			await this.accountsRepository.findManyByUserId(userId)
 
-		const accounts = accountsResponse.map((account) => {
-			const { number } = account
-
-			return Object.assign(account, {
-				number: number ? hideAccountNumber(number) : null,
-			})
-		})
-
-		return { accounts }
+		return resumeResponse
 	}
 }
