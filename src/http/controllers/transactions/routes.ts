@@ -9,6 +9,7 @@ import { fetchByUser } from './fetch-by-user'
 import { get } from './get'
 import { Import } from './import'
 import { metrics } from './metrics'
+import { monthlyExpensesByYear } from './monthly-expenses-by-year'
 import { update } from './update'
 
 const upload = multer({
@@ -21,6 +22,7 @@ transactionsRouter.use(verifyJWT)
 
 const importTransactions = new Import()
 
+transactionsRouter.get('/transactions/monthly-expenses', monthlyExpensesByYear)
 transactionsRouter.get('/transactions/metrics', metrics)
 transactionsRouter.get('/users/transactions', fetchByUser)
 transactionsRouter.put('/transactions/:id', update)

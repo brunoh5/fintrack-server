@@ -5,7 +5,6 @@ import { prisma } from '@/lib/prisma'
 import { divideAmount } from '@/utils/divide-amount'
 
 import {
-	CompareWithMonthResponse,
 	CreateMany,
 	FindManyByUserIdProps,
 	MonthlyExpense,
@@ -14,10 +13,17 @@ import {
 
 export class PrismaTransactionsRepository implements TransactionsRepository {
 	async monthlyExpensesMetricsByYear(year: number, userId: string) {
+		const today = dayjs()
+		const lastYear = today.subtract(1, 'year')
+
+		const lastYearWithMonth = lastYear.format('YYYY-MM')
+		const currentYearWithMonth = today.format('YYYY-MM')
+
 		const expenses = await prisma.$queryRaw<MonthlyExpense[]>`
-			SELECT date_trunc('month', created_at) AS month, SUM(amount) AS total
+			SELECT date_trunc('month', created_at) AS month, SUM(CAST(amount / 100 AS BIGINT)) AS total
 			FROM transactions
-			WHERE EXTRACT(year FROM created_at) = ${year}
+			WHERE TO_CHAR(created_at, 'YYYY-MM')
+			BETWEEN ${lastYearWithMonth} AND ${currentYearWithMonth}
 			AND transaction_type='DEBIT'
 			AND "userId" = ${userId}
 			GROUP BY month
@@ -109,7 +115,7 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 		const lastMonthWithYear = lastMonth.format('YYYY-MM')
 		const currentMonthWithYear = today.format('YYYY-MM')
 
-		const metrics = await prisma.$queryRaw<CompareWithMonthResponse>`
+		const metrics = await prisma.$queryRaw`
 			WITH transactions AS (
 				SELECT EXTRACT(MONTH FROM created_at) as month,
 					SUM(CAST(amount AS BIGINT)) AS total,

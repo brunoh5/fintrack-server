@@ -12,6 +12,6 @@ export class FetchMonthlyMetricsByYearUseCase {
 		const monthlyExpenses =
 			this.transactionsRepository.monthlyExpensesMetricsByYear(year, userId)
 
-		return { monthlyExpenses }
+		return monthlyExpenses
 	}
 }

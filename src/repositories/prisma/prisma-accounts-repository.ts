@@ -28,19 +28,6 @@ export class PrismaAccountsRepository implements AccountsRepository {
 		await this.update(id, account)
 	}
 
-	async getBalanceByAccountId(id: string) {
-		const account = await prisma.account.findUnique({
-			where: {
-				id,
-			},
-			select: {
-				balance: true,
-			},
-		})
-
-		return Number(account?.balance)
-	}
-
 	async delete(id: string) {
 		await prisma.account.delete({ where: { id } })
 	}
@@ -55,23 +42,41 @@ export class PrismaAccountsRepository implements AccountsRepository {
 	}
 
 	async findManyByUserId(id: string) {
-		const accounts = await prisma.$queryRaw<PrismaFindManyByUserIdResponse[]>`
+		const resumeResponse = await prisma.$queryRaw<
+			PrismaFindManyByUserIdResponse[]
+		>`
 			SELECT JSON_AGG(accounts.*) as accounts,
 			SUM(CAST(balance / 100 AS BIGINT)) AS total
 			FROM accounts
 			WHERE "userId" = ${id}
 		`
 
-		const account = accounts[0]
+		const resume = resumeResponse[0]
 
-		return account
+		Object.assign(resume, {
+			accounts: resume.accounts.map((account) => {
+				return Object.assign(account, {
+					balance: account.balance / 100,
+				})
+			}),
+		})
+
+		return resume
 	}
 
 	async findById(id: string) {
-		return prisma.account.findUnique({
+		const account = await prisma.account.findUnique({
 			where: {
 				id,
 			},
+		})
+
+		if (!account) {
+			return null
+		}
+
+		return Object.assign(account, {
+			balance: account.balance / 100,
 		})
 	}
 

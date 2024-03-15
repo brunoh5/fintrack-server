@@ -11,7 +11,6 @@ export interface AccountsRepository {
 		amount: number,
 		type: 'DEBIT' | 'CREDIT',
 	): Promise<void>
-	getBalanceByAccountId(id: string): Promise<number>
 	delete(id: string): Promise<void>
 	update(id: string, data: Prisma.AccountUpdateInput): Promise<Account>
 	findManyByUserId(id: string): Promise<FindManyByUserIdResponse>
