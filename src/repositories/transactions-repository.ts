@@ -6,7 +6,7 @@ export interface CreateMany {
 
 export interface MonthlyExpense {
 	month: Date
-	total_amount: string
+	total: number
 }
 
 export interface FindManyByUserIdProps {

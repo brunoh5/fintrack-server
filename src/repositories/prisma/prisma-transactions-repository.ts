@@ -30,7 +30,14 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 			ORDER BY month
 		`
 
-		return expenses
+		const formattedExpenses = expenses.map((expense) => {
+			return Object.assign(expense, {
+				month: dayjs(expense.month).format('MMM/YYYY'),
+				total: Number(expense.total * -1),
+			})
+		})
+
+		return formattedExpenses
 	}
 
 	async findManyByUserId({
