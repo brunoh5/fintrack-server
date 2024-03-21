@@ -33,7 +33,7 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 		const formattedExpenses = expenses.map((expense) => {
 			return Object.assign(expense, {
 				month: dayjs(expense.month).format('MMM/YYYY'),
-				total: Number(expense.total * -1),
+				total: Number(expense.total),
 			})
 		})
 
@@ -43,17 +43,32 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 	async findManyByUserId({
 		id,
 		transaction_type,
-		page,
-		limit = 10,
+		pageIndex = 0,
 	}: FindManyByUserIdProps) {
-		return await prisma.transaction.findMany({
+		const transactionsResult = await prisma.transaction.findMany({
 			where: {
 				userId: id,
 				transaction_type,
 			},
-			take: limit,
-			skip: (page - 1) * limit,
+			take: 10,
+			skip: pageIndex * 10,
 		})
+
+		const transactionsCount = await prisma.transaction.count({
+			where: {
+				userId: id,
+			},
+		})
+
+		const transactions = transactionsResult.map((transaction) => {
+			return Object.assign(transaction, {
+				amount: undefined,
+				amountInCents: transaction.amount,
+				userId: undefined,
+			})
+		})
+
+		return { transactions, transactionsCount }
 	}
 
 	async update(id: string, data: Prisma.TransactionUpdateInput) {
@@ -90,7 +105,8 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 
 		const transactionsAmountFormatted = transactions.map((transaction) => {
 			return Object.assign(transaction, {
-				amount: divideAmount(transaction.amount),
+				amount: undefined,
+				amountInCents: transaction.amount,
 			})
 		})
 

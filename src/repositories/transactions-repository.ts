@@ -11,9 +11,8 @@ export interface MonthlyExpense {
 
 export interface FindManyByUserIdProps {
 	id: string
-	transaction_type?: TransactionType
-	page: number
-	limit?: number
+	transaction_type?: TransactionType | undefined
+	pageIndex?: number
 }
 
 export interface TransactionMetrics {
@@ -23,6 +22,11 @@ export interface TransactionMetrics {
 		total: number
 		category: string
 	}[]
+}
+
+export interface UserTransactionResponse {
+	transactions: Transaction[]
+	transactionsCount: number
 }
 
 export interface TransactionsRepository {
@@ -39,12 +43,9 @@ export interface TransactionsRepository {
 	findManyByUserId({
 		id,
 		transaction_type,
-	}: FindManyByUserIdProps): Promise<Transaction[]>
-	findManyByAccountId(
-		id: string,
-		page: number,
-		limit?: number,
-	): Promise<Transaction[]>
+		pageIndex,
+	}: FindManyByUserIdProps): Promise<UserTransactionResponse>
+	findManyByAccountId(id: string, pageIndex: number): Promise<Transaction[]>
 	findById(id: string): Promise<Transaction | null>
 	create(data: Prisma.TransactionUncheckedCreateInput): Promise<Transaction>
 	expensesCompareWithLastMonth(

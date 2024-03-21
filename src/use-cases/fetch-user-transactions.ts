@@ -5,12 +5,16 @@ import { TransactionsRepository } from '@/repositories/transactions-repository'
 interface FetchUserTransactionsUseCaseRequest {
 	userId: string
 	transaction_type?: TransactionType
-	page: number
-	limit?: number
+	pageIndex?: number
 }
 
 interface FetchUserTransactionsUseCaseResponse {
 	transactions: Transaction[]
+	meta: {
+		totalCount: number
+		pageIndex: number
+		perPage: number
+	}
 }
 
 export class FetchUserTransactionsUseCase {
@@ -19,25 +23,21 @@ export class FetchUserTransactionsUseCase {
 	async execute({
 		userId,
 		transaction_type,
-		page,
-		limit,
+		pageIndex = 0,
 	}: FetchUserTransactionsUseCaseRequest): Promise<FetchUserTransactionsUseCaseResponse> {
-		const transactions = await this.transactionsRepository.findManyByUserId({
+		const result = await this.transactionsRepository.findManyByUserId({
 			id: userId,
 			transaction_type,
-			page,
-			limit,
-		})
-
-		const formattedTransactions = transactions.map((transaction) => {
-			return {
-				...transaction,
-				amount: transaction.amount / 100,
-			}
+			pageIndex,
 		})
 
 		return {
-			transactions: formattedTransactions,
+			transactions: result.transactions,
+			meta: {
+				totalCount: result.transactionsCount,
+				pageIndex,
+				perPage: 10,
+			},
 		}
 	}
 }
