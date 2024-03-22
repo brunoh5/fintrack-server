@@ -6,7 +6,7 @@ import { InMemoryAccountsRepository } from '@/repositories/in-memory/in-memory-a
 import { InMemoryTransactionsRepository } from '@/repositories/in-memory/in-memory-transactions-repository'
 import { TransactionsRepository } from '@/repositories/transactions-repository'
 
-import { FetchTransactionsUseCase } from './fetch-transactions-deprecated'
+import { FetchTransactionsUseCase } from './fetch-transactions'
 
 let transactionsRepository: TransactionsRepository
 let accountsRepository: AccountsRepository
@@ -30,9 +30,9 @@ describe('Fetch Transactions Use Case', () => {
 
 		await transactionsRepository.create({
 			userId: randomUUID(),
-			categoryId: randomUUID(),
+			category: 'OTHERS',
 			accountId: createdAccount.id,
-			amount: '3500',
+			amount: 3500,
 			shopName: 'KaBuM-01',
 			transaction_type: 'DEBIT',
 			payment_method: 'CREDIT_CARD',
@@ -41,9 +41,9 @@ describe('Fetch Transactions Use Case', () => {
 
 		await transactionsRepository.create({
 			userId: 'user-01',
-			categoryId: 'category-01',
+			category: 'OTHERS',
 			accountId: createdAccount.id,
-			amount: '3500',
+			amount: 3500,
 			shopName: 'KaBuM-02',
 			transaction_type: 'DEBIT',
 			payment_method: 'CREDIT_CARD',
