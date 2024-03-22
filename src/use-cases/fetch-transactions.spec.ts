@@ -6,7 +6,7 @@ import { InMemoryAccountsRepository } from '@/repositories/in-memory/in-memory-a
 import { InMemoryTransactionsRepository } from '@/repositories/in-memory/in-memory-transactions-repository'
 import { TransactionsRepository } from '@/repositories/transactions-repository'
 
-import { FetchTransactionsUseCase } from './fetch-transactions'
+import { FetchTransactionsUseCase } from './fetch-transactions-deprecated'
 
 let transactionsRepository: TransactionsRepository
 let accountsRepository: AccountsRepository

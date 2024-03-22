@@ -2,7 +2,7 @@ import { PrismaTransactionsRepository } from '@/repositories/prisma/prisma-trans
 
 import { FetchTransactionsUseCase } from '../fetch-transactions'
 
-export function makeFetchTransactionUseCase() {
+export function makeFetchTransactionsUseCase() {
 	const transactionsRepository = new PrismaTransactionsRepository()
 	const useCase = new FetchTransactionsUseCase(transactionsRepository)
 

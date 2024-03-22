@@ -11,6 +11,18 @@ import {
 	TransactionsRepository,
 } from '../transactions-repository'
 
+interface ExpensesCompareWithLastMonthResponse {
+	metrics: {
+		[key: string]: {
+			transactions: {
+				month: number
+				total: number
+			}[]
+			diffBetweenMonth: number
+		}
+	}[]
+}
+
 export class PrismaTransactionsRepository implements TransactionsRepository {
 	async monthlyExpensesMetricsByYear(year: number, userId: string) {
 		const today = dayjs()
@@ -48,7 +60,7 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 		const transactionsResult = await prisma.transaction.findMany({
 			where: {
 				userId: id,
-				transaction_type,
+				transaction_type: transaction_type ?? undefined,
 			},
 			take: 10,
 			skip: pageIndex * 10,
@@ -138,7 +150,8 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 		const lastMonthWithYear = lastMonth.format('YYYY-MM')
 		const currentMonthWithYear = today.format('YYYY-MM')
 
-		const metrics = await prisma.$queryRaw`
+		const metrics =
+			await prisma.$queryRaw<ExpensesCompareWithLastMonthResponse>`
 			WITH transactions AS (
 				SELECT EXTRACT(MONTH FROM created_at) as month,
 					SUM(CAST(amount AS BIGINT)) AS total,
