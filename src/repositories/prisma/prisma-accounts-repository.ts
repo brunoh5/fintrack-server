@@ -46,22 +46,20 @@ export class PrismaAccountsRepository implements AccountsRepository {
 			PrismaFindManyByUserIdResponse[]
 		>`
 			SELECT JSON_AGG(accounts.*) as accounts,
-			SUM(CAST(balance / 100 AS BIGINT)) AS total
+			SUM(CAST(balance AS BIGINT)) AS total
 			FROM accounts
 			WHERE "userId" = ${id}
 		`
 
-		const resume = resumeResponse[0]
-
-		Object.assign(resume, {
-			accounts: resume.accounts.map((account) => {
-				return Object.assign(account, {
-					balance: account.balance / 100,
-				})
-			}),
+		const accountsCount = await prisma.account.count({
+			where: {
+				userId: id,
+			},
 		})
 
-		return resume
+		const { accounts, total } = resumeResponse[0]
+
+		return { accounts, total, accountsCount }
 	}
 
 	async findById(id: string) {

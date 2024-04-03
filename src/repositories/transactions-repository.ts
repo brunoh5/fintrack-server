@@ -1,4 +1,9 @@
-import { Prisma, Transaction, TransactionType } from '@prisma/client'
+import {
+	PaymentMethod,
+	Prisma,
+	Transaction,
+	TransactionType,
+} from '@prisma/client'
 
 export interface CreateMany {
 	transactions: Prisma.TransactionCreateManyInput[]
@@ -11,9 +16,11 @@ export interface MonthlyExpense {
 
 export interface FindManyByUserIdProps {
 	id: string
-	transaction_type?: TransactionType | null
+	name: string | undefined
+	transaction_type?: TransactionType | undefined
 	pageIndex?: number
 	accountId?: string | null
+	payment_method?: PaymentMethod | undefined
 }
 
 export interface TransactionMetrics {

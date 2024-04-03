@@ -4,10 +4,17 @@ import { AccountsRepository } from '@/repositories/accounts-repository'
 
 interface FetchAccountsUseCaseRequest {
 	userId: string
+	pageIndex?: number
 }
 
 interface FetchAccountsUseCaseResponse {
 	accounts: Account[]
+	totalBalanceInCents: number
+	meta: {
+		totalCount: number
+		pageIndex: number
+		perPage: number
+	}
 }
 
 export class FetchAccountsUseCase {
@@ -15,10 +22,20 @@ export class FetchAccountsUseCase {
 
 	async execute({
 		userId,
+		pageIndex = 0,
 	}: FetchAccountsUseCaseRequest): Promise<FetchAccountsUseCaseResponse> {
-		const resumeResponse =
-			await this.accountsRepository.findManyByUserId(userId)
+		const result = await this.accountsRepository.findManyByUserId(userId)
 
-		return resumeResponse
+		console.log(result)
+
+		return {
+			accounts: result.accounts || [],
+			totalBalanceInCents: result.total,
+			meta: {
+				totalCount: result.accountsCount,
+				pageIndex,
+				perPage: 10,
+			},
+		}
 	}
 }

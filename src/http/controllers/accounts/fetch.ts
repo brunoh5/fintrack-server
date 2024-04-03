@@ -9,5 +9,7 @@ export async function fetch(req: Request, res: Response) {
 		userId: req.user.sub,
 	})
 
+	console.log(resume)
+
 	return res.json(resume)
 }

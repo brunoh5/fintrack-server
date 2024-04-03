@@ -54,13 +54,19 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 
 	async findManyByUserId({
 		id,
+		name,
 		transaction_type,
+		payment_method,
 		pageIndex = 0,
 	}: FindManyByUserIdProps) {
 		const transactionsResult = await prisma.transaction.findMany({
 			where: {
+				name: {
+					contains: name,
+				},
 				userId: id,
-				transaction_type: transaction_type ?? undefined,
+				transaction_type,
+				payment_method,
 			},
 			take: 10,
 			skip: pageIndex * 10,
@@ -68,7 +74,12 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 
 		const transactionsCount = await prisma.transaction.count({
 			where: {
+				name: {
+					contains: name,
+				},
 				userId: id,
+				transaction_type,
+				payment_method,
 			},
 		})
 
