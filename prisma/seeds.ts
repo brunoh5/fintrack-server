@@ -8,11 +8,11 @@ const prisma = new PrismaClient()
 
 async function main() {
 	/** Reset database */
-	await prisma.user.deleteMany()
-	await prisma.account.deleteMany()
-	await prisma.transaction.deleteMany()
-	await prisma.bill.deleteMany()
-	await prisma.goal.deleteMany()
+	await prisma.$executeRaw`DELETE FROM users`
+	await prisma.$executeRaw`DELETE FROM accounts`
+	await prisma.$executeRaw`DELETE FROM transactions`
+	await prisma.$executeRaw`DELETE FROM bills`
+	await prisma.$executeRaw`DELETE FROM goals`
 
 	const { id: userId } = await prisma.user.create({
 		data: {
@@ -33,7 +33,7 @@ async function main() {
 
 	const transactionsToInsert: any[] = []
 
-	for (let i = 0; i < 20; i++) {
+	for (let i = 0; i < 40; i++) {
 		const transaction_type = faker.helpers.arrayElement([
 			'CREDIT',
 			'DEBIT',
