@@ -26,8 +26,6 @@ export class FetchAccountsUseCase {
 	}: FetchAccountsUseCaseRequest): Promise<FetchAccountsUseCaseResponse> {
 		const result = await this.accountsRepository.findManyByUserId(userId)
 
-		console.log(result)
-
 		return {
 			accounts: result.accounts || [],
 			totalBalanceInCents: result.total,

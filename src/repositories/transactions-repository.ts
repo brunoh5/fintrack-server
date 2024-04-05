@@ -1,4 +1,5 @@
 import {
+	Category,
 	PaymentMethod,
 	Prisma,
 	Transaction,
@@ -16,11 +17,12 @@ export interface MonthlyExpense {
 
 export interface FindManyByUserIdProps {
 	id: string
-	name: string | undefined
-	transaction_type?: TransactionType | undefined
+	name?: string
+	transaction_type?: TransactionType
 	pageIndex?: number
-	accountId?: string | null
-	payment_method?: PaymentMethod | undefined
+	accountId?: string
+	payment_method?: PaymentMethod
+	category?: Category
 }
 
 export interface TransactionMetrics {
@@ -54,21 +56,26 @@ export interface TransactionsRepository {
 		year: number,
 		userId: string,
 	): Promise<MonthlyExpense[]>
+
 	update(
 		id: string,
 		data: Prisma.TransactionUncheckedUpdateInput,
 	): Promise<Transaction>
+
 	createMany(data: CreateMany): Promise<void>
+
 	delete(id: string): Promise<void>
-	findManyByUserId({
-		id,
-		transaction_type,
-		pageIndex,
-		accountId,
-	}: FindManyByUserIdProps): Promise<UserTransactionResponse>
+
+	findManyByUserId(
+		data: FindManyByUserIdProps,
+	): Promise<UserTransactionResponse>
+
 	findManyByAccountId(id: string, pageIndex: number): Promise<Transaction[]>
+
 	findById(id: string): Promise<Transaction | null>
+
 	create(data: Prisma.TransactionUncheckedCreateInput): Promise<Transaction>
+
 	expensesCompareWithLastMonth(
 		userId: string,
 	): Promise<ExpensesCompareWithLastMonthResponse>

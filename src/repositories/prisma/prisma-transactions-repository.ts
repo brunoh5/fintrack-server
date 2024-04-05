@@ -45,7 +45,7 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 		const formattedExpenses = expenses.map((expense) => {
 			return Object.assign(expense, {
 				month: dayjs(expense.month).format('MMM/YYYY'),
-				total: Number(expense.total),
+				total: Number(expense.total * -1),
 			})
 		})
 
@@ -57,6 +57,7 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 		name,
 		transaction_type,
 		payment_method,
+		category,
 		pageIndex = 0,
 	}: FindManyByUserIdProps) {
 		const transactionsResult = await prisma.transaction.findMany({
@@ -67,6 +68,7 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 				userId: id,
 				transaction_type,
 				payment_method,
+				category,
 			},
 			take: 10,
 			skip: pageIndex * 10,
@@ -80,6 +82,7 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 				userId: id,
 				transaction_type,
 				payment_method,
+				category,
 			},
 		})
 
@@ -180,6 +183,8 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 			GROUP BY transactions.category
 			ORDER BY category ASC
 		`
+
+		console.log(JSON.stringify(metrics, null, 2))
 
 		return metrics
 	}

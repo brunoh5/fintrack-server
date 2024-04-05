@@ -114,8 +114,6 @@ describe('Import Transactions UseCase', () => {
 			createdAccount.id,
 		)) as Account
 
-		console.log(account)
-
 		expect(account.balance).toEqual(-7000)
 	})
 })
