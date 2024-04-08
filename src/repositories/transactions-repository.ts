@@ -15,23 +15,14 @@ export interface MonthlyExpense {
 	total: number
 }
 
-export interface FindManyByUserIdProps {
-	id: string
+export interface FindManyTransactionsProps {
+	userId: string
+	pageIndex: number
 	name?: string
 	transaction_type?: TransactionType
-	pageIndex?: number
 	accountId?: string
 	payment_method?: PaymentMethod
 	category?: Category
-}
-
-export interface TransactionMetrics {
-	category: string
-	transactions: {
-		month: number
-		total: number
-		category: string
-	}[]
 }
 
 export interface UserTransactionResponse {
@@ -39,16 +30,9 @@ export interface UserTransactionResponse {
 	transactionsCount: number
 }
 
-interface ExpensesCompareWithLastMonthResponse {
-	metrics: {
-		[key: string]: {
-			transactions: {
-				month: number
-				total: number
-			}[]
-			diffBetweenMonth: number
-		}
-	}[]
+export interface MonthExpensesResponse {
+	category: string
+	transactions: Transaction[]
 }
 
 export interface TransactionsRepository {
@@ -66,8 +50,8 @@ export interface TransactionsRepository {
 
 	delete(id: string): Promise<void>
 
-	findManyByUserId(
-		data: FindManyByUserIdProps,
+	findManyTransactions(
+		data: FindManyTransactionsProps,
 	): Promise<UserTransactionResponse>
 
 	findManyByAccountId(id: string, pageIndex: number): Promise<Transaction[]>
@@ -76,7 +60,5 @@ export interface TransactionsRepository {
 
 	create(data: Prisma.TransactionUncheckedCreateInput): Promise<Transaction>
 
-	expensesCompareWithLastMonth(
-		userId: string,
-	): Promise<ExpensesCompareWithLastMonthResponse>
+	monthExpenses(userId: string): Promise<MonthExpensesResponse[]>
 }

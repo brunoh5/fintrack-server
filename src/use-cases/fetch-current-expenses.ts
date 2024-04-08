@@ -4,17 +4,10 @@ interface FetchCurrentExpensesUseCaseRequest {
 	userId: string
 }
 
-type Transaction = {
-	month: number
-	total: number
-	category: string | undefined
-}
-
-type Metrics = {
-	[key: string]: {
-		transactions: Transaction[]
-		diffBetweenMonth: number
-	}
+interface ExpensesResponse {
+	category: string
+	amount: number
+	diffBetweenMonth: number
 }
 
 export class FetchCurrentExpenses {
@@ -22,52 +15,30 @@ export class FetchCurrentExpenses {
 
 	async execute({ userId }: FetchCurrentExpensesUseCaseRequest) {
 		const currentExpenses =
-			await this.transactionsRepository.expensesCompareWithLastMonth(userId)
+			await this.transactionsRepository.monthExpenses(userId)
 
-		if (currentExpenses === null) {
-			return null
-		}
-
-		const newExpenses = currentExpenses.reduce((acc: Metrics, item) => {
-			if (!acc[item.category]) {
-				acc[item.category] = {
-					transactions: [],
-					diffBetweenMonth: 0,
-				}
-			}
-
-			const currentMonth = item.transactions[0] || {
+		const expenses: ExpensesResponse[] = currentExpenses.map((expense) => {
+			const currentMonth = expense.transactions[0] || {
 				month: null,
 				total: 0,
 			}
 
-			const lastMonth = item.transactions[1] || {
+			const lastMonth = expense.transactions[1] || {
 				month: null,
 				total: 0,
 			}
-
-			acc[item.category].transactions.push(
-				Object.assign(currentMonth, {
-					category: undefined,
-					total: currentMonth.total / 100,
-				}),
-			)
-			acc[item.category].transactions.push(
-				Object.assign(lastMonth, {
-					category: undefined,
-					total: lastMonth.total / 100,
-				}),
-			)
 
 			const absoluteDiff = currentMonth.total - lastMonth.total
 			const average = (currentMonth.total + lastMonth.total) / 2
 			const monthlyDiffInPercentage = (100 * absoluteDiff) / average
 
-			acc[item.category].diffBetweenMonth = Math.floor(monthlyDiffInPercentage)
+			return {
+				category: expense.category,
+				amount: currentMonth.total,
+				diffBetweenMonth: Math.floor(monthlyDiffInPercentage),
+			}
+		})
 
-			return acc
-		}, {})
-
-		return newExpenses
+		return expenses
 	}
 }

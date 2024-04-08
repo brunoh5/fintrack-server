@@ -18,7 +18,7 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsup src --out-dir build",
-    "db:generate": "prisma generate",
+    "generate": "prisma generate",
     "db:push": "prisma db push",
     "seed": "tsx prisma/seeds.ts",
     "start": "node build/server.js",
@@ -51,7 +51,6 @@
   },
   "devDependencies": {
     "@faker-js/faker": "8.4.1",
-    "@paralleldrive/cuid2": "2.2.2",
     "@rocketseat/eslint-config": "^2.2.2",
     "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.17",

@@ -25,8 +25,8 @@ app.use(transactionsRouter)
 app.use(accountsRouter)
 app.use(billsRouter)
 
+app.use(errorHandler)
+
 app.use((_, res: Response) => {
 	return res.status(404).send({ message: 'Rota não encontrada' })
 })
-
-app.use(errorHandler)

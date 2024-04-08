@@ -38,8 +38,8 @@ export class FetchTransactionsUseCase {
 		pageIndex = 0,
 		accountId,
 	}: FetchTransactionsUseCaseRequest): Promise<FetchTransactionsUseCaseResponse> {
-		const result = await this.transactionsRepository.findManyByUserId({
-			id: userId,
+		const result = await this.transactionsRepository.findManyTransactions({
+			userId,
 			name,
 			transaction_type,
 			pageIndex,

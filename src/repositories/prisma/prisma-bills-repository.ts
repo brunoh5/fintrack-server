@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client'
 
 import { prisma } from '@/lib/prisma'
 
-import { BillsRepository } from '../bills-repository'
+import { BillsRepository, FindManyBillsProps } from '../bills-repository'
 
 export class PrismaBillsRepository implements BillsRepository {
 	async create(data: Prisma.BillUncheckedCreateInput) {
@@ -13,14 +13,36 @@ export class PrismaBillsRepository implements BillsRepository {
 		return bill
 	}
 
-	async findBillsByUserId(id: string) {
-		const bills = await prisma.bill.findMany({
+	async findManyBills({ userId, title, pageIndex }: FindManyBillsProps) {
+		const billsResult = await prisma.bill.findMany({
 			where: {
-				userId: id,
+				title: {
+					contains: title,
+				},
+				userId,
+			},
+			take: 10,
+			skip: pageIndex * 10,
+		})
+
+		const billsCount = await prisma.bill.count({
+			where: {
+				title: {
+					contains: title,
+				},
+				userId,
 			},
 		})
 
-		return bills
+		const bills = billsResult.map((bill) => {
+			return Object.assign(bill, {
+				amount: undefined,
+				amountInCents: bill.amount,
+				userId: undefined,
+			})
+		})
+
+		return { bills, billsCount }
 	}
 
 	async findById(id: string) {
