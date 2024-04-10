@@ -2,6 +2,7 @@ import { Bill, Prisma } from '@prisma/client'
 
 export interface FindManyBillsProps {
 	userId: string
+	status?: string
 	title?: string
 	pageIndex: number
 }
@@ -9,6 +10,7 @@ export interface FindManyBillsProps {
 interface FindManyBillsResponse {
 	bills: Bill[]
 	billsCount: number
+	totalInCents: number
 }
 
 export interface BillsRepository {

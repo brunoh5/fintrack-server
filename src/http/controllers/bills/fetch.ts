@@ -7,17 +7,23 @@ export async function fetch(req: Request, res: Response) {
 	const fetchBillsQuerySchema = z.object({
 		pageIndex: z.coerce.number().default(0).optional(),
 		title: z.string().optional(),
+		status: z.string().optional(),
 	})
 
-	const { pageIndex = 0, title } = fetchBillsQuerySchema.parse(req.query)
+	const {
+		pageIndex = 0,
+		title,
+		status,
+	} = fetchBillsQuerySchema.parse(req.query)
 
 	const fetchBillsUseCase = makeFetchBillUseCase()
 
-	const { bills, meta } = await fetchBillsUseCase.execute({
+	const result = await fetchBillsUseCase.execute({
 		pageIndex,
 		title,
+		status,
 		userId: req.user.sub,
 	})
 
-	return res.json({ bills, meta })
+	return res.json(result)
 }
