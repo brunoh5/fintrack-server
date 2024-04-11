@@ -20,13 +20,17 @@ app.use(express.json())
 
 app.use(cors())
 
+app.get('/', (req, res) => {
+	return res.send({ ok: true })
+})
+
 app.use(usersRouter)
 app.use(transactionsRouter)
 app.use(accountsRouter)
 app.use(billsRouter)
 
-app.use(errorHandler)
-
 app.use((_, res: Response) => {
 	return res.status(404).send({ message: 'Rota não encontrada' })
 })
+
+app.use(errorHandler)

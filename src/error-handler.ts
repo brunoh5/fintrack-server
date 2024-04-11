@@ -3,7 +3,6 @@ import { NextFunction, Request, Response } from 'express'
 import { ZodError } from 'zod'
 
 import { env } from './env'
-import { ResourceNotFoundError } from './use-cases/errors/resource-not-found-error'
 
 export function errorHandler(
 	error: Error,
@@ -17,8 +16,8 @@ export function errorHandler(
 			.send({ message: 'Validation error.', issues: error.format() })
 	}
 
-	if (error instanceof ResourceNotFoundError) {
-		return res.status(400).send({ message: 'Recurso não encontrado' })
+	if (error instanceof Error) {
+		return res.status(400).send({ error: error.message })
 	}
 
 	if (env.NODE_ENV !== 'production') {
