@@ -10,6 +10,7 @@ interface CreateTransactionUseCaseRequest {
 	amount: number
 	userId: string
 	transaction_type: 'CREDIT' | 'DEBIT'
+	created_at?: string
 	category:
 		| 'HOME'
 		| 'FOOD'
@@ -40,8 +41,11 @@ export class CreateTransactionUseCase {
 		amount,
 		transaction_type,
 		payment_method,
+		created_at,
 	}: CreateTransactionUseCaseRequest) {
 		const account = await this.accountsRepository.findById(accountId)
+
+		console.log(amount)
 
 		if (!account) {
 			throw new ResourceNotFoundError()
@@ -56,6 +60,7 @@ export class CreateTransactionUseCase {
 			transaction_type,
 			payment_method,
 			userId,
+			created_at,
 		})
 
 		await this.accountsRepository.updateBalanceAccount(

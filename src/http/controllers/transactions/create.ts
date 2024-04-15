@@ -9,6 +9,7 @@ export async function create(req: Request, res: Response): Promise<Response> {
 		name: z.string(),
 		shopName: z.string(),
 		amount: z.coerce.number(),
+		created_at: z.string().optional(),
 		transaction_type: z.enum(['CREDIT', 'DEBIT']),
 		category: z.enum([
 			'HOME',
@@ -35,6 +36,7 @@ export async function create(req: Request, res: Response): Promise<Response> {
 		amount,
 		transaction_type,
 		payment_method,
+		created_at,
 	} = createTransactionBodySchema.parse(req.body)
 
 	const createTransactionUseCase = makeCreateTransactionUseCase()
@@ -47,6 +49,7 @@ export async function create(req: Request, res: Response): Promise<Response> {
 		amount: amount * 100,
 		transaction_type,
 		payment_method,
+		created_at,
 		userId: req.user.sub,
 	})
 
