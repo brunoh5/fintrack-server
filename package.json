@@ -13,25 +13,18 @@
     "pnpm": ">=8",
     "node": ">=20"
   },
-  "main": "index.js",
+  "main": "server.js",
   "keywords": [],
   "scripts": {
+		"start": "node build/server.js",
     "dev": "tsx watch src/server.ts",
     "build": "tsup src --out-dir build",
-    "db:generate": "prisma generate",
-    "db:push": "prisma db push",
     "seed": "tsx prisma/seeds.ts",
-    "start": "node build/server.js",
-    "test:create-prisma-environment": "pnpm link --global --dir ./prisma/vitest-environment-prisma",
-    "test:install-prisma-environment": "pnpm link --global vitest-environment-prisma",
-    "test": "vitest run --dir src/use-cases",
-    "test:watch": "vitest --dir src/use-cases",
-    "pretest:e2e": "npm-run-all test:create-prisma-environment test:install-prisma-environment",
-    "pretest:coverage": "npm-run-all test:create-prisma-environment test:install-prisma-environment",
-    "test:e2e": "vitest run --dir src/http",
-    "test:e2e:watch": "vitest --dir src/http",
-    "test:coverage": "vitest run --coverage",
-    "lint": "eslint --fix ./src --ext .ts"
+    "test": "vitest --dir src/use-cases",
+    "test:e2e": "vitest --dir src/http",
+		"test:create-prisma-environment": "pnpm link --global --dir ./prisma/vitest-environment-prisma",
+		"test:install-prisma-environment": "pnpm link --global vitest-environment-prisma",
+    "pretest:e2e": "npm-run-all test:create-prisma-environment test:install-prisma-environment"
   },
   "dependencies": {
     "@prisma/client": "^5.10.2",
@@ -50,6 +43,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@faker-js/faker": "8.4.1",
     "@rocketseat/eslint-config": "^2.2.2",
     "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.17",

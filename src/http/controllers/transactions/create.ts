@@ -6,6 +6,10 @@ import { makeCreateTransactionUseCase } from '@/use-cases/factories/makeCreateTr
 export async function create(req: Request, res: Response): Promise<Response> {
 	const createTransactionBodySchema = z.object({
 		accountId: z.string().uuid(),
+		name: z.string(),
+		shopName: z.string(),
+		amount: z.coerce.number(),
+		transaction_type: z.enum(['CREDIT', 'DEBIT']),
 		category: z.enum([
 			'HOME',
 			'FOOD',
@@ -14,10 +18,6 @@ export async function create(req: Request, res: Response): Promise<Response> {
 			'ENTERTAINMENT',
 			'SHOPPING',
 		]),
-		name: z.string(),
-		shopName: z.string(),
-		amount: z.coerce.number(),
-		transaction_type: z.enum(['CREDIT', 'DEBIT']),
 		payment_method: z.enum([
 			'MONEY',
 			'PIX',

@@ -12,10 +12,10 @@ const accountsRouter = Router()
 
 accountsRouter.use(verifyJWT)
 
-accountsRouter.get('/accounts/:id', get)
+accountsRouter.post('/accounts', create)
 accountsRouter.get('/accounts', fetch)
+accountsRouter.get('/accounts/:id', get)
 accountsRouter.delete('/accounts/:id', deleteAccount)
 accountsRouter.put('/accounts/:id', update)
-accountsRouter.post('/accounts', create)
 
 export { accountsRouter }

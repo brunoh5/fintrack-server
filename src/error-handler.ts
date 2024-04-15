@@ -16,6 +16,10 @@ export function errorHandler(
 			.send({ message: 'Validation error.', issues: error.format() })
 	}
 
+	if (error instanceof Error) {
+		return res.status(400).send({ error: error.message })
+	}
+
 	if (env.NODE_ENV !== 'production') {
 		console.error(error)
 	}

@@ -3,13 +3,13 @@ import { Router } from 'express'
 import { verifyJWT } from '@/http/middlewares/verify-jwt'
 
 import { create } from './create'
-import { fetchByUser } from './fetch-by-user'
+import { fetch } from './fetch'
 
 const billsRouter = Router()
 
 billsRouter.use(verifyJWT)
 
-billsRouter.get('/bills', fetchByUser)
+billsRouter.get('/bills', fetch)
 billsRouter.post('/bills', create)
 
 export { billsRouter }

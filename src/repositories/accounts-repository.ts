@@ -3,6 +3,7 @@ import { Account, Prisma } from '@prisma/client'
 interface FindManyByUserIdResponse {
 	accounts: Account[]
 	total: number
+	accountsCount: number
 }
 
 export interface AccountsRepository {

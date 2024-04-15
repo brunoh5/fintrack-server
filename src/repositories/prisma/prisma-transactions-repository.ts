@@ -6,22 +6,11 @@ import { divideAmount } from '@/utils/divide-amount'
 
 import {
 	CreateMany,
-	FindManyByUserIdProps,
+	FindManyTransactionsProps,
+	MonthExpensesResponse,
 	MonthlyExpense,
 	TransactionsRepository,
 } from '../transactions-repository'
-
-interface ExpensesCompareWithLastMonthResponse {
-	metrics: {
-		[key: string]: {
-			transactions: {
-				month: number
-				total: number
-			}[]
-			diffBetweenMonth: number
-		}
-	}[]
-}
 
 export class PrismaTransactionsRepository implements TransactionsRepository {
 	async monthlyExpensesMetricsByYear(year: number, userId: string) {
@@ -45,30 +34,51 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 		const formattedExpenses = expenses.map((expense) => {
 			return Object.assign(expense, {
 				month: dayjs(expense.month).format('MMM/YYYY'),
-				total: Number(expense.total),
+				total: Number(expense.total * -1),
 			})
 		})
 
 		return formattedExpenses
 	}
 
-	async findManyByUserId({
-		id,
+	async findManyTransactions({
+		userId,
+		accountId,
+		name,
 		transaction_type,
-		pageIndex = 0,
-	}: FindManyByUserIdProps) {
+		payment_method,
+		category,
+		pageIndex,
+	}: FindManyTransactionsProps) {
 		const transactionsResult = await prisma.transaction.findMany({
 			where: {
-				userId: id,
-				transaction_type: transaction_type ?? undefined,
+				name: {
+					contains: name,
+					mode: 'insensitive',
+				},
+				userId,
+				accountId,
+				transaction_type,
+				payment_method,
+				category,
 			},
 			take: 10,
 			skip: pageIndex * 10,
+			orderBy: {
+				created_at: 'desc',
+			},
 		})
 
 		const transactionsCount = await prisma.transaction.count({
 			where: {
-				userId: id,
+				name: {
+					contains: name,
+				},
+				userId,
+				accountId,
+				transaction_type,
+				payment_method,
+				category,
 			},
 		})
 
@@ -143,15 +153,14 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 		return transactionAmountFormatted
 	}
 
-	async expensesCompareWithLastMonth(userId: string) {
+	async monthExpenses(userId: string) {
 		const today = dayjs()
 		const lastMonth = today.subtract(1, 'month')
 
 		const lastMonthWithYear = lastMonth.format('YYYY-MM')
 		const currentMonthWithYear = today.format('YYYY-MM')
 
-		const metrics =
-			await prisma.$queryRaw<ExpensesCompareWithLastMonthResponse>`
+		const expenses = await prisma.$queryRaw<MonthExpensesResponse[]>`
 			WITH transactions AS (
 				SELECT EXTRACT(MONTH FROM created_at) as month,
 					SUM(CAST(amount AS BIGINT)) AS total,
@@ -170,7 +179,7 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 			ORDER BY category ASC
 		`
 
-		return metrics
+		return expenses
 	}
 
 	async create(data: Prisma.TransactionUncheckedCreateInput) {

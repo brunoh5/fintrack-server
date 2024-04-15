@@ -20,6 +20,10 @@ app.use(express.json())
 
 app.use(cors())
 
+app.get('/', (req, res) => {
+	return res.send({ ok: true })
+})
+
 app.use(usersRouter)
 app.use(transactionsRouter)
 app.use(accountsRouter)
