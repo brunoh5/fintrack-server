@@ -4,6 +4,7 @@ import { Router } from 'express'
 import { verifyJWT } from '@/http/middlewares/verify-jwt'
 
 import { create } from './create'
+import { deleteTransaction } from './delete'
 import { fetch } from './fetch'
 import { get } from './get'
 // import { Import } from './import'
@@ -28,6 +29,7 @@ transactionsRouter.post('/transactions', create)
 
 transactionsRouter.put('/transactions/:id', update)
 transactionsRouter.get('/transactions/:id', get)
+transactionsRouter.delete('/transactions/:id/delete', deleteTransaction)
 
 // transactionsRouter.post(
 // 	'/transactions/:accountId/import',

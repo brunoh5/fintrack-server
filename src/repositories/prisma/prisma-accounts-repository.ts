@@ -12,7 +12,7 @@ export class PrismaAccountsRepository implements AccountsRepository {
 	) {
 		const account = await this.findById(id)
 
-		console.log({ account })
+		console.log({ amount, type })
 
 		if (!account) {
 			return
@@ -25,8 +25,6 @@ export class PrismaAccountsRepository implements AccountsRepository {
 		if (type === 'DEBIT') {
 			account.balance = account.balance - amount
 		}
-
-		console.log({ totalBalance: account.balance })
 
 		await this.update(id, account)
 	}

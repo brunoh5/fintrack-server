@@ -48,7 +48,7 @@ export interface TransactionsRepository {
 
 	createMany(data: CreateMany): Promise<void>
 
-	delete(id: string): Promise<void>
+	delete(id: string): Promise<Transaction>
 
 	findManyTransactions(
 		data: FindManyTransactionsProps,

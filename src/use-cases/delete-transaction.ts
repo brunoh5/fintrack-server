@@ -1,5 +1,3 @@
-import { Transaction } from '@prisma/client'
-
 import { AccountsRepository } from '@/repositories/accounts-repository'
 import { TransactionsRepository } from '@/repositories/transactions-repository'
 
@@ -15,17 +13,34 @@ export class DeleteTransactionUseCase {
 
 	async execute({
 		transactionId,
-	}: DeleteTransactionUseCaseRequest): Promise<void> {
-		const transaction = (await this.transactionsRepository.findById(
-			transactionId,
-		)) as Transaction
+	}: DeleteTransactionUseCaseRequest): Promise<any> {
+		const transaction =
+			await this.transactionsRepository.findById(transactionId)
 
-		await this.accountsRepository.updateBalanceAccount(
-			transaction?.accountId,
-			Number(transaction?.amount),
-			'sent',
-		)
+		if (!transaction) {
+			return
+		}
 
-		return this.transactionsRepository.delete(transactionId)
+		if (transaction?.transaction_type === 'CREDIT') {
+			await this.accountsRepository.updateBalanceAccount(
+				transaction?.accountId,
+				transaction?.amount * 100,
+				'DEBIT',
+			)
+		} else {
+			await this.accountsRepository.updateBalanceAccount(
+				transaction?.accountId,
+				transaction?.amount * 100,
+				'CREDIT',
+			)
+		}
+
+		await this.transactionsRepository.delete(transactionId)
+
+		return {
+			amount: transaction.amount,
+			id: transaction.id,
+			transaction_type: transaction.transaction_type,
+		}
 	}
 }
