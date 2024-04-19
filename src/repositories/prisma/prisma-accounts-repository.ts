@@ -10,15 +10,23 @@ export class PrismaAccountsRepository implements AccountsRepository {
 		amount: number,
 		type: 'DEBIT' | 'CREDIT',
 	) {
-		const account = (await this.findById(id)) as Account
+		const account = await this.findById(id)
+
+		console.log({ account })
+
+		if (!account) {
+			return
+		}
 
 		if (type === 'CREDIT') {
-			account.balance = Number(account.balance) + amount
+			account.balance = account.balance + amount
 		}
 
 		if (type === 'DEBIT') {
-			account.balance = Number(account.balance) - amount
+			account.balance = account.balance - amount
 		}
+
+		console.log({ totalBalance: account.balance })
 
 		await this.update(id, account)
 	}
@@ -61,8 +69,8 @@ export class PrismaAccountsRepository implements AccountsRepository {
 		return { accounts, total: _sum.balance ?? 0, accountsCount }
 	}
 
-	async findById(id: string) {
-		const account = await prisma.account.findUnique({
+	async findById(id: string): Promise<Account | null> {
+		const account = await prisma.account.findFirst({
 			where: {
 				id,
 			},
@@ -72,9 +80,7 @@ export class PrismaAccountsRepository implements AccountsRepository {
 			return null
 		}
 
-		return Object.assign(account, {
-			balance: account.balance / 100,
-		})
+		return account
 	}
 
 	async create(data: Prisma.AccountUncheckedCreateInput) {

@@ -32,7 +32,10 @@ export class GetAccountUseCase {
 		})
 
 		return {
-			account,
+			account: Object.assign(account, {
+				balanceInCents: account.balance,
+				balance: undefined,
+			}),
 		}
 	}
 }

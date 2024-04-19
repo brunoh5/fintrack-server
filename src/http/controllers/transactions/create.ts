@@ -46,7 +46,7 @@ export async function create(req: Request, res: Response): Promise<Response> {
 		category,
 		name,
 		shopName,
-		amount: amount * 100,
+		amount,
 		transaction_type,
 		payment_method,
 		created_at,
