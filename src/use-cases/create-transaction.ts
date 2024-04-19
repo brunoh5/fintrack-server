@@ -49,14 +49,12 @@ export class CreateTransactionUseCase {
 			throw new ResourceNotFoundError()
 		}
 
-		const amountInCents = amount * 100
-
 		const transaction = await this.transactionsRepository.create({
 			accountId,
 			category,
 			name,
 			shopName,
-			amount: amountInCents,
+			amount,
 			transaction_type,
 			payment_method,
 			userId,
@@ -65,7 +63,7 @@ export class CreateTransactionUseCase {
 
 		await this.accountsRepository.updateBalanceAccount(
 			accountId,
-			amountInCents,
+			amount,
 			transaction_type,
 		)
 
