@@ -5,12 +5,32 @@ import { prisma } from '@/lib/prisma'
 import { BillsRepository, FindManyBillsProps } from '../bills-repository'
 
 export class PrismaBillsRepository implements BillsRepository {
-	async create(data: Prisma.BillUncheckedCreateInput) {
+	async create({
+		title,
+		description,
+		amount,
+		dueDate,
+		paid_at,
+		payment_method,
+		userId,
+	}: Prisma.BillUncheckedCreateInput) {
 		const bill = await prisma.bill.create({
-			data,
+			data: {
+				title,
+				description,
+				amount,
+				dueDate,
+				paid_at,
+				payment_method,
+				userId,
+			},
 		})
 
-		return bill
+		return Object.assign(bill, {
+			amountInCents: bill.amount,
+			amount: undefined,
+			userId: undefined,
+		})
 	}
 
 	async findManyBills({

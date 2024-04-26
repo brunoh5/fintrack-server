@@ -1,35 +1,36 @@
 import { Request, Response } from 'express'
 import { z } from 'zod'
 
-import { prisma } from '@/lib/prisma'
+import { PrismaBillsRepository } from '@/repositories/prisma/prisma-bills-repository'
 
 export async function create(req: Request, res: Response) {
 	const { sub: userId } = req.user
 
 	const createBillBodySchema = z.object({
 		title: z.string(),
-		description: z.string().nullable(),
-		imageUrl: z.string().nullable(),
-		amount: z.number().default(0),
+		description: z.string().optional(),
+		amount: z.number(),
 		dueDate: z.string(),
-		lastCharge: z.string().nullable(),
-		paid_at: z.string().nullable(),
+		paid_at: z.string().optional(),
+		payment_method: z
+			.enum(['MONEY', 'PIX', 'CREDIT_CARD', 'DEBIT_CARD', 'BANK_TRANSFER'])
+			.default('MONEY'),
+		accountId: z.string().optional(),
 	})
 
-	const { amount, description, dueDate, imageUrl, lastCharge, paid_at, title } =
+	const { amount, description, dueDate, paid_at, title, payment_method } =
 		createBillBodySchema.parse(req.body)
 
-	const bill = await prisma.bill.create({
-		data: {
-			imageUrl,
-			userId,
-			dueDate,
-			title,
-			description,
-			lastCharge,
-			amount,
-			paid_at,
-		},
+	const billsRepository = new PrismaBillsRepository()
+
+	const bill = await billsRepository.create({
+		title,
+		description,
+		amount,
+		dueDate,
+		paid_at,
+		payment_method,
+		userId,
 	})
 
 	return res.status(201).json({ bill })
