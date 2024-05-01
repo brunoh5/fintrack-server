@@ -82,6 +82,45 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 			},
 		})
 
+		const { _sum: revenueSum } = await prisma.transaction.aggregate({
+			_sum: {
+				amount: true,
+			},
+			where: {
+				name: {
+					contains: name,
+					mode: 'insensitive',
+				},
+				userId,
+				accountId,
+				transaction_type: 'CREDIT',
+				payment_method,
+				category,
+			},
+		})
+
+		const { _sum: expenseSum } = await prisma.transaction.aggregate({
+			_sum: {
+				amount: true,
+			},
+			where: {
+				name: {
+					contains: name,
+					mode: 'insensitive',
+				},
+				userId,
+				accountId,
+				transaction_type: 'DEBIT',
+				payment_method,
+				category,
+			},
+		})
+
+		const transactionsStatus = {
+			totalRevenueInCents: revenueSum.amount ?? 0,
+			totalExpenseInCents: expenseSum.amount ?? 0,
+		}
+
 		const transactions = transactionsResult.map((transaction) => {
 			return Object.assign(transaction, {
 				amount: undefined,
@@ -90,7 +129,7 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 			})
 		})
 
-		return { transactions, transactionsCount }
+		return { transactions, transactionsCount, transactionsStatus }
 	}
 
 	async update(id: string, data: Prisma.TransactionUpdateInput) {

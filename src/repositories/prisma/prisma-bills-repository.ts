@@ -89,6 +89,22 @@ export class PrismaBillsRepository implements BillsRepository {
 			},
 		})
 
+		const { _sum: notPaidInCentsSum } = await prisma.bill.aggregate({
+			_sum: {
+				amount: true,
+			},
+			where: {
+				title: {
+					contains: title,
+					mode: 'insensitive',
+				},
+				userId,
+				paid_at: {
+					equals: null,
+				},
+			},
+		})
+
 		const bills = billsResult.map((bill) => {
 			return Object.assign(bill, {
 				amount: undefined,
@@ -97,7 +113,17 @@ export class PrismaBillsRepository implements BillsRepository {
 			})
 		})
 
-		return { bills, billsCount, totalInCents: _sum.amount ?? 0 }
+		const billsStatus = {
+			paidInCents: 0,
+			notPaidInCents: notPaidInCentsSum.amount ?? 0,
+		}
+
+		return {
+			bills,
+			billsCount,
+			totalInCents: _sum.amount ?? 0,
+			billsStatus,
+		}
 	}
 
 	async findById(id: string) {

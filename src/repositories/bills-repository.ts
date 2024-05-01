@@ -7,10 +7,14 @@ export interface FindManyBillsProps {
 	pageIndex: number
 }
 
-interface FindManyBillsResponse {
+export interface FindManyBillsResponse {
 	bills: Bill[]
 	billsCount: number
 	totalInCents: number
+	billsStatus: {
+		paidInCents: number
+		notPaidInCents: number
+	}
 }
 
 export interface BillsRepository {

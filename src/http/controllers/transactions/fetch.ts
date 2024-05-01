@@ -35,7 +35,7 @@ export async function fetch(req: Request, res: Response) {
 
 	const fetchTransactionUseCase = makeFetchTransactionsUseCase()
 
-	const { transactions, meta } = await fetchTransactionUseCase.execute({
+	const result = await fetchTransactionUseCase.execute({
 		userId: req.user.sub,
 		name,
 		transaction_type,
@@ -45,5 +45,5 @@ export async function fetch(req: Request, res: Response) {
 		payment_method,
 	})
 
-	return res.status(200).json({ transactions, meta })
+	return res.status(200).json(result)
 }

@@ -12,6 +12,10 @@ interface FetchBillsUseCaseProps {
 interface FetchBillsUseCaseResponse {
 	bills: Bill[]
 	totalInCents: number
+	billsStatus: {
+		paidInCents: number
+		notPaidInCents: number
+	}
 	meta: {
 		totalCount: number
 		pageIndex: number
@@ -28,7 +32,7 @@ export class FetchBillsUseCase {
 		pageIndex,
 		status,
 	}: FetchBillsUseCaseProps): Promise<FetchBillsUseCaseResponse> {
-		const { bills, billsCount, totalInCents } =
+		const { bills, billsCount, totalInCents, billsStatus } =
 			await this.billsRepository.findManyBills({
 				userId,
 				title,
@@ -39,6 +43,7 @@ export class FetchBillsUseCase {
 		return {
 			bills,
 			totalInCents,
+			billsStatus,
 			meta: {
 				totalCount: billsCount,
 				pageIndex,

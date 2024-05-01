@@ -19,6 +19,10 @@ interface FetchTransactionsUseCaseRequest {
 
 interface FetchTransactionsUseCaseResponse {
 	transactions: Transaction[]
+	transactionsStatus: {
+		totalRevenueInCents: number
+		totalExpenseInCents: number
+	}
 	meta: {
 		totalCount: number
 		pageIndex: number
@@ -38,20 +42,22 @@ export class FetchTransactionsUseCase {
 		pageIndex = 0,
 		accountId,
 	}: FetchTransactionsUseCaseRequest): Promise<FetchTransactionsUseCaseResponse> {
-		const result = await this.transactionsRepository.findManyTransactions({
-			userId,
-			name,
-			transaction_type,
-			pageIndex,
-			accountId,
-			category,
-			payment_method,
-		})
+		const { transactions, transactionsCount, transactionsStatus } =
+			await this.transactionsRepository.findManyTransactions({
+				userId,
+				name,
+				transaction_type,
+				pageIndex,
+				accountId,
+				category,
+				payment_method,
+			})
 
 		return {
-			transactions: result.transactions,
+			transactions,
+			transactionsStatus,
 			meta: {
-				totalCount: result.transactionsCount,
+				totalCount: transactionsCount,
 				pageIndex,
 				perPage: 10,
 			},

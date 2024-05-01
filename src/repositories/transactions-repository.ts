@@ -28,6 +28,10 @@ export interface FindManyTransactionsProps {
 export interface UserTransactionResponse {
 	transactions: Transaction[]
 	transactionsCount: number
+	transactionsStatus: {
+		totalRevenueInCents: number
+		totalExpenseInCents: number
+	}
 }
 
 export interface MonthExpensesResponse {
