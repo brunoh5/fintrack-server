@@ -6,12 +6,14 @@ interface FindManyByUserIdResponse {
 	accountsCount: number
 }
 
+export interface UpdateBalanceAccountRequest {
+	id: string
+	amount: number
+	type: 'DEBIT' | 'CREDIT'
+}
+
 export interface AccountsRepository {
-	updateBalanceAccount(
-		id: string,
-		amount: number,
-		type: 'DEBIT' | 'CREDIT',
-	): Promise<void>
+	updateBalanceAccount(data: UpdateBalanceAccountRequest): Promise<void>
 	delete(id: string): Promise<void>
 	update(id: string, data: Prisma.AccountUpdateInput): Promise<Account>
 	findManyByUserId(id: string): Promise<FindManyByUserIdResponse>

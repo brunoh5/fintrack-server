@@ -2,17 +2,18 @@ import { Account, Prisma } from '@prisma/client'
 
 import { prisma } from '@/lib/prisma'
 
-import { AccountsRepository } from '../accounts-repository'
+import {
+	AccountsRepository,
+	UpdateBalanceAccountRequest,
+} from '../accounts-repository'
 
 export class PrismaAccountsRepository implements AccountsRepository {
-	async updateBalanceAccount(
-		id: string,
-		amount: number,
-		type: 'DEBIT' | 'CREDIT',
-	) {
+	async updateBalanceAccount({
+		id,
+		amount,
+		type,
+	}: UpdateBalanceAccountRequest) {
 		const account = await this.findById(id)
-
-		console.log({ amount, type })
 
 		if (!account) {
 			return
