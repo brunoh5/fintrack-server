@@ -9,6 +9,8 @@ export async function fetch(req: Request, res: Response) {
 		accountId: z.string().optional(),
 		name: z.string().optional(),
 		transaction_type: z.enum(['DEBIT', 'CREDIT']).optional(),
+		from: z.string().optional(),
+		to: z.string().optional(),
 		category: z
 			.enum([
 				'HOME',
@@ -31,6 +33,8 @@ export async function fetch(req: Request, res: Response) {
 		name,
 		category,
 		payment_method,
+		from,
+		to,
 	} = fetchTransactionQuerySchema.parse(req.query)
 
 	const fetchTransactionUseCase = makeFetchTransactionsUseCase()
@@ -43,6 +47,8 @@ export async function fetch(req: Request, res: Response) {
 		accountId,
 		category,
 		payment_method,
+		from,
+		to,
 	})
 
 	return res.status(200).json(result)

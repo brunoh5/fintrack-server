@@ -49,7 +49,12 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 		payment_method,
 		category,
 		pageIndex,
+		from,
+		to,
 	}: FindManyTransactionsProps) {
+		const startDate = from ? dayjs(from) : dayjs().subtract(30, 'd')
+		const endDate = to ? dayjs(to) : from ? startDate.add(30, 'days') : dayjs()
+
 		const transactionsResult = await prisma.transaction.findMany({
 			where: {
 				name: {
@@ -61,6 +66,16 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 				transaction_type,
 				payment_method,
 				category,
+				created_at: {
+					gte: startDate
+						.startOf('day')
+						.add(startDate.utcOffset(), 'minutes')
+						.toDate(),
+					lte: endDate
+						.endOf('day')
+						.add(endDate.utcOffset(), 'minutes')
+						.toDate(),
+				},
 			},
 			take: 10,
 			skip: pageIndex * 10,
@@ -73,12 +88,23 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 			where: {
 				name: {
 					contains: name,
+					mode: 'insensitive',
 				},
 				userId,
 				accountId,
 				transaction_type,
 				payment_method,
 				category,
+				created_at: {
+					gte: startDate
+						.startOf('day')
+						.add(startDate.utcOffset(), 'minutes')
+						.toDate(),
+					lte: endDate
+						.endOf('day')
+						.add(endDate.utcOffset(), 'minutes')
+						.toDate(),
+				},
 			},
 		})
 
@@ -96,6 +122,16 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 				transaction_type: 'CREDIT',
 				payment_method,
 				category,
+				created_at: {
+					gte: startDate
+						.startOf('day')
+						.add(startDate.utcOffset(), 'minutes')
+						.toDate(),
+					lte: endDate
+						.endOf('day')
+						.add(endDate.utcOffset(), 'minutes')
+						.toDate(),
+				},
 			},
 		})
 
@@ -113,6 +149,16 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 				transaction_type: 'DEBIT',
 				payment_method,
 				category,
+				created_at: {
+					gte: startDate
+						.startOf('day')
+						.add(startDate.utcOffset(), 'minutes')
+						.toDate(),
+					lte: endDate
+						.endOf('day')
+						.add(endDate.utcOffset(), 'minutes')
+						.toDate(),
+				},
 			},
 		})
 

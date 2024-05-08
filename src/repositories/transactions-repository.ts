@@ -18,6 +18,8 @@ export interface MonthlyExpense {
 export interface FindManyTransactionsProps {
 	userId: string
 	pageIndex: number
+	from?: string
+	to?: string
 	name?: string
 	transaction_type?: TransactionType
 	accountId?: string

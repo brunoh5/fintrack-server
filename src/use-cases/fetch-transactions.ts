@@ -9,6 +9,8 @@ import { TransactionsRepository } from '@/repositories/transactions-repository'
 
 interface FetchTransactionsUseCaseRequest {
 	userId: string
+	from?: string
+	to?: string
 	transaction_type?: TransactionType
 	pageIndex?: number
 	accountId?: string
@@ -41,6 +43,8 @@ export class FetchTransactionsUseCase {
 		transaction_type,
 		pageIndex = 0,
 		accountId,
+		from,
+		to,
 	}: FetchTransactionsUseCaseRequest): Promise<FetchTransactionsUseCaseResponse> {
 		const { transactions, transactionsCount, transactionsStatus } =
 			await this.transactionsRepository.findManyTransactions({
@@ -51,6 +55,8 @@ export class FetchTransactionsUseCase {
 				accountId,
 				category,
 				payment_method,
+				from,
+				to,
 			})
 
 		return {
