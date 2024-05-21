@@ -9,7 +9,7 @@ interface PayBillUseCaseRequest {
 	accountId: string
 	userId: string
 	paid_at: Date | string
-	paidAmount?: number
+	paid_amount?: number
 }
 
 export class PayBillUseCase {
@@ -24,7 +24,7 @@ export class PayBillUseCase {
 		accountId,
 		userId,
 		paid_at,
-		paidAmount,
+		paid_amount,
 	}: PayBillUseCaseRequest) {
 		const bill = await this.billsRepository.findById(billId)
 
@@ -33,14 +33,14 @@ export class PayBillUseCase {
 		}
 
 		Object.assign(bill, {
-			paidAmount,
+			paid_amount,
 			paid_at,
 			accountId,
 		})
 
 		await this.accountsRepository.updateBalanceAccount({
 			id: accountId,
-			amount: paidAmount ?? bill.amount,
+			amount: paid_amount ?? bill.amount,
 			type: 'DEBIT',
 		})
 
@@ -48,7 +48,7 @@ export class PayBillUseCase {
 			name: `Conta Paga: ${bill.title}`,
 			accountId,
 			userId,
-			amount: paidAmount ?? bill.amount,
+			amount: paid_amount ?? bill.amount,
 		})
 
 		await this.billsRepository.update(billId, bill)

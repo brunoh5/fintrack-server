@@ -102,6 +102,7 @@ model Bill {
   amount         Int
   created_at     DateTime      @default(now())
   paid_at        DateTime?
+  paid_amount    Int?
   payment_method PaymentMethod @default(MONEY)
 
   period Period @default(ONLY)
