@@ -2,16 +2,19 @@ import { randomUUID } from 'node:crypto'
 
 import { Account, Prisma } from '@prisma/client'
 
-import { AccountsRepository } from '../accounts-repository'
+import {
+	AccountsRepository,
+	UpdateBalanceAccountRequest,
+} from '../accounts-repository'
 
 export class InMemoryAccountsRepository implements AccountsRepository {
 	public items: Account[] = []
 
-	async updateBalanceAccount(
-		id: string,
-		amount: number,
-		type: 'CREDIT' | 'DEBIT',
-	) {
+	async updateBalanceAccount({
+		id,
+		amount,
+		type,
+	}: UpdateBalanceAccountRequest) {
 		const rowIndex = this.items.findIndex((row) => row.id === id)
 		const row = this.items[rowIndex]
 
@@ -40,7 +43,17 @@ export class InMemoryAccountsRepository implements AccountsRepository {
 	}
 
 	async findManyByUserId(id: string) {
-		return this.items.filter((item) => item.userId === id)
+		const accounts = this.items.filter((item) => item.userId === id)
+
+		const total = accounts.reduce((acc, account) => {
+			return acc + account.balance / 100
+		}, 0)
+
+		return {
+			accounts,
+			total,
+			accountsCount: accounts.length + 1,
+		}
 	}
 
 	async findById(id: string) {

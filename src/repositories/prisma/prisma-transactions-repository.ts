@@ -1,4 +1,5 @@
 import { Prisma } from '@prisma/client'
+import { endOfDay, endOfMonth, startOfDay, startOfMonth } from 'date-fns'
 import dayjs from 'dayjs'
 
 import { prisma } from '@/lib/prisma'
@@ -52,8 +53,14 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 		from,
 		to,
 	}: FindManyTransactionsProps) {
-		const startDate = from ? dayjs(from) : dayjs().subtract(30, 'd')
-		const endDate = to ? dayjs(to) : from ? startDate.add(30, 'days') : dayjs()
+		const startDate = from
+			? startOfDay(new Date(from))
+			: startOfMonth(new Date())
+		const endDate = to
+			? endOfDay(new Date(to))
+			: from
+				? endOfMonth(new Date(from))
+				: new Date()
 
 		const transactionsResult = await prisma.transaction.findMany({
 			where: {
@@ -67,14 +74,8 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 				payment_method,
 				category,
 				created_at: {
-					gte: startDate
-						.startOf('day')
-						.add(startDate.utcOffset(), 'minutes')
-						.toDate(),
-					lte: endDate
-						.endOf('day')
-						.add(endDate.utcOffset(), 'minutes')
-						.toDate(),
+					gte: startDate.toISOString(),
+					lte: endDate.toISOString(),
 				},
 			},
 			take: 10,
@@ -96,14 +97,8 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 				payment_method,
 				category,
 				created_at: {
-					gte: startDate
-						.startOf('day')
-						.add(startDate.utcOffset(), 'minutes')
-						.toDate(),
-					lte: endDate
-						.endOf('day')
-						.add(endDate.utcOffset(), 'minutes')
-						.toDate(),
+					gte: startDate.toISOString(),
+					lte: endDate.toISOString(),
 				},
 			},
 		})
@@ -123,14 +118,8 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 				payment_method,
 				category,
 				created_at: {
-					gte: startDate
-						.startOf('day')
-						.add(startDate.utcOffset(), 'minutes')
-						.toDate(),
-					lte: endDate
-						.endOf('day')
-						.add(endDate.utcOffset(), 'minutes')
-						.toDate(),
+					gte: startDate.toISOString(),
+					lte: endDate.toISOString(),
 				},
 			},
 		})
@@ -150,14 +139,8 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 				payment_method,
 				category,
 				created_at: {
-					gte: startDate
-						.startOf('day')
-						.add(startDate.utcOffset(), 'minutes')
-						.toDate(),
-					lte: endDate
-						.endOf('day')
-						.add(endDate.utcOffset(), 'minutes')
-						.toDate(),
+					gte: startDate.toISOString(),
+					lte: endDate.toISOString(),
 				},
 			},
 		})

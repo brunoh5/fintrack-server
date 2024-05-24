@@ -36,10 +36,10 @@ describe('Create Transactions UseCase', () => {
 
 	it('should be able to create a transaction', async () => {
 		const { transaction } = await sut.execute({
-			userId: randomUUID(),
-			categoryId: randomUUID(),
+			userId: 'user-01',
+			category: 'OTHERS',
 			accountId: 'account-01',
-			amount: '3500',
+			amount: 3500,
 			shopName: 'KaBuM',
 			transaction_type: 'DEBIT',
 			payment_method: 'CREDIT_CARD',
@@ -51,10 +51,10 @@ describe('Create Transactions UseCase', () => {
 
 	it('should be able to update a account balance', async () => {
 		await sut.execute({
-			userId: randomUUID(),
-			categoryId: randomUUID(),
+			userId: 'user-01',
+			category: 'OTHERS',
 			accountId: 'account-01',
-			amount: '3500',
+			amount: 3500,
 			shopName: 'KaBuM',
 			transaction_type: 'DEBIT',
 			payment_method: 'CREDIT_CARD',
@@ -69,10 +69,10 @@ describe('Create Transactions UseCase', () => {
 	it('should not be able to create a transaction with non-existent account', async () => {
 		await expect(() =>
 			sut.execute({
-				userId: randomUUID(),
-				categoryId: randomUUID(),
+				userId: 'user-01',
+				category: 'OTHERS',
 				accountId: 'non-existent-account',
-				amount: '3500',
+				amount: 3500,
 				shopName: 'KaBuM',
 				transaction_type: 'DEBIT',
 				payment_method: 'CREDIT_CARD',

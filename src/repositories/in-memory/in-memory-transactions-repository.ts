@@ -4,8 +4,9 @@ import { Prisma, Transaction } from '@prisma/client'
 
 import {
 	CreateMany,
-	FindManyByUserIdProps,
+	MonthExpensesResponse,
 	TransactionsRepository,
+	UserTransactionResponse,
 } from '../transactions-repository'
 
 export class InMemoryTransactionsRepository implements TransactionsRepository {
@@ -47,6 +48,8 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
 		}
 
 		this.items.splice(rowIndex, 1)
+
+		return this.items[rowIndex]
 	}
 
 	async findManyByAccountId(id: string) {
@@ -82,11 +85,19 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
 		return transaction
 	}
 
-	async monthlyExpensesMetricsByYear(year: number, userId: string) {
+	async monthlyExpensesMetricsByYear() {
+		return [{ month: new Date(), total: 25000 }]
+	}
+
+	async findManyByUserId() {
 		throw new Error('Method not implemented.')
 	}
 
-	async findManyByUserId({ id, transaction_type }: FindManyByUserIdProps) {
+	async findManyTransactions(): Promise<UserTransactionResponse> {
+		throw new Error('Method not implemented.')
+	}
+
+	async monthExpenses(): Promise<MonthExpensesResponse[]> {
 		throw new Error('Method not implemented.')
 	}
 }

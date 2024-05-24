@@ -9,16 +9,16 @@ export class InMemoryBillsRepository implements BillsRepository {
 	async create(data: Prisma.BillUncheckedCreateInput) {
 		const bill = {
 			id: data.id ?? randomUUID(),
-			dueDate: new Date(data.dueDate),
-			imageUrl: data.imageUrl ?? null,
 			title: data.title,
 			description: data.description ?? null,
-			lastCharge: data.lastCharge ? new Date(data.lastCharge) : null,
+			dueDate: data.dueDate ? new Date(data.dueDate) : null,
 			created_at: new Date(),
 			amount: data.amount,
 			paid_at: data.paid_at ? new Date(data.paid_at) : null,
 			userId: data.userId,
 			period: data.period ?? 'ONLY',
+			paid_amount: data.paid_amount,
+			payment_method: data.payment_method ?? 'MONEY',
 		}
 
 		this.items.push(bill)

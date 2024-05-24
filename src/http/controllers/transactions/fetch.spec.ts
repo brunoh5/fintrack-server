@@ -11,7 +11,7 @@ describe('Fetch Transactions (e2e)', () => {
 
 		const { account } = await createAccount(token)
 
-		const t = await request(app)
+		await request(app)
 			.post('/transactions')
 			.set('Authorization', `Bearer ${token}`)
 			.send({
@@ -23,8 +23,6 @@ describe('Fetch Transactions (e2e)', () => {
 				payment_method: 'CREDIT_CARD',
 				name: 'RTX 3060',
 			})
-
-		console.log(t.body)
 
 		await request(app)
 			.post('/transactions')

@@ -22,17 +22,17 @@ export class DeleteTransactionUseCase {
 		}
 
 		if (transaction?.transaction_type === 'CREDIT') {
-			await this.accountsRepository.updateBalanceAccount(
-				transaction?.accountId,
-				transaction?.amount * 100,
-				'DEBIT',
-			)
+			await this.accountsRepository.updateBalanceAccount({
+				id: transaction?.accountId,
+				amount: transaction?.amount * 100,
+				type: 'DEBIT',
+			})
 		} else {
-			await this.accountsRepository.updateBalanceAccount(
-				transaction?.accountId,
-				transaction?.amount * 100,
-				'CREDIT',
-			)
+			await this.accountsRepository.updateBalanceAccount({
+				id: transaction?.accountId,
+				amount: transaction?.amount * 100,
+				type: 'CREDIT',
+			})
 		}
 
 		await this.transactionsRepository.delete(transactionId)

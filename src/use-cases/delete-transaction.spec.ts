@@ -1,5 +1,3 @@
-import { randomUUID } from 'node:crypto'
-
 import { beforeEach, describe, expect, it } from 'vitest'
 
 import { AccountsRepository } from '@/repositories/accounts-repository'
@@ -8,6 +6,7 @@ import { InMemoryTransactionsRepository } from '@/repositories/in-memory/in-memo
 import { TransactionsRepository } from '@/repositories/transactions-repository'
 
 import { DeleteTransactionUseCase } from './delete-transaction'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 let transactionsRepository: TransactionsRepository
 let accountsRepository: AccountsRepository
@@ -24,22 +23,22 @@ describe('Delete Transaction UseCase', () => {
 
 		await accountsRepository.create({
 			id: 'account-01',
-			balance: 3500,
+			balance: 0,
 			bank: 'bank',
 			type: 'CURRENT_ACCOUNT',
 			number: '1111 2222 3333 4444',
-			userId: randomUUID(),
+			userId: 'user-01',
 		})
 	})
 
 	it('should be able to delete a transaction', async () => {
 		const createdTransaction = await transactionsRepository.create({
 			userId: 'user-id',
-			categoryId: 'category-id',
+			category: 'OTHERS',
 			accountId: 'account-01',
-			amount: '3500',
+			amount: 3500,
 			shopName: 'KaBuM',
-			transaction_type: 'DEBIT',
+			transaction_type: 'CREDIT',
 			payment_method: 'CREDIT_CARD',
 			name: 'RTX 3060',
 		})
@@ -57,29 +56,26 @@ describe('Delete Transaction UseCase', () => {
 
 	it('should be able to update a account balance', async () => {
 		const createdTransaction = await transactionsRepository.create({
+			name: 'RTX 3060',
 			userId: 'user-id',
-			categoryId: 'category-id',
+			category: 'OTHERS',
 			accountId: 'account-01',
-			amount: '3500',
+			amount: 3500,
 			shopName: 'KaBuM',
 			transaction_type: 'DEBIT',
 			payment_method: 'CREDIT_CARD',
-
-			name: 'RTX 3060',
 		})
 
 		await sut.execute({
 			transactionId: createdTransaction.id,
 		})
 
-		const deleteTransaction = await transactionsRepository.findById(
-			createdTransaction.id,
-		)
+		const account = await accountsRepository.findById('account-01')
 
-		const accountBalance =
-			await accountsRepository.getBalanceByAccountId('account-01')
+		if (!account) {
+			throw new ResourceNotFoundError()
+		}
 
-		expect(deleteTransaction).toEqual(null)
-		expect(accountBalance).toEqual(3500)
+		expect(account.balance / 100).toEqual(3500)
 	})
 })
