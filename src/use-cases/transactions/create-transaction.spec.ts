@@ -8,8 +8,8 @@ import { InMemoryAccountsRepository } from '@/repositories/in-memory/in-memory-a
 import { InMemoryTransactionsRepository } from '@/repositories/in-memory/in-memory-transactions-repository'
 import { TransactionsRepository } from '@/repositories/transactions-repository'
 
+import { ResourceNotFoundError } from '../errors/resource-not-found-error'
 import { CreateTransactionUseCase } from './create-transaction'
-import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 let transactionsRepository: TransactionsRepository
 let accountsRepository: AccountsRepository

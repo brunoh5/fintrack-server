@@ -17,9 +17,9 @@ describe('Update Transaction UseCase', () => {
 	it('should be able to update a transaction', async () => {
 		const createdTransaction = await transactionsRepository.create({
 			userId: 'user-01',
-			categoryId: 'category-01',
+			category: 'OTHERS',
 			accountId: 'account-01',
-			amount: '3500',
+			amount: -3500,
 			shopName: 'KaBuM-01',
 			transaction_type: 'DEBIT',
 			payment_method: 'CREDIT_CARD',
@@ -27,11 +27,10 @@ describe('Update Transaction UseCase', () => {
 		})
 
 		const { transaction } = await sut.execute({
-			transactionId: createdTransaction.id,
-			categoryId: 'category-01',
-			amount: '3500',
+			id: createdTransaction.id,
+			category: 'OTHERS',
+			amount: -3500,
 			shopName: 'KaBuM-02',
-			transaction_type: 'DEBIT',
 			payment_method: 'CREDIT_CARD',
 			name: 'RTX 3060',
 		})
