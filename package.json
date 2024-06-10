@@ -10,7 +10,6 @@
     "url": "git+https://github.com/brunoh5/fintracer-api.git"
   },
   "engines": {
-    "pnpm": ">=9",
     "node": ">=20"
   },
   "main": "server.js",
