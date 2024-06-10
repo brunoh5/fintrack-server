@@ -1,11 +1,11 @@
-import { Account } from '@prisma/client'
+import { Account, AccountType } from '@prisma/client'
 
 import { AccountsRepository } from '@/repositories/accounts-repository'
 
 interface CreateAccountUseCaseRequest {
-	type: string
+	type: AccountType
 	bank: string
-	number: string | null
+	number?: string | null | undefined
 	balance: number
 	userId: string
 }

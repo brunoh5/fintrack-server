@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { z } from 'zod'
 
-import { makeUpdateTransactionUseCase } from '@/use-cases/factories/makeUpdateTransactionUseCase'
+import { makeUpdateTransactionUseCase } from '@/use-cases/transactions/factories/makeUpdateTransactionUseCase'
 
 export async function update(req: Request, res: Response) {
 	const updateTransactionParamsSchema = z.object({
@@ -9,40 +9,40 @@ export async function update(req: Request, res: Response) {
 	})
 
 	const createTransactionBodySchema = z.object({
-		categoryId: z.string().uuid(),
+		accountId: z.string().uuid(),
 		name: z.string(),
-		shopName: z.string(),
+		shopName: z.string().optional(),
 		amount: z.coerce.number(),
-		transaction_type: z.enum(['CREDIT', 'DEBIT']),
-		payment_method: z.enum([
-			'MONEY',
-			'PIX',
-			'CREDIT_CARD',
-			'DEBIT_CARD',
-			'BANK_TRANSFER',
-		]),
+		created_at: z.string().optional(),
+		category: z
+			.enum([
+				'HOME',
+				'FOOD',
+				'TRANSPORTATION',
+				'OTHERS',
+				'ENTERTAINMENT',
+				'SHOPPING',
+			])
+			.default('OTHERS'),
+		payment_method: z
+			.enum(['MONEY', 'PIX', 'CREDIT_CARD', 'DEBIT_CARD', 'BANK_TRANSFER'])
+			.default('MONEY'),
 	})
 
-	const {
-		categoryId,
-		name,
-		shopName,
-		amount,
-		transaction_type,
-		payment_method,
-	} = createTransactionBodySchema.parse(req.body)
+	const { category, name, shopName, amount, payment_method } =
+		createTransactionBodySchema.parse(req.body)
 	const { id } = updateTransactionParamsSchema.parse(req.params)
 
 	const updateTransactionUseCase = makeUpdateTransactionUseCase()
 
 	const { transaction } = await updateTransactionUseCase.execute({
-		transactionId: id,
-		categoryId,
+		id,
+		category,
 		name,
 		shopName,
 		amount,
-		transaction_type,
 		payment_method,
+		transaction_type: amount < 0 ? 'DEBIT' : 'CREDIT',
 	})
 
 	return res.json({ transaction })

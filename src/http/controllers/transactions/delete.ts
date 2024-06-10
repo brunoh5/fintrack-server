@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { z } from 'zod'
 
-import { makeDeleteTransactionUseCase } from '@/use-cases/factories/makeDeleteTransactionUseCase'
+import { makeDeleteTransactionUseCase } from '@/use-cases/transactions/factories/makeDeleteTransactionUseCase'
 
 export async function deleteTransaction(
 	req: Request,

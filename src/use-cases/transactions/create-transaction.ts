@@ -1,29 +1,20 @@
+import { $Enums } from '@prisma/client'
+
 import { AccountsRepository } from '@/repositories/accounts-repository'
 import { TransactionsRepository } from '@/repositories/transactions-repository'
 
-import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { ResourceNotFoundError } from '../errors/resource-not-found-error'
 
 interface CreateTransactionUseCaseRequest {
 	accountId: string
 	name: string
-	shopName: string
+	shopName?: string
 	amount: number
 	userId: string
-	transaction_type: 'CREDIT' | 'DEBIT'
-	created_at?: string
-	category:
-		| 'HOME'
-		| 'FOOD'
-		| 'TRANSPORTATION'
-		| 'OTHERS'
-		| 'ENTERTAINMENT'
-		| 'SHOPPING'
-	payment_method:
-		| 'MONEY'
-		| 'PIX'
-		| 'CREDIT_CARD'
-		| 'DEBIT_CARD'
-		| 'BANK_TRANSFER'
+	date: Date | undefined
+	transaction_type: $Enums.TransactionType
+	category: $Enums.Category
+	payment_method: $Enums.PaymentMethod
 }
 
 export class CreateTransactionUseCase {
@@ -39,9 +30,9 @@ export class CreateTransactionUseCase {
 		name,
 		shopName,
 		amount,
-		transaction_type,
 		payment_method,
-		created_at,
+		date,
+		transaction_type,
 	}: CreateTransactionUseCaseRequest) {
 		const account = await this.accountsRepository.findById(accountId)
 
@@ -55,10 +46,10 @@ export class CreateTransactionUseCase {
 			name,
 			shopName,
 			amount,
-			transaction_type,
 			payment_method,
 			userId,
-			created_at,
+			transaction_type,
+			date,
 		})
 
 		await this.accountsRepository.updateBalanceAccount({

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { z } from 'zod'
 
-import { makeFetchTransactionsUseCase } from '@/use-cases/factories/makeFetchTransactionsUseCase'
+import { makeFetchTransactionsUseCase } from '@/use-cases/transactions/factories/makeFetchTransactionsUseCase'
 
 export async function fetch(req: Request, res: Response) {
 	const fetchTransactionQuerySchema = z.object({

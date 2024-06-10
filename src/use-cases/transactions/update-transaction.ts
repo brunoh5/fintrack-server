@@ -1,20 +1,14 @@
-import { Transaction } from '@prisma/client'
+import { $Enums, Transaction } from '@prisma/client'
 
 import { TransactionsRepository } from '@/repositories/transactions-repository'
 
 interface UpdateTransactionUseCaseRequest {
-	transactionId: string
-	categoryId: string
+	id: string
 	name: string
-	shopName: string
+	shopName?: string | null | undefined
+	category: $Enums.Category
+	payment_method: $Enums.PaymentMethod
 	amount: number
-	transaction_type: 'CREDIT' | 'DEBIT'
-	payment_method:
-		| 'MONEY'
-		| 'PIX'
-		| 'CREDIT_CARD'
-		| 'DEBIT_CARD'
-		| 'BANK_TRANSFER'
 }
 
 interface UpdateTransactionUseCaseResponse {
@@ -25,25 +19,20 @@ export class UpdateTransactionUseCase {
 	constructor(private transactionsRepository: TransactionsRepository) {}
 
 	async execute({
-		transactionId,
-		categoryId,
+		id,
+		category,
 		name,
 		shopName,
 		amount,
 		payment_method,
-		transaction_type,
 	}: UpdateTransactionUseCaseRequest): Promise<UpdateTransactionUseCaseResponse> {
-		const transaction = await this.transactionsRepository.update(
-			transactionId,
-			{
-				name,
-				shopName,
-				amount,
-				payment_method,
-				categoryId,
-				transaction_type,
-			},
-		)
+		const transaction = await this.transactionsRepository.update(id, {
+			name,
+			shopName,
+			amount,
+			payment_method,
+			category,
+		})
 
 		return {
 			transaction,

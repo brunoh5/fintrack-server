@@ -11,7 +11,7 @@ export async function update(req: Request, res: Response): Promise<Response> {
 	const updateAccountBodySchema = z.object({
 		type: z.string(),
 		bank: z.string(),
-		number: z.string().nullable(),
+		number: z.string().optional(),
 	})
 
 	const { id } = updateAccountParamsSchema.parse(req.params)
@@ -24,7 +24,7 @@ export async function update(req: Request, res: Response): Promise<Response> {
 		accountId: id,
 		type,
 		bank,
-		number,
+		number: number ?? '',
 	})
 
 	return res.status(200).json({ account })

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { z } from 'zod'
 
-import { makeGetTransactionUseCase } from '@/use-cases/factories/makeGetTransactionUseCase'
+import { makeGetTransactionUseCase } from '@/use-cases/transactions/factories/makeGetTransactionUseCase'
 
 export async function get(req: Request, res: Response): Promise<Response> {
 	const getTransactionParamsSchema = z.object({

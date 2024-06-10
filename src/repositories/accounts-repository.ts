@@ -1,4 +1,4 @@
-import { Account, Prisma } from '@prisma/client'
+import { $Enums, Account, Prisma } from '@prisma/client'
 
 interface FindManyByUserIdResponse {
 	accounts: Account[]
@@ -9,7 +9,7 @@ interface FindManyByUserIdResponse {
 export interface UpdateBalanceAccountRequest {
 	id: string
 	amount: number
-	type: 'DEBIT' | 'CREDIT'
+	type: $Enums.TransactionType
 }
 
 export interface AccountsRepository {

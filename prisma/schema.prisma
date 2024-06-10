@@ -7,6 +7,83 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id                 String        @id @default(uuid())
+  name               String
+  email              String        @unique
+  password_hash      String
+  created_at         DateTime      @default(now())
+  activeSubscription Boolean?
+  stripeCustomerId   String?
+  stripePriceId      String?
+  accounts           Account[]
+  bills              Bill[]
+  goals              Goal[]
+  transactions       Transaction[]
+
+  @@map("users")
+}
+
+model Account {
+  id           String        @id @default(uuid())
+  balance      Int           @default(0)
+  number       String?
+  bank         String
+  userId       String
+  type         AccountType   @default(CURRENT_ACCOUNT)
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+
+  @@map("accounts")
+}
+
+model Transaction {
+  id               String          @id @default(uuid())
+  name             String
+  shopName         String?
+  created_at       DateTime        @default(now())
+  amount           Int             @default(0)
+  accountId        String
+  userId           String
+  transaction_type TransactionType @default(DEBIT)
+  payment_method   PaymentMethod   @default(MONEY)
+  category         Category        @default(OTHERS)
+  date             DateTime?
+  account          Account         @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("transactions")
+}
+
+model Bill {
+  id             String        @id @default(uuid())
+  dueDate        DateTime      @default(now())
+  title          String
+  description    String?
+  amount         Int
+  created_at     DateTime      @default(now())
+  paid_at        DateTime?
+  userId         String
+  period         Period        @default(ONLY)
+  paid_amount    Int?
+  payment_method PaymentMethod @default(MONEY)
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("bills")
+}
+
+model Goal {
+  id            String   @id @default(uuid())
+  name          String
+  targetAmount  Int      @default(0)
+  presentAmount Int?     @default(0)
+  created_at    DateTime @default(now())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("goals")
+}
+
 enum PaymentMethod {
   MONEY
   PIX
@@ -15,43 +92,11 @@ enum PaymentMethod {
   BANK_TRANSFER
 }
 
-model User {
-  id            String   @id @default(uuid())
-  name          String
-  email         String   @unique
-  password_hash String
-  created_at    DateTime @default(now())
-  phone         String?
-  avatar_url    String?
-
-  accounts     Account[]
-  bills        Bill[]
-  goals        Goal[]
-  transactions Transaction[]
-
-  @@map("users")
-}
-
 enum AccountType {
   CURRENT_ACCOUNT
   INVESTMENT_ACCOUNT
   SAVINGS_ACCOUNT
   MACHINE_ACCOUNT
-}
-
-model Account {
-  id      String      @id @default(uuid())
-  balance Int         @default(0)
-  type    AccountType @default(CURRENT_ACCOUNT)
-  number  String?
-  bank    String
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  transactions Transaction[]
-
-  @@map("accounts")
 }
 
 enum TransactionType {
@@ -68,60 +113,8 @@ enum Category {
   OTHERS
 }
 
-model Transaction {
-  id         String   @id @default(uuid())
-  name       String
-  shopName   String?
-  created_at DateTime @default(now())
-  amount     Int      @default(0)
-
-  category         Category        @default(OTHERS)
-  transaction_type TransactionType @default(DEBIT)
-  payment_method   PaymentMethod   @default(MONEY)
-
-  accountId String
-  account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("transactions")
-}
-
 enum Period {
   ONLY
   MONTHLY
   ANUAL
-}
-
-model Bill {
-  id             String        @id @default(uuid())
-  title          String
-  description    String?
-  dueDate        DateTime      @default(now())
-  amount         Int
-  created_at     DateTime      @default(now())
-  paid_at        DateTime?
-  paid_amount    Int?
-  payment_method PaymentMethod @default(MONEY)
-
-  period Period @default(ONLY)
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("bills")
-}
-
-model Goal {
-  id            String   @id @default(uuid())
-  name          String
-  targetAmount  Int      @default(0)
-  presentAmount Int?     @default(0)
-  created_at    DateTime @default(now())
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("goals")
 }

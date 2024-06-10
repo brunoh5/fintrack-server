@@ -3,7 +3,7 @@ import { Transaction } from '@prisma/client'
 import { AccountsRepository } from '@/repositories/accounts-repository'
 import { TransactionsRepository } from '@/repositories/transactions-repository'
 
-import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { ResourceNotFoundError } from '../errors/resource-not-found-error'
 
 interface CreateManyRequest {
 	accountId: string
@@ -38,17 +38,17 @@ export class ImportTransactionsUseCase {
 		})
 
 		const totalAmount = transactions.reduce((acc, transaction) => {
-			if (transaction.type === 'sent') {
+			if (transaction_type === 'sent') {
 				return acc - transaction.amount
 			} else {
 				return acc + transaction.amount
 			}
 		}, 0)
 
-		await this.accountsRepository.updateBalanceAccount(
-			accountId,
-			totalAmount,
-			'received',
-		)
+		await this.accountsRepository.updateBalanceAccount({
+			id: accountId,
+			amount: totalAmount,
+			type: 'CREDIT',
+		})
 	}
 }

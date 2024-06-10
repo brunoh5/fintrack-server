@@ -1,16 +1,15 @@
 import { Request, Response } from 'express'
 import { z } from 'zod'
 
-import { makeCreateTransactionUseCase } from '@/use-cases/factories/makeCreateTransactionUseCase'
+import { makeCreateTransactionUseCase } from '@/use-cases/transactions/factories/makeCreateTransactionUseCase'
 
 export async function create(req: Request, res: Response): Promise<Response> {
 	const createTransactionBodySchema = z.object({
 		accountId: z.string().uuid(),
 		name: z.string(),
-		shopName: z.string(),
+		shopName: z.string().optional(),
 		amount: z.coerce.number(),
-		created_at: z.string().optional(),
-		transaction_type: z.enum(['CREDIT', 'DEBIT']),
+		date: z.coerce.date().optional(),
 		category: z.enum([
 			'HOME',
 			'FOOD',
@@ -28,16 +27,8 @@ export async function create(req: Request, res: Response): Promise<Response> {
 		]),
 	})
 
-	const {
-		accountId,
-		category,
-		name,
-		shopName,
-		amount,
-		transaction_type,
-		payment_method,
-		created_at,
-	} = createTransactionBodySchema.parse(req.body)
+	const { accountId, category, name, shopName, amount, payment_method, date } =
+		createTransactionBodySchema.parse(req.body)
 
 	const createTransactionUseCase = makeCreateTransactionUseCase()
 
@@ -47,9 +38,9 @@ export async function create(req: Request, res: Response): Promise<Response> {
 		name,
 		shopName,
 		amount,
-		transaction_type,
+		transaction_type: amount < 0 ? 'DEBIT' : 'CREDIT',
 		payment_method,
-		created_at,
+		date,
 		userId: req.user.sub,
 	})
 

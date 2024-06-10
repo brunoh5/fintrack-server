@@ -3,7 +3,6 @@ import { endOfDay, endOfMonth, startOfDay, startOfMonth } from 'date-fns'
 import dayjs from 'dayjs'
 
 import { prisma } from '@/lib/prisma'
-import { divideAmount } from '@/utils/divide-amount'
 
 import {
 	CreateMany,
@@ -214,11 +213,11 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 			return null
 		}
 
-		const transactionAmountFormatted = Object.assign(transaction, {
-			amount: divideAmount(transaction.amount),
+		return Object.assign(transaction, {
+			amount: undefined,
+			amountInCents: transaction.amount,
+			userId: undefined,
 		})
-
-		return transactionAmountFormatted
 	}
 
 	async monthExpenses(userId: string) {
