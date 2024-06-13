@@ -6,17 +6,13 @@ import {
 	TransactionType,
 } from '@prisma/client'
 
-export interface CreateMany {
-	transactions: Prisma.TransactionCreateManyInput[]
-}
-
 export interface MonthlyExpense {
 	month: Date
 	total: number
 }
 
 export interface FindManyTransactionsProps {
-	userId: string
+	userId?: string
 	pageIndex: number
 	from?: string
 	to?: string
@@ -46,25 +42,15 @@ export interface TransactionsRepository {
 		year: number,
 		userId: string,
 	): Promise<MonthlyExpense[]>
-
 	update(
 		id: string,
 		data: Prisma.TransactionUncheckedUpdateInput,
 	): Promise<Transaction>
-
-	createMany(data: CreateMany): Promise<void>
-
 	delete(id: string): Promise<Transaction>
-
 	findManyTransactions(
 		data: FindManyTransactionsProps,
 	): Promise<UserTransactionResponse>
-
-	findManyByAccountId(id: string, pageIndex: number): Promise<Transaction[]>
-
 	findById(id: string): Promise<Transaction | null>
-
 	create(data: Prisma.TransactionUncheckedCreateInput): Promise<Transaction>
-
 	monthExpenses(userId: string): Promise<MonthExpensesResponse[]>
 }

@@ -42,7 +42,6 @@ export async function update(req: Request, res: Response) {
 		shopName,
 		amount,
 		payment_method,
-		transaction_type: amount < 0 ? 'DEBIT' : 'CREDIT',
 	})
 
 	return res.json({ transaction })

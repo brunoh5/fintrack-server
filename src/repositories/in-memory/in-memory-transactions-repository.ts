@@ -3,7 +3,6 @@ import { randomUUID } from 'node:crypto'
 import { Prisma, Transaction } from '@prisma/client'
 
 import {
-	CreateMany,
 	MonthExpensesResponse,
 	TransactionsRepository,
 	UserTransactionResponse,
@@ -21,25 +20,6 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
 		return row
 	}
 
-	async createMany({ transactions }: CreateMany): Promise<void> {
-		transactions.map((transaction) => {
-			const data = {
-				id: randomUUID(),
-				name: transaction.name,
-				shopName: transaction.shopName ?? null,
-				created_at: new Date(),
-				transaction_type: transaction.transaction_type ?? 'DEBIT',
-				amount: transaction.amount ?? 0,
-				payment_method: transaction.payment_method ?? 'MONEY',
-				category: transaction.category ?? 'OTHERS',
-				accountId: transaction.accountId,
-				userId: transaction.userId,
-			}
-
-			return this.items.push(data)
-		})
-	}
-
 	async delete(id: string) {
 		const rowIndex = this.items.findIndex((row) => row.id === id)
 
@@ -50,10 +30,6 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
 		this.items.splice(rowIndex, 1)
 
 		return this.items[rowIndex]
-	}
-
-	async findManyByAccountId(id: string) {
-		return this.items.filter((item) => item.accountId === id)
 	}
 
 	async findById(id: string) {
@@ -78,6 +54,7 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
 			category: data.category ?? 'OTHERS',
 			accountId: data.accountId,
 			userId: data.userId,
+			date: new Date(),
 		}
 
 		this.items.push(transaction)

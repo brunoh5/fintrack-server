@@ -1,23 +1,45 @@
 import { Bill, Prisma } from '@prisma/client'
 import { randomUUID } from 'crypto'
 
-import { BillsRepository } from '../bills-repository'
+import {
+	BillsRepository,
+	FindManyBillsProps,
+	FindManyBillsResponse,
+} from '../bills-repository'
 
 export class InMemoryBillsRepository implements BillsRepository {
 	public items: Bill[] = []
+
+	async findManyBills(
+		data: FindManyBillsProps,
+	): Promise<FindManyBillsResponse> {
+		const bills = this.items.filter((item) => item.userId === data.userId)
+
+		return {
+			bills,
+			billsCount: bills.length + 1,
+			totalInCents: bills.reduce((acc, data) => {
+				return acc + data.amount
+			}, 0),
+			billsStatus: {
+				paidInCents: 0,
+				notPaidInCents: 0,
+			},
+		}
+	}
 
 	async create(data: Prisma.BillUncheckedCreateInput) {
 		const bill = {
 			id: data.id ?? randomUUID(),
 			title: data.title,
 			description: data.description ?? null,
-			dueDate: data.dueDate ? new Date(data.dueDate) : null,
+			dueDate: data.dueDate ? new Date(data.dueDate) : new Date(),
 			created_at: new Date(),
 			amount: data.amount,
 			paid_at: data.paid_at ? new Date(data.paid_at) : null,
 			userId: data.userId,
 			period: data.period ?? 'ONLY',
-			paid_amount: data.paid_amount,
+			paid_amount: data.paid_amount ?? null,
 			payment_method: data.payment_method ?? 'MONEY',
 		}
 

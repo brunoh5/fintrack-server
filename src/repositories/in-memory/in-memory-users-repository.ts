@@ -33,9 +33,10 @@ export class InMemoryUsersRepository implements UsersRepository {
 			name: data.name,
 			email: data.email,
 			password_hash: data.password_hash,
-			phone: data.phone ?? null,
-			avatar_url: data.avatar_url ?? null,
 			created_at: new Date(),
+			activeSubscription: null,
+			stripeCustomerId: null,
+			stripePriceId: null,
 		}
 
 		this.items.push(user)

@@ -5,7 +5,6 @@ import dayjs from 'dayjs'
 import { prisma } from '@/lib/prisma'
 
 import {
-	CreateMany,
 	FindManyTransactionsProps,
 	MonthExpensesResponse,
 	MonthlyExpense,
@@ -169,37 +168,12 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 		})
 	}
 
-	async createMany(data: CreateMany) {
-		await prisma.transaction.createMany({
-			data: data.transactions,
-		})
-	}
-
 	async delete(id: string) {
 		return await prisma.transaction.delete({
 			where: {
 				id,
 			},
 		})
-	}
-
-	async findManyByAccountId(id: string, page = 1, limit = 10) {
-		const transactions = await prisma.transaction.findMany({
-			where: {
-				accountId: id,
-			},
-			take: limit,
-			skip: (page - 1) * limit,
-		})
-
-		const transactionsAmountFormatted = transactions.map((transaction) => {
-			return Object.assign(transaction, {
-				amount: undefined,
-				amountInCents: transaction.amount,
-			})
-		})
-
-		return transactionsAmountFormatted
 	}
 
 	async findById(id: string) {
