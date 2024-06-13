@@ -20,9 +20,9 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 		const currentYearWithMonth = today.format('YYYY-MM')
 
 		const expenses = await prisma.$queryRaw<MonthlyExpense[]>`
-			SELECT date_trunc('month', created_at) AS month, SUM(CAST(amount / 100 AS BIGINT)) AS total
+			SELECT date_trunc('month', 'date') AS month, SUM(CAST(amount / 100 AS BIGINT)) AS total
 			FROM transactions
-			WHERE TO_CHAR(created_at, 'YYYY-MM')
+			WHERE TO_CHAR('date', 'YYYY-MM')
 			BETWEEN ${lastYearWithMonth} AND ${currentYearWithMonth}
 			AND transaction_type='DEBIT'
 			AND "userId" = ${userId}
@@ -71,7 +71,7 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 				transaction_type,
 				payment_method,
 				category,
-				created_at: {
+				date: {
 					gte: startDate.toISOString(),
 					lte: endDate.toISOString(),
 				},
@@ -94,7 +94,7 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 				transaction_type,
 				payment_method,
 				category,
-				created_at: {
+				date: {
 					gte: startDate.toISOString(),
 					lte: endDate.toISOString(),
 				},
@@ -115,7 +115,7 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 				transaction_type: 'CREDIT',
 				payment_method,
 				category,
-				created_at: {
+				date: {
 					gte: startDate.toISOString(),
 					lte: endDate.toISOString(),
 				},
@@ -136,7 +136,7 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 				transaction_type: 'DEBIT',
 				payment_method,
 				category,
-				created_at: {
+				date: {
 					gte: startDate.toISOString(),
 					lte: endDate.toISOString(),
 				},
@@ -203,11 +203,11 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 
 		const expenses = await prisma.$queryRaw<MonthExpensesResponse[]>`
 			WITH transactions AS (
-				SELECT EXTRACT(MONTH FROM created_at) as month,
+				SELECT EXTRACT(MONTH FROM 'date') as month,
 					SUM(CAST(amount AS BIGINT)) AS total,
 					category
 					FROM transactions
-					WHERE TO_CHAR(created_at, 'YYYY-MM')
+					WHERE TO_CHAR('date', 'YYYY-MM')
 					BETWEEN ${lastMonthWithYear} AND ${currentMonthWithYear}
 					AND "userId" = ${userId}
 					AND transaction_type = 'DEBIT'
