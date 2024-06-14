@@ -79,7 +79,7 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 			take: 10,
 			skip: pageIndex * 10,
 			orderBy: {
-				created_at: 'desc',
+				date: 'desc',
 			},
 		})
 
