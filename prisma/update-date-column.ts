@@ -4,16 +4,13 @@ const prisma = new PrismaClient()
 
 async function updateDateColumn() {
 	try {
-		const updatedRecords = await prisma.transaction.updateMany({
-			data: {
-				date: new Date(String(prisma.transaction.fields.created_at)),
-			},
-			where: {
-				date: undefined,
-			},
-		})
+		const result = await prisma.$executeRaw`
+      UPDATE "transactions"
+      SET "date" = "created_at"
+      WHERE "date" IS NULL
+    `
 
-		console.log(`Updated ${updatedRecords.count} records.`)
+		console.log(`Updated ${result} rows.`)
 	} catch (error) {
 		console.error('Error updating date column:', error)
 	} finally {

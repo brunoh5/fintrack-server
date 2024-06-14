@@ -11,7 +11,7 @@ export async function update(req: Request, res: Response) {
 	const createTransactionBodySchema = z.object({
 		accountId: z.string().uuid(),
 		name: z.string(),
-		shopName: z.string().optional(),
+		shopName: z.any().optional(),
 		amount: z.coerce.number(),
 		created_at: z.string().optional(),
 		category: z
