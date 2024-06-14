@@ -1,6 +1,8 @@
 import { AccountsRepository } from '@/repositories/accounts-repository'
 import { TransactionsRepository } from '@/repositories/transactions-repository'
 
+import { ResourceNotFoundError } from '../errors/resource-not-found-error'
+
 interface DeleteTransactionUseCaseRequest {
 	transactionId: string
 }
@@ -18,20 +20,20 @@ export class DeleteTransactionUseCase {
 			await this.transactionsRepository.findById(transactionId)
 
 		if (!transaction) {
-			return
+			throw new ResourceNotFoundError()
 		}
 
-		if (transaction?.transaction_type === 'CREDIT') {
+		if (transaction?.amount < 0) {
 			await this.accountsRepository.updateBalanceAccount({
-				id: transaction?.accountId,
-				amount: transaction?.amount * 100,
-				type: 'DEBIT',
+				id: transaction.accountId,
+				amount: transaction.amount * 100,
+				type: 'CREDIT',
 			})
 		} else {
 			await this.accountsRepository.updateBalanceAccount({
 				id: transaction?.accountId,
 				amount: transaction?.amount * 100,
-				type: 'CREDIT',
+				type: 'DEBIT',
 			})
 		}
 
@@ -40,7 +42,7 @@ export class DeleteTransactionUseCase {
 		return {
 			amount: transaction.amount,
 			id: transaction.id,
-			transaction_type: transaction.transaction_type,
+			transaction_type: transaction.transaction_type ?? '',
 		}
 	}
 }
