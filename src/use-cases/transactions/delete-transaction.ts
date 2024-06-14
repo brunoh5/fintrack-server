@@ -40,9 +40,7 @@ export class DeleteTransactionUseCase {
 		await this.transactionsRepository.delete(transactionId)
 
 		return {
-			amount: transaction.amount,
-			id: transaction.id,
-			transaction_type: transaction.transaction_type ?? '',
+			transaction,
 		}
 	}
 }
