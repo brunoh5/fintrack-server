@@ -31,7 +31,7 @@ describe('Fetch Accounts Use Case', () => {
 	})
 
 	it('should be able to fetch accounts', async () => {
-		const { bills } = await sut.execute('user-01')
+		const { bills } = await sut.execute({ userId: 'user-01', pageIndex: 0 })
 
 		expect(bills).toHaveLength(2)
 		expect(bills).toEqual([

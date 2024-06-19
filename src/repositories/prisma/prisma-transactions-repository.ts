@@ -66,9 +66,12 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 					contains: name,
 					mode: 'insensitive',
 				},
+				amount: {
+					gte: transaction_type === 'CREDIT' ? 0 : undefined,
+					lte: transaction_type === 'DEBIT' ? 0 : undefined,
+				},
 				userId,
 				accountId,
-				transaction_type,
 				payment_method,
 				category,
 				date: {
@@ -91,7 +94,10 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 				},
 				userId,
 				accountId,
-				transaction_type,
+				amount: {
+					gte: transaction_type === 'CREDIT' ? 0 : undefined,
+					lte: transaction_type === 'DEBIT' ? 0 : undefined,
+				},
 				payment_method,
 				category,
 				date: {
@@ -112,7 +118,9 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 				},
 				userId,
 				accountId,
-				transaction_type: 'CREDIT',
+				amount: {
+					gte: 0,
+				},
 				payment_method,
 				category,
 				date: {
@@ -133,7 +141,9 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 				},
 				userId,
 				accountId,
-				transaction_type: 'DEBIT',
+				amount: {
+					lte: 0,
+				},
 				payment_method,
 				category,
 				date: {

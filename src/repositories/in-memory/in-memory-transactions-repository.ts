@@ -3,6 +3,7 @@ import { randomUUID } from 'node:crypto'
 import { Prisma, Transaction } from '@prisma/client'
 
 import {
+	FindManyTransactionsProps,
 	MonthExpensesResponse,
 	TransactionsRepository,
 	UserTransactionResponse,
@@ -48,13 +49,13 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
 			name: data.name,
 			shopName: data.shopName ?? null,
 			created_at: new Date(),
-			transaction_type: data.transaction_type ?? 'DEBIT',
 			amount: data.amount ?? 0,
 			payment_method: data.payment_method ?? 'MONEY',
 			category: data.category ?? 'OTHERS',
 			accountId: data.accountId,
 			userId: data.userId,
-			date: new Date(),
+			transaction_type: data.transaction_type ?? 'CREDIT',
+			date: new Date(String(data.date)) ?? new Date(),
 		}
 
 		this.items.push(transaction)
@@ -66,15 +67,62 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
 		return [{ month: new Date(), total: 25000 }]
 	}
 
-	async findManyByUserId() {
-		throw new Error('Method not implemented.')
+	async findManyTransactions(
+		data: FindManyTransactionsProps,
+	): Promise<UserTransactionResponse> {
+		const filteredTransactions = this.items.filter((transaction) => {
+			const fromDate = data.from ? new Date(data.from) : new Date()
+			const toDate = data.to ? new Date(data.to) : new Date()
+
+			const matchesType =
+				!data.transaction_type ||
+				(data.transaction_type === 'CREDIT' && transaction.amount >= 0) ||
+				(data.transaction_type === 'DEBIT' && transaction.amount < 0)
+
+			return (
+				matchesType &&
+				(!data.userId || transaction.userId === data.userId) &&
+				(!data.from ||
+					(fromDate && transaction.date) ||
+					transaction.created_at >= fromDate) &&
+				(!data.to ||
+					(toDate && transaction.date) ||
+					transaction.created_at <= toDate) &&
+				(!data.name || transaction.name.includes(data.name)) &&
+				(!data.accountId || transaction.accountId === data.accountId) &&
+				(!data.payment_method ||
+					transaction.payment_method === data.payment_method) &&
+				(!data.category || transaction.category === data.category)
+			)
+		})
+
+		const totalExpenseInCents = filteredTransactions.reduce((acc, data) => {
+			if (data.amount - 0) {
+				return (acc += data.amount)
+			} else {
+				return acc
+			}
+		}, 0)
+
+		const totalRevenueInCents = filteredTransactions.reduce((acc, data) => {
+			if (data.amount + 0) {
+				return (acc += data.amount)
+			} else {
+				return acc
+			}
+		}, 0)
+
+		return {
+			transactions: filteredTransactions,
+			transactionsCount: filteredTransactions.length,
+			transactionsStatus: {
+				totalExpenseInCents,
+				totalRevenueInCents,
+			},
+		}
 	}
 
-	async findManyTransactions(): Promise<UserTransactionResponse> {
-		throw new Error('Method not implemented.')
-	}
-
-	async monthExpenses(): Promise<MonthExpensesResponse[]> {
+	monthExpenses(): Promise<MonthExpensesResponse[]> {
 		throw new Error('Method not implemented.')
 	}
 }

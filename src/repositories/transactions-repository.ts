@@ -1,10 +1,4 @@
-import {
-	Category,
-	PaymentMethod,
-	Prisma,
-	Transaction,
-	TransactionType,
-} from '@prisma/client'
+import { $Enums, Prisma, Transaction } from '@prisma/client'
 
 export interface MonthlyExpense {
 	month: Date
@@ -17,10 +11,10 @@ export interface FindManyTransactionsProps {
 	from?: string
 	to?: string
 	name?: string
-	transaction_type?: TransactionType
+	transaction_type?: $Enums.TransactionType
 	accountId?: string
-	payment_method?: PaymentMethod
-	category?: Category
+	payment_method?: $Enums.PaymentMethod
+	category?: $Enums.Category
 }
 
 export interface UserTransactionResponse {

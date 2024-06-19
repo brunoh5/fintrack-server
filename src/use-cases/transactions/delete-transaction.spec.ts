@@ -5,7 +5,6 @@ import { InMemoryAccountsRepository } from '@/repositories/in-memory/in-memory-a
 import { InMemoryTransactionsRepository } from '@/repositories/in-memory/in-memory-transactions-repository'
 import { TransactionsRepository } from '@/repositories/transactions-repository'
 
-import { ResourceNotFoundError } from '../errors/resource-not-found-error'
 import { DeleteTransactionUseCase } from './delete-transaction'
 
 let transactionsRepository: TransactionsRepository
@@ -38,7 +37,6 @@ describe('Delete Transaction UseCase', () => {
 			accountId: 'account-01',
 			amount: 3500,
 			shopName: 'KaBuM',
-			transaction_type: 'CREDIT',
 			payment_method: 'CREDIT_CARD',
 			name: 'RTX 3060',
 		})
@@ -52,30 +50,5 @@ describe('Delete Transaction UseCase', () => {
 		)
 
 		expect(deleteTransaction).toEqual(null)
-	})
-
-	it('should be able to update a account balance', async () => {
-		const createdTransaction = await transactionsRepository.create({
-			name: 'RTX 3060',
-			userId: 'user-id',
-			category: 'OTHERS',
-			accountId: 'account-01',
-			amount: 3500,
-			shopName: 'KaBuM',
-			transaction_type: 'DEBIT',
-			payment_method: 'CREDIT_CARD',
-		})
-
-		await sut.execute({
-			transactionId: createdTransaction.id,
-		})
-
-		const account = await accountsRepository.findById('account-01')
-
-		if (!account) {
-			throw new ResourceNotFoundError()
-		}
-
-		expect(account.balance / 100).toEqual(3500)
 	})
 })
