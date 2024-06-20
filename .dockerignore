@@ -11,3 +11,4 @@
 !/tsconfig*.json
 !/pnpm-lock.yaml
 !/.nixpacks/**
+!/tsup.config.ts
