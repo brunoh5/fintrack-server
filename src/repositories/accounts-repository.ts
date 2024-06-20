@@ -1,4 +1,4 @@
-import { $Enums, Account, Prisma } from '@prisma/client'
+import { Account, Prisma } from '@prisma/client'
 
 interface FindManyByUserIdResponse {
 	accounts: Account[]
@@ -6,14 +6,8 @@ interface FindManyByUserIdResponse {
 	accountsCount: number
 }
 
-export interface UpdateBalanceAccountRequest {
-	id: string
-	amount: number
-	type: $Enums.TransactionType
-}
-
 export interface AccountsRepository {
-	updateBalanceAccount(data: UpdateBalanceAccountRequest): Promise<void>
+	updateBalanceAccount(id: string, amount: number): Promise<void>
 	delete(id: string): Promise<void>
 	update(id: string, data: Prisma.AccountUpdateInput): Promise<Account>
 	findManyByUserId(id: string): Promise<FindManyByUserIdResponse>

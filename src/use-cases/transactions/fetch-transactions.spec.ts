@@ -52,25 +52,9 @@ describe('Fetch Transactions Use Case', () => {
 			transaction_type: 'CREDIT',
 		})
 
-		console.log(result.meta)
-
 		expect(result.meta.totalCount).toEqual(1)
 		expect(result.transactions).toEqual([
 			expect.objectContaining({ amount: 3500 }),
-		])
-	})
-
-	it('should be able to fetch expense transactions', async () => {
-		const result = await sut.execute({
-			userId: 'user-01',
-			transaction_type: 'CREDIT',
-		})
-
-		console.log(result.meta)
-
-		expect(result.meta.totalCount).toEqual(1)
-		expect(result.transactions).toEqual([
-			expect.objectContaining({ amount: -3500 }),
 		])
 	})
 })

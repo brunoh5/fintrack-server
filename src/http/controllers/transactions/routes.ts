@@ -19,8 +19,8 @@ transactionsRouter.get('/transactions/metrics', metrics)
 transactionsRouter.get('/transactions', fetch)
 transactionsRouter.post('/transactions', create)
 
-transactionsRouter.put('/transactions/:id', update)
 transactionsRouter.get('/transactions/:id', get)
-transactionsRouter.delete('/transactions/:id/delete', deleteTransaction)
+transactionsRouter.put('/transactions/:id', update)
+transactionsRouter.delete('/transactions/:id', deleteTransaction)
 
 export { transactionsRouter }

@@ -23,19 +23,10 @@ export class DeleteTransactionUseCase {
 			throw new ResourceNotFoundError()
 		}
 
-		if (transaction?.amount < 0) {
-			await this.accountsRepository.updateBalanceAccount({
-				id: transaction.accountId,
-				amount: transaction.amount * 100,
-				type: 'CREDIT',
-			})
-		} else {
-			await this.accountsRepository.updateBalanceAccount({
-				id: transaction?.accountId,
-				amount: transaction?.amount * 100,
-				type: 'DEBIT',
-			})
-		}
+		await this.accountsRepository.updateBalanceAccount(
+			transaction.accountId,
+			transaction.amount * -1,
+		)
 
 		await this.transactionsRepository.delete(transactionId)
 

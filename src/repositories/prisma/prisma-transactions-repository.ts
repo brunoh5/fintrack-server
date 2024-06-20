@@ -198,7 +198,7 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 		}
 
 		return Object.assign(transaction, {
-			amount: undefined,
+			amount: transaction.amount / 100,
 			amountInCents: transaction.amount,
 			userId: undefined,
 		})
