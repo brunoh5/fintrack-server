@@ -17,7 +17,7 @@
   "scripts": {
     "start": "node build/server.js",
     "dev": "tsx watch src/server.ts",
-    "build": "tsup src --out-dir build",
+    "build": "tsup",
     "seed": "tsx prisma/seeds.ts",
     "test": "vitest --dir src/use-cases",
     "test:e2e": "vitest --dir src/http",
