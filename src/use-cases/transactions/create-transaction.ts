@@ -52,11 +52,7 @@ export class CreateTransactionUseCase {
 			date,
 		})
 
-		await this.accountsRepository.updateBalanceAccount({
-			id: accountId,
-			amount,
-			type: transaction_type,
-		})
+		await this.accountsRepository.updateBalanceAccount(accountId, amount)
 
 		return {
 			transaction,

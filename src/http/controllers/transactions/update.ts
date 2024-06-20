@@ -14,6 +14,7 @@ export async function update(req: Request, res: Response) {
 		shopName: z.any().optional(),
 		amount: z.coerce.number(),
 		created_at: z.string().optional(),
+		date: z.coerce.date().optional(),
 		category: z
 			.enum([
 				'HOME',
@@ -29,7 +30,7 @@ export async function update(req: Request, res: Response) {
 			.default('MONEY'),
 	})
 
-	const { category, name, shopName, amount, payment_method } =
+	const { category, name, shopName, amount, payment_method, date } =
 		createTransactionBodySchema.parse(req.body)
 	const { id } = updateTransactionParamsSchema.parse(req.params)
 
@@ -42,6 +43,7 @@ export async function update(req: Request, res: Response) {
 		shopName,
 		amount,
 		payment_method,
+		date,
 	})
 
 	return res.json({ transaction })

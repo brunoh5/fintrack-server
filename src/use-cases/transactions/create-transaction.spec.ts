@@ -1,5 +1,3 @@
-import { randomUUID } from 'node:crypto'
-
 import { Account } from '@prisma/client'
 import { beforeEach, describe, expect, it } from 'vitest'
 
@@ -30,7 +28,7 @@ describe('Create Transactions UseCase', () => {
 			bank: 'bank',
 			type: 'CURRENT_ACCOUNT',
 			number: '1111 2222 3333 4444',
-			userId: randomUUID(),
+			userId: 'user-01',
 		})
 	})
 
@@ -44,6 +42,7 @@ describe('Create Transactions UseCase', () => {
 			transaction_type: 'DEBIT',
 			payment_method: 'CREDIT_CARD',
 			name: 'RTX 3060',
+			date: new Date(),
 		})
 
 		expect(transaction.id).toEqual(expect.any(String))
@@ -59,6 +58,7 @@ describe('Create Transactions UseCase', () => {
 			transaction_type: 'DEBIT',
 			payment_method: 'CREDIT_CARD',
 			name: 'RTX 3060',
+			date: new Date(),
 		})
 
 		const account = (await accountsRepository.findById('account-01')) as Account
@@ -77,6 +77,7 @@ describe('Create Transactions UseCase', () => {
 				transaction_type: 'DEBIT',
 				payment_method: 'CREDIT_CARD',
 				name: 'RTX 3060',
+				date: new Date(),
 			}),
 		).rejects.toBeInstanceOf(ResourceNotFoundError)
 	})

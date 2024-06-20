@@ -9,6 +9,7 @@ interface UpdateTransactionUseCaseRequest {
 	category: $Enums.Category
 	payment_method: $Enums.PaymentMethod
 	amount: number
+	date?: Date | undefined
 }
 
 interface UpdateTransactionUseCaseResponse {
@@ -25,6 +26,7 @@ export class UpdateTransactionUseCase {
 		shopName,
 		amount,
 		payment_method,
+		date,
 	}: UpdateTransactionUseCaseRequest): Promise<UpdateTransactionUseCaseResponse> {
 		const transaction = await this.transactionsRepository.update(id, {
 			name,
@@ -32,6 +34,7 @@ export class UpdateTransactionUseCase {
 			amount,
 			payment_method,
 			category,
+			date,
 		})
 
 		return {
